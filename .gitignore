@@ -2,3 +2,4 @@
 .coverage
 doc2dash.egg-info
 test_data
+*.docset
