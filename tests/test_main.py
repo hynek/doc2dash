@@ -19,6 +19,16 @@ def test_fails_without_source(capsys, monkeypatch):
     assert 'doc2dash: error: too few arguments' in err
 
 
+def test_handles_unknown_doc_types(monkeypatch):
+    with tempfile.TemporaryDirectory() as td:
+        monkeypatch.chdir(td)
+        monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo'])
+        os.mkdir('foo')
+        with pytest.raises(SystemExit) as e:
+            main.main()
+        assert e.value.code == errno.EINVAL
+
+
 ###########################################################################
 #                            setup_paths tests                            #
 ###########################################################################
@@ -30,6 +40,8 @@ def test_setup_paths_works(monkeypatch):
         os.mkdir('foo')
         args = mock.MagicMock(source='foo')
         assert ('foo', 'foo.docset') == main.setup_paths(args)
+        args.source = os.path.abspath('foo')
+        assert (os.path.abspath('foo'), 'foo.docset') == main.setup_paths(args)
 
 
 def test_setup_paths_detects_missing_source():

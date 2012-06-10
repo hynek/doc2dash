@@ -3,7 +3,7 @@ import errno
 import os
 import sys
 
-from . import __version__, __doc__
+from . import __version__, __doc__, parsers
 
 
 def main():
@@ -22,8 +22,14 @@ def main():
     args = parser.parse_args()
 
     source, dest = setup_paths(args)
-    print('Converting {} to {}.'.format(source, dest))
     # 1. detect type
+    dt = parsers.get_doctype(source)
+    if dt is None:
+        print('"{}" does not contain a known documentation format.'
+              .format(source))
+        sys.exit(errno.EINVAL)
+
+    print('Converting {} docs from {} to {}.'.format(dt.name, source, dest))
     # 2. create boilerplate
     # 3. copy files
     # 4. index files
@@ -32,7 +38,7 @@ def main():
 def setup_paths(args):
     """Determine source and destination using the results of argparse."""
     source = args.source
-    dest = source + '.docset'
+    dest = os.path.split(source)[-1] + '.docset'
     if not os.path.exists(source):
         print('Source directory "{}" does not exist.'.format(source))
         sys.exit(errno.ENOENT)
