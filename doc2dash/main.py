@@ -1,6 +1,7 @@
 import argparse
 import errno
 import os
+import shutil
 import sys
 
 from . import __version__, __doc__, parsers
@@ -13,6 +14,11 @@ def main():
             'source',
             help='Source directory containing API documentation in a supported'
                  ' format.'
+    )
+    parser.add_argument(
+            '--force', '-f',
+            action='store_true',
+            help='force overwriting if destination already exists',
     )
     parser.add_argument(
             '--version',
@@ -45,7 +51,10 @@ def setup_paths(args):
     if not os.path.isdir(source):
         print('Source "{}" is not a directory.'.format(source))
         sys.exit(errno.ENOTDIR)
-    if os.path.lexists(dest):
+    dst_exists = os.path.lexists(dest)
+    if dst_exists and args.force:
+        shutil.rmtree(dest)
+    elif dst_exists:
         print('Destination path "{}" already exists.'.format(dest))
         sys.exit(errno.EEXIST)
     return source, dest

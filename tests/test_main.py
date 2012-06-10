@@ -63,7 +63,11 @@ def test_setup_paths_detects_existing_dest(monkeypatch):
         monkeypatch.chdir(td)
         os.mkdir('foo')
         os.mkdir('foo.docset')
-        args = mock.MagicMock(source='foo')
+        args = mock.MagicMock(source='foo', force=False)
         with pytest.raises(SystemExit) as e:
             main.setup_paths(args)
         assert e.value.code == errno.EEXIST
+
+        args.force = True
+        main.setup_paths(args)
+        assert not os.path.lexists('foo.docset')
