@@ -23,6 +23,10 @@ def main():
             help='force overwriting if destination already exists',
     )
     parser.add_argument(
+            '--name', '-n',
+            help='name docset explicitely',
+    )
+    parser.add_argument(
             '--version',
             action='version',
             version='%(prog)s {}'.format(__version__),
@@ -43,7 +47,11 @@ def main():
 def setup_paths(args):
     """Determine source and destination using the results of argparse."""
     source = args.source
-    dest = os.path.split(source)[-1] + '.docset'
+    if not args.name:
+        args.name = os.path.split(source)[-1]
+    elif args.name.endswith('.docset'):
+        args.name = args.name.replace('.docset', '')
+    dest = args.name + '.docset'
     if not os.path.exists(source):
         print('Source directory "{}" does not exist.'.format(source))
         sys.exit(errno.ENOENT)
@@ -65,7 +73,6 @@ def prepare_docset(args, dest):
     Return a tuple of path to resources and connection to sqlite db.
 
     """
-    name = os.path.split(args.source)[-1]
     resources = os.path.join(dest, 'Contents/Resources/')
     docs = os.path.join(resources, 'Documents')
     os.makedirs(docs)
@@ -78,9 +85,9 @@ def prepare_docset(args, dest):
 
     plistlib.writePlist(
             {
-                'CFBundleIdentifier': name,
-                'CFBundleName': name,
-                'DocSetPlatformFamily': name,
+                'CFBundleIdentifier': args.name,
+                'CFBundleName': args.name,
+                'DocSetPlatformFamily': args.name,
                 'isDashDocset': True,
             },
             os.path.join(dest, 'Contents/Info.plist')

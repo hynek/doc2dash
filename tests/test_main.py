@@ -6,10 +6,13 @@ import sqlite3
 import sys
 import tempfile
 
-import mock
 import pytest
+from mock import MagicMock
 
 from doc2dash import main
+
+
+args = MagicMock(name='args')
 
 
 def test_fails_without_source(capsys, monkeypatch):
@@ -41,21 +44,25 @@ def test_setup_paths_works(monkeypatch):
     with tempfile.TemporaryDirectory() as td:
         monkeypatch.chdir(td)
         os.mkdir('foo')
-        args = mock.MagicMock(source='foo')
+        args.configure_mock(source='foo', name=None)
         assert ('foo', 'foo.docset') == main.setup_paths(args)
         args.source = os.path.abspath('foo')
         assert (os.path.abspath('foo'), 'foo.docset') == main.setup_paths(args)
+        assert args.name == 'foo'
+        args.name = 'baz.docset'
+        assert (os.path.abspath('foo'), 'baz.docset') == main.setup_paths(args)
+        assert args.name == 'baz'
 
 
 def test_setup_paths_detects_missing_source():
-    args = mock.MagicMock(source='doesnotexist')
+    args.configure_mock(source='doesnotexist', name=None)
     with pytest.raises(SystemExit) as e:
         main.setup_paths(args)
     assert e.value.code == errno.ENOENT
 
 
 def test_setup_paths_detects_source_is_file():
-    args = mock.MagicMock(source='setup.py')
+    args.configure_mock(source='setup.py', name=None)
     with pytest.raises(SystemExit) as e:
         main.setup_paths(args)
     assert e.value.code == errno.ENOTDIR
@@ -66,7 +73,7 @@ def test_setup_paths_detects_existing_dest(monkeypatch):
         monkeypatch.chdir(td)
         os.mkdir('foo')
         os.mkdir('foo.docset')
-        args = mock.MagicMock(source='foo', force=False)
+        args.configure_mock(source='foo', force=False, name=None)
         with pytest.raises(SystemExit) as e:
             main.setup_paths(args)
         assert e.value.code == errno.EEXIST
@@ -79,10 +86,10 @@ def test_setup_paths_detects_existing_dest(monkeypatch):
 def test_prepare_docset(monkeypatch):
     with tempfile.TemporaryDirectory() as td:
         monkeypatch.chdir(td)
-        m_ct = mock.MagicMock()
+        m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
-        args = mock.MagicMock(source='some/path/foo')
+        args.configure_mock(source='some/path/foo', name='foo')
         main.prepare_docset(args, 'bar')
         m_ct.assert_called_once_with(
                 'some/path/foo',
