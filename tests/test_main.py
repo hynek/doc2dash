@@ -1,5 +1,8 @@
 import errno
 import os
+import plistlib
+import shutil
+import sqlite3
 import sys
 import tempfile
 
@@ -71,3 +74,30 @@ def test_setup_paths_detects_existing_dest(monkeypatch):
         args.force = True
         main.setup_paths(args)
         assert not os.path.lexists('foo.docset')
+
+
+def test_prepare_docset(monkeypatch):
+    with tempfile.TemporaryDirectory() as td:
+        monkeypatch.chdir(td)
+        m_ct = mock.MagicMock()
+        monkeypatch.setattr(shutil, 'copytree', m_ct)
+        os.mkdir('bar')
+        args = mock.MagicMock(source='some/path/foo')
+        main.prepare_docset(args, 'bar')
+        m_ct.assert_called_once_with(
+                'some/path/foo',
+                'bar/Contents/Resources/Documents/data',
+        )
+        assert os.path.isfile('bar/Contents/Resources/docSet.dsidx')
+        p = plistlib.readPlist('bar/Contents/Info.plist')
+        assert p == {
+                'CFBundleIdentifier': 'foo',
+                'CFBundleName': 'foo',
+                'DocSetPlatformFamily': 'foo',
+                'isDashDocset': True,
+        }
+        with sqlite3.connect('bar/Contents/Resources/docSet.dsidx') as db_conn:
+            cur = db_conn.cursor()
+            # ensure table exists and is empty
+            cur.execute('select count(1) from searchIndex')
+            assert cur.fetchone()[0] == 0

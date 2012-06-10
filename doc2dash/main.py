@@ -1,7 +1,9 @@
 import argparse
 import errno
 import os
+import plistlib
 import shutil
+import sqlite3
 import sys
 
 from . import __version__, __doc__, parsers
@@ -28,16 +30,13 @@ def main():
     args = parser.parse_args()
 
     source, dest = setup_paths(args)
-    # 1. detect type
     dt = parsers.get_doctype(source)
     if dt is None:
         print('"{}" does not contain a known documentation format.'
               .format(source))
         sys.exit(errno.EINVAL)
-
     print('Converting {} docs from {} to {}.'.format(dt.name, source, dest))
-    # 2. create boilerplate
-    # 3. copy files
+    resources, docs = prepare_docset(args, dest)
     # 4. index files
 
 
@@ -58,3 +57,34 @@ def setup_paths(args):
         print('Destination path "{}" already exists.'.format(dest))
         sys.exit(errno.EEXIST)
     return source, dest
+
+
+def prepare_docset(args, dest):
+    """Create boilerplate files & directories and copy vanilla docs inside.
+
+    Return a tuple of path to resources and connection to sqlite db.
+
+    """
+    name = os.path.split(args.source)[-1]
+    resources = os.path.join(dest, 'Contents/Resources/')
+    docs = os.path.join(resources, 'Documents')
+    os.makedirs(docs)
+
+    with sqlite3.connect(os.path.join(resources, 'docSet.dsidx')) as db_conn:
+        db_conn.execute(
+                'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
+                'type TEXT, path TEXT)'
+        )
+
+    plistlib.writePlist(
+            {
+                'CFBundleIdentifier': name,
+                'CFBundleName': name,
+                'DocSetPlatformFamily': name,
+                'isDashDocset': True,
+            },
+            os.path.join(dest, 'Contents/Info.plist')
+    )
+
+    shutil.copytree(args.source, os.path.join(docs, 'data'))
+    return resources, db_conn
