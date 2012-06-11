@@ -36,7 +36,15 @@ Installation
 The latest stable version can be always found on PyPI and can therefore be
 installed using a simple: ::
 
-   $ pip install --user doc2dash
+   $ pip-3.2 install --user doc2dash
+
+The easiest way known to me to get Python 3.2 on OS X is using homebrew_: ::
+
+   $ brew install python3
+
+The installation of pip_ should be as easy as: ::
+
+   $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python3.2
 
 
 
@@ -48,3 +56,5 @@ installed using a simple: ::
 .. _SQLite: http://www.sqlite.org/
 .. _PyPI: http://pypi.python.org/pypi/doc2dash/
 .. _Twisted: http://twistedmatrix.com/
+.. _homebrew: http://mxcl.github.com/homebrew/
+.. _pip: http://www.pip-installer.org/en/latest/installing.html#alternative-installation-procedures
