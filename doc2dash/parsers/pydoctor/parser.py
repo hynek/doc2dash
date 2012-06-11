@@ -3,13 +3,13 @@ import os
 from bs4 import BeautifulSoup
 
 
-def parse(path):
-    """Parse pydoctor docs at *path*.
+def parse(docpath):
+    """Parse pydoctor docs at *docpath*.
 
     yield tuples of symbol name, type and path
 
     """
-    soup = BeautifulSoup(open(os.path.join(path, 'nameIndex.html')), 'lxml')
+    soup = BeautifulSoup(open(os.path.join(docpath, 'nameIndex.html')), 'lxml')
     print('Creating database...')
     for tag in soup.body.find_all('a'):
         path = tag.get('href')
