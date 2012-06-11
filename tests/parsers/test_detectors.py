@@ -2,7 +2,21 @@ import os
 
 import pytest
 
+import doc2dash
 from doc2dash.parsers import DOCTYPES
+from doc2dash.parsers.doctype import DocType
+
+
+def test_get_doctype(monkeypatch):
+    monkeypatch.setattr(doc2dash.parsers, 'DOCTYPES', [])
+    assert doc2dash.parsers.get_doctype('foo') is None
+    dt = DocType('testtype', lambda _: True, None)
+    monkeypatch.setattr(
+            doc2dash.parsers,
+            'DOCTYPES',
+            [dt]
+    )
+    assert doc2dash.parsers.get_doctype('foo') is dt
 
 
 def test_detectors_detect_no_false_positives():

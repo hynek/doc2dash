@@ -9,7 +9,9 @@ import tempfile
 import pytest
 from mock import MagicMock
 
+import doc2dash
 from doc2dash import main
+from doc2dash.parsers.doctype import DocType
 
 
 args = MagicMock(name='args')
@@ -33,6 +35,37 @@ def test_handles_unknown_doc_types(monkeypatch):
         with pytest.raises(SystemExit) as e:
             main.main()
         assert e.value.code == errno.EINVAL
+
+
+def test_normal_flow(monkeypatch, capsys):
+
+    def _fake_prepare(args, dest):
+        db_conn = sqlite3.connect(':memory:')
+        db_conn.execute(
+                'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
+                'type TEXT, path TEXT)'
+        )
+        return 'data', db_conn
+
+    def _yielder(path):
+        yield 'testmethod', 'testpath', 'cm'
+
+    with tempfile.TemporaryDirectory() as td:
+        monkeypatch.chdir(td)
+        os.mkdir('foo')
+        monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-n', 'bar'])
+        monkeypatch.setattr(main, 'prepare_docset', _fake_prepare)
+        dt = DocType('testtype', lambda _: True, _yielder)
+        monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
+        main.main()
+
+    out, err = capsys.readouterr()
+    assert err == ''
+    assert out == '''\
+Converting testtype docs from "foo" to "bar.docset".
+Parsing HTML...
+Added 1 index entries.
+'''
 
 
 ###########################################################################

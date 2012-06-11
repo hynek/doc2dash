@@ -39,9 +39,20 @@ def main():
         print('"{}" does not contain a known documentation format.'
               .format(source))
         sys.exit(errno.EINVAL)
-    print('Converting {} docs from {} to {}.'.format(dt.name, source, dest))
-    resources, docs = prepare_docset(args, dest)
-    # 4. index files
+    print('Converting {} docs from "{}" to "{}".'
+          .format(dt.name, source, dest))
+    docs, db_conn = prepare_docset(args, dest)
+
+    with db_conn:
+        print('Parsing HTML...')
+        for entry in dt.parse(docs):
+            db_conn.execute(
+                    'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
+                    entry
+            )
+        print('Added {0:,} index entries.'.format(
+              db_conn.execute('SELECT COUNT(1) FROM searchIndex')
+                     .fetchone()[0]))
 
 
 def setup_paths(args):
@@ -77,11 +88,12 @@ def prepare_docset(args, dest):
     docs = os.path.join(resources, 'Documents')
     os.makedirs(docs)
 
-    with sqlite3.connect(os.path.join(resources, 'docSet.dsidx')) as db_conn:
-        db_conn.execute(
-                'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
-                'type TEXT, path TEXT)'
-        )
+    db_conn = sqlite3.connect(os.path.join(resources, 'docSet.dsidx'))
+    db_conn.execute(
+            'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
+            'type TEXT, path TEXT)'
+    )
+    db_conn.commit()
 
     plistlib.writePlist(
             {
@@ -94,4 +106,4 @@ def prepare_docset(args, dest):
     )
 
     shutil.copytree(args.source, os.path.join(docs, 'data'))
-    return resources, db_conn
+    return os.path.join(docs, 'data'), db_conn

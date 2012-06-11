@@ -20,6 +20,7 @@ setup(
     },
     install_requires=[
         'beautifulsoup4==4.1.0',
+        'lxml==2.3.4',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
