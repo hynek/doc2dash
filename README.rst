@@ -29,6 +29,22 @@ directory containing a dash-compatible docset with a SQLite_ index.
 
 When finished, the docset can be imported into dash.
 
+Full usage: ::
+
+   usage: doc2dash [-h] [--force] [--name NAME] [--version] source
+
+   Convert docs to docsets.
+
+   positional arguments:
+     source                Source directory containing API documentation in a
+                           supported format.
+
+   optional arguments:
+     -h, --help            show this help message and exit
+     --force, -f           force overwriting if destination already exists
+     --name NAME, -n NAME  name docset explicitly
+     --version             show program's version number and exit
+
 
 Installation
 ------------
@@ -48,7 +64,7 @@ The installation of pip_ should be as easy as: ::
 
 
 
-.. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html   
+.. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html
 .. _dash: http://kapeli.com/dash/
 .. _`Python 3`: http://getpython3.com/
 .. _pydoctor: http://codespeak.net/~mwh/pydoctor/

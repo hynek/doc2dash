@@ -24,7 +24,7 @@ def main():
     )
     parser.add_argument(
             '--name', '-n',
-            help='name docset explicitely',
+            help='name docset explicitly',
     )
     parser.add_argument(
             '--version',
