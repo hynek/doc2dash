@@ -2,6 +2,8 @@ import os
 
 from bs4 import BeautifulSoup
 
+from doc2dash.parsers.types import CLASS, PACKAGE, METHOD
+
 
 def parse(docpath):
     """Parse pydoctor docs at *docpath*.
@@ -21,8 +23,8 @@ def parse(docpath):
 def _guess_type(name, path):
     """Employ voodoo magic to guess the type of *name* in *path*."""
     if name[0].isupper() and '#' not in path:
-        return 'cl'
+        return CLASS
     elif name.islower() and '#' not in path:
-        return 'cat'
+        return PACKAGE
     else:
-        return 'clm'
+        return METHOD
