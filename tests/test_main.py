@@ -126,7 +126,7 @@ def test_prepare_docset(monkeypatch):
         main.prepare_docset(args, 'bar')
         m_ct.assert_called_once_with(
                 'some/path/foo',
-                'bar/Contents/Resources/Documents/data',
+                'bar/Contents/Resources/Documents',
         )
         assert os.path.isfile('bar/Contents/Resources/docSet.dsidx')
         p = plistlib.readPlist('bar/Contents/Info.plist')

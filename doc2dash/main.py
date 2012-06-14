@@ -86,7 +86,7 @@ def prepare_docset(args, dest):
     """
     resources = os.path.join(dest, 'Contents/Resources/')
     docs = os.path.join(resources, 'Documents')
-    os.makedirs(docs)
+    os.makedirs(resources)
 
     db_conn = sqlite3.connect(os.path.join(resources, 'docSet.dsidx'))
     db_conn.execute(
@@ -105,5 +105,5 @@ def prepare_docset(args, dest):
             os.path.join(dest, 'Contents/Info.plist')
     )
 
-    shutil.copytree(args.source, os.path.join(docs, 'data'))
-    return os.path.join(docs, 'data'), db_conn
+    shutil.copytree(args.source, docs)
+    return docs, db_conn

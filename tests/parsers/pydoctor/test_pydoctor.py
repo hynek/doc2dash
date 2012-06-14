@@ -32,16 +32,16 @@ def test_parse():
     with patch('builtins.open') as mock:
         mock.return_value = example
         assert (list(parse('foo')) == [
-            ('A', 'clm', 'data/twisted.conch.insults.insults.ServerProtocol'
+            ('A', 'clm', 'twisted.conch.insults.insults.ServerProtocol'
                 '.ControlSequenceParser.html#A'),
-            ('A', 'cl', 'data/twisted.test.myrebuilder1.A.html'),
-            ('A', 'cl', 'data/twisted.test.myrebuilder2.A.html'),
-            ('A', 'cl', 'data/twisted.test.test_jelly.A.html'),
-            ('A', 'cl', 'data/twisted.test.test_persisted.A.html'),
-            ('a', 'clm', 'data/twisted.test.myrebuilder1.A.html#a'),
-            ('a', 'clm', 'data/twisted.test.myrebuilder1.Inherit.html#a'),
-            ('a', 'clm', 'data/twisted.test.myrebuilder2.A.html#a'),
-            ('a', 'clm', 'data/twisted.test.myrebuilder2.Inherit.html#a'),
-            ('abort', 'clm', 'data/twisted.web._newclient.HTTP11ClientProtocol'
+            ('A', 'cl', 'twisted.test.myrebuilder1.A.html'),
+            ('A', 'cl', 'twisted.test.myrebuilder2.A.html'),
+            ('A', 'cl', 'twisted.test.test_jelly.A.html'),
+            ('A', 'cl', 'twisted.test.test_persisted.A.html'),
+            ('a', 'clm', 'twisted.test.myrebuilder1.A.html#a'),
+            ('a', 'clm', 'twisted.test.myrebuilder1.Inherit.html#a'),
+            ('a', 'clm', 'twisted.test.myrebuilder2.A.html#a'),
+            ('a', 'clm', 'twisted.test.myrebuilder2.Inherit.html#a'),
+            ('abort', 'clm', 'twisted.web._newclient.HTTP11ClientProtocol'
                 '.html#abort')
         ])

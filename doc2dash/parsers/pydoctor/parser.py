@@ -17,7 +17,7 @@ def parse(docpath):
         path = tag.get('href')
         if path and not path.startswith('#'):
             name = tag.string.rsplit('.')[-1]
-            yield name, _guess_type(name, path), os.path.join('data', path)
+            yield name, _guess_type(name, path), path
 
 
 def _guess_type(name, path):
