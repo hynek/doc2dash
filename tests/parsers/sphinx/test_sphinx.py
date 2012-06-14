@@ -84,5 +84,14 @@ def test_parse_soup(monkeypatch):
                 'pyramid.interfaces.IDict.__setitem__'),
             ('__str__()', 'clm', 'api/interfaces.html#'
                 'pyramid.interfaces.IActionInfo.__str__'),
+            ('dict', 'cl', 'library/stdtypes.html#dict'),
             ('foo', 'clconst', 'api/foo'),
     ]
+
+
+def test_strip_annotation():
+    assert parser._strip_annotation('Foo') == 'Foo'
+    assert parser._strip_annotation('foo()') == 'foo()'
+    assert parser._strip_annotation('Foo (bar)') == 'Foo'
+    assert parser._strip_annotation('foo() (bar baz)') == 'foo()'
+    assert parser._strip_annotation('foo() ()') == 'foo()'

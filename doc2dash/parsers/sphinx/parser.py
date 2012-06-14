@@ -43,11 +43,23 @@ def _parse_soup(soup):
                     if name:
                         yield name, type_, dt.a['href']
                     else:
-                        name = dt.a.string.strip()
+                        name = _strip_annotation(dt.a.string)
                     dd = dt.next_sibling.next_sibling
                     if dd and dd.name == 'dd':
                         for y in _process_dd(name, dd):
                             yield y
+
+
+RE_ANNO = re.compile(r'(\S+) \(.*\)')
+
+
+def _strip_annotation(text):
+    """ Transforms 'foo (class in bar)' to 'foo'.  """
+    m = RE_ANNO.match(text)
+    if m:
+        return m.group(1)
+    else:
+        return text.strip()
 
 
 def _process_dd(name, dd):
@@ -84,6 +96,8 @@ TYPE_MAPPING = [
         (re.compile(r'(.*)\(\S+ attribute\)$'), types.ATTRIBUTE),
         (re.compile(r'(.*)\(\S+ member\)$'), types.ATTRIBUTE),
         (re.compile(r'(.*)\(class in \S+\)$'), types.CLASS),
+        (re.compile(r'(.*)\(built-in class\)$'), types.CLASS),
+        (re.compile(r'(.*)\(built-in variable\)$'), types.CONSTANT),
         (re.compile(r'(.*)\(module\)$'), types.PACKAGE),
         (re.compile(r'(.*)\(in module \S+\)$'), _IN_MODULE),
 ]
