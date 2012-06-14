@@ -1,3 +1,6 @@
 CLASS = 'cl'
 PACKAGE = 'cat'
 METHOD = 'clm'
+FUNCTION = 'func'
+ATTRIBUTE = 'instp'
+CONSTANT = 'clconst'
