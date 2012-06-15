@@ -1,0 +1,14 @@
+<h1>Some module</h1
+<p><span class="methodcategory">Adding Routes and Views</span></p>
+<blockquote>
+<div><dl class="method">
+<dt id="pyramid.config.Configurator.add_route">
+<tt class="descname">add_route</tt><big>(</big><em>name</em>, <em>pattern=None</em>, <em>view=None</em>, <em>view_for=None</em>, <em>permission=None</em>, <em>factory=None</em>, <em>for_=None</em>, <em>header=None</em>, <em>xhr=False</em>, <em>accept=None</em>, <em>path_info=None</em>, <em>request_method=None</em>, <em>request_param=None</em>, <em>traverse=None</em>, <em>custom_predicates=()</em>, <em>view_permission=None</em>, <em>renderer=None</em>, <em>view_renderer=None</em>, <em>view_context=None</em>, <em>view_attr=None</em>, <em>use_global_views=False</em>, <em>path=None</em>, <em>pregenerator=None</em>, <em>static=False</em><big>)</big><a class="headerlink" href="#pyramid.config.Configurator.add_route" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a <a class="reference internal" href="../glossary.html#term-route-configuration"><em class="xref std std-term">route configuration</em></a> to the current
+configuration state, as well as possibly a <a class="reference internal" href="../glossary.html#term-view-configuration"><em class="xref std std-term">view
+configuration</em></a> to be used to specify a <a class="reference internal" href="../glossary.html#term-view-callable"><em class="xref std std-term">view callable</em></a>
+that will be invoked when this route matches.  The arguments
+to this method are divided into <em>predicate</em>, <em>non-predicate</em>,
+and <em>view-related</em> types.  <a class="reference internal" href="../glossary.html#term-route-predicate"><em class="xref std std-term">Route predicate</em></a> arguments
+narrow the circumstances in which a route will be match a
+request; non-predicate arguments are informational.</p>

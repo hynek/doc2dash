@@ -11,7 +11,6 @@ from mock import MagicMock
 
 import doc2dash
 from doc2dash import main
-from doc2dash.parsers.doctype import DocType
 
 
 args = MagicMock(name='args')
@@ -41,13 +40,14 @@ def test_normal_flow(monkeypatch, capsys):
 
     def _fake_prepare(args, dest):
         db_conn = sqlite3.connect(':memory:')
+        db_conn.row_factory = sqlite3.Row
         db_conn.execute(
                 'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
                 'type TEXT, path TEXT)'
         )
         return 'data', db_conn
 
-    def _yielder(path):
+    def _yielder():
         yield 'testmethod', 'testpath', 'cm'
 
     with tempfile.TemporaryDirectory() as td:
@@ -55,7 +55,9 @@ def test_normal_flow(monkeypatch, capsys):
         os.mkdir('foo')
         monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-n', 'bar'])
         monkeypatch.setattr(main, 'prepare_docset', _fake_prepare)
-        dt = DocType('testtype', lambda _: True, _yielder)
+        dt = MagicMock(detect=lambda _: True)
+        dt.name = 'testtype'
+        dt.return_value = MagicMock(parse=_yielder)
         monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
         main.main()
 
@@ -65,6 +67,7 @@ def test_normal_flow(monkeypatch, capsys):
 Converting testtype docs from "foo" to "bar.docset".
 Parsing HTML...
 Added 1 index entries.
+Adding table of contents meta data...
 '''
 
 

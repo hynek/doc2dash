@@ -1,7 +1,7 @@
 from . import pydoctor, sphinx
 
 
-DOCTYPES = [sphinx.doctype, pydoctor.doctype]
+DOCTYPES = [sphinx.SphinxParser, pydoctor.PyDoctorParser]
 
 
 def get_doctype(path):

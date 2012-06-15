@@ -39,20 +39,25 @@ def main():
         print('"{}" does not contain a known documentation format.'
               .format(source))
         sys.exit(errno.EINVAL)
+    docs, db_conn = prepare_docset(args, dest)
+    doc_parser = dt(docs)
     print('Converting {} docs from "{}" to "{}".'
           .format(dt.name, source, dest))
-    docs, db_conn = prepare_docset(args, dest)
 
     with db_conn:
         print('Parsing HTML...')
-        for entry in dt.parse(docs):
+        toc = doc_parser.add_toc()
+        for entry in doc_parser.parse():
             db_conn.execute(
                     'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
                     entry
             )
+            toc.send(entry)
         print('Added {0:,} index entries.'.format(
               db_conn.execute('SELECT COUNT(1) FROM searchIndex')
                      .fetchone()[0]))
+        print('Adding table of contents meta data...')
+        toc.close()
 
 
 def setup_paths(args):
@@ -89,6 +94,7 @@ def prepare_docset(args, dest):
     os.makedirs(resources)
 
     db_conn = sqlite3.connect(os.path.join(resources, 'docSet.dsidx'))
+    db_conn.row_factory = sqlite3.Row
     db_conn.execute(
             'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
             'type TEXT, path TEXT)'

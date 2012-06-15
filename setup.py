@@ -15,8 +15,6 @@ setup(
     packages=[
         'doc2dash',
         'doc2dash.parsers',
-        'doc2dash.parsers.pydoctor',
-        'doc2dash.parsers.sphinx',
     ],
     entry_points={
         'console_scripts': [

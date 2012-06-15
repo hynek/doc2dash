@@ -6,14 +6,15 @@ from bs4 import BeautifulSoup
 from mock import patch
 from pytest import raises
 
-from doc2dash.parsers.sphinx import parser
-from doc2dash.parsers import types
+from doc2dash.parsers import sphinx, types
+from doc2dash.parsers.base import Entry
 
 
 def test_index_detection():
     with tempfile.TemporaryDirectory() as td:
+        parser = sphinx.SphinxParser(td)
         with raises(IOError) as e:
-            list(parser.parse(td))
+            list(parser.parse())
         assert e.value.errno == errno.ENOENT
 
         idx_all = os.path.join(td, 'genindex-all.html')
@@ -23,11 +24,11 @@ def test_index_detection():
             f1.write('all')
             f2.write('reg')
 
-        with patch('doc2dash.parsers.sphinx.parser._parse_soup') as mock:
-            list(parser.parse(td))
+        with patch('doc2dash.parsers.sphinx._parse_soup') as mock:
+            list(parser.parse())
             assert 'all' in str(mock.call_args[0][0])
             os.unlink(idx_all)
-            list(parser.parse(td))
+            list(parser.parse())
             assert 'reg' in str(mock.call_args[0][0])
 
 
@@ -45,16 +46,16 @@ DD_EXAMPLE_PARSE_RESULT = [
 
 def test_process_dd():
     soup = BeautifulSoup(open('tests/parsers/sphinx/dd_example.html'))
-    assert list(parser._process_dd('__call__()', soup)) == \
+    assert list(sphinx._process_dd('__call__()', soup)) == \
            DD_EXAMPLE_PARSE_RESULT
-    assert list(parser._process_dd(
+    assert list(sphinx._process_dd(
         'foo()',
         BeautifulSoup('<dd><dl><dt>doesntmatchanything</dt></dl><dd>'))) == []
 
 
 def test_guess_type_by_name():
-    assert parser._guess_type_by_name('foo()') == types.FUNCTION
-    assert parser._guess_type_by_name('foo') == types.CONSTANT
+    assert sphinx._guess_type_by_name('foo()') == types.FUNCTION
+    assert sphinx._guess_type_by_name('foo') == types.CONSTANT
 
 
 EXAMPLE_PARSE_RESULT = [
@@ -93,16 +94,37 @@ EXAMPLE_PARSE_RESULT = [
 
 
 def test_parse_soup(monkeypatch):
-    monkeypatch.setattr(parser, 'POSSIBLE_INDEXES', ['sphinx_example.html'])
-    res = list(parser.parse('tests/parsers/sphinx'))
+    monkeypatch.setattr(sphinx, 'POSSIBLE_INDEXES', ['sphinx_example.html'])
+    res = list(sphinx.SphinxParser('tests/parsers/sphinx').parse())
     soup = BeautifulSoup(open('tests/parsers/sphinx/sphinx_example.html'))
-    assert res == list(parser._parse_soup(soup))
+    assert res == list(sphinx._parse_soup(soup))
     assert res == EXAMPLE_PARSE_RESULT
 
 
 def test_strip_annotation():
-    assert parser._strip_annotation('Foo') == 'Foo'
-    assert parser._strip_annotation('foo()') == 'foo()'
-    assert parser._strip_annotation('Foo (bar)') == 'Foo'
-    assert parser._strip_annotation('foo() (bar baz)') == 'foo()'
-    assert parser._strip_annotation('foo() ()') == 'foo()'
+    assert sphinx._strip_annotation('Foo') == 'Foo'
+    assert sphinx._strip_annotation('foo()') == 'foo()'
+    assert sphinx._strip_annotation('Foo (bar)') == 'Foo'
+    assert sphinx._strip_annotation('foo() (bar baz)') == 'foo()'
+    assert sphinx._strip_annotation('foo() ()') == 'foo()'
+
+
+def test_patcher():
+    p = sphinx.SphinxParser('foo')
+    soup = BeautifulSoup(open('tests/parsers/sphinx/function_example.html'))
+    assert p.find_and_patch_entry(
+            soup,
+            Entry(
+                'pyramid.config.Configurator.add_route',
+                'clm',
+                'pyramid.config.Configurator.add_route'
+            )
+    )
+    toc_link = soup(
+            'a',
+            attrs={'name': '//apple_ref/cpp/clm/pyramid.config.Configurator.'
+                           'add_route'}
+    )
+    assert toc_link
+    assert not p.find_and_patch_entry(soup, Entry('invented', 'cl', 'nonex'))
+    assert p.find_and_patch_entry(soup, Entry('somemodule', 'cl', 'module-sm'))

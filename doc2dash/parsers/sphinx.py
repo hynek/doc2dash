@@ -4,32 +4,57 @@ import re
 
 from bs4 import BeautifulSoup
 
-from doc2dash.parsers import types
+from . import types
+from .base import _BaseParser
+
+
+class SphinxParser(_BaseParser):
+
+    """Parser for Sphinx-based documenation: Python, Django, Pyramid..."""
+
+    name = 'sphinx'
+
+    DETECT_FILE = '_static/searchtools.js'
+    DETECT_PATTERN = '* Sphinx JavaScript util'
+
+    def parse(self):
+        """Parse sphinx docs at *path*.
+
+        yield tuples of symbol name, type and path
+
+        """
+        for idx in POSSIBLE_INDEXES:
+            try:
+                soup = BeautifulSoup(open(os.path.join(self.docpath, idx)),
+                                     'lxml')
+                break
+            except IOError:
+                pass
+        else:
+            raise IOError(errno.ENOENT, 'Essential index file not found.')
+
+        for t in _parse_soup(soup):
+            yield t
+
+    def find_and_patch_entry(self, soup, entry):
+        """Modify soup so dash can generate TOCs on the fly."""
+        link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
+        tag = soup.new_tag('a')
+        tag['name'] = self.APPLE_REF.format(entry.type, entry.name)
+        if link:
+            link.parent.insert(0, tag)
+            return True
+        elif entry.anchor.startswith('module-'):
+            soup.h1.parent.insert(0, tag)
+            return True
+        else:
+            return False
 
 
 POSSIBLE_INDEXES = [
         'genindex-all.html',
         'genindex.html',
 ]
-
-
-def parse(docpath):
-    """Parse sphinx docs at *path*.
-
-    yield tuples of symbol name, type and path
-
-    """
-    for idx in POSSIBLE_INDEXES:
-        try:
-            soup = BeautifulSoup(open(os.path.join(docpath, idx)), 'lxml')
-            break
-        except IOError:
-            pass
-    else:
-        raise IOError(errno.ENOENT, 'Essential index file not found.')
-
-    for t in _parse_soup(soup):
-        yield t
 
 
 def _parse_soup(soup):
@@ -42,7 +67,9 @@ def _parse_soup(soup):
                     type_, name = _get_type_and_name(dt.a.string)
                     if name:
                         href = dt.a['href']
-                        yield _url_to_name(href, type_), type_, href
+                        tmp_name = _url_to_name(href, type_)
+                        if not tmp_name.startswith('index-'):
+                            yield tmp_name, type_, href
                     else:
                         name = _strip_annotation(dt.a.string)
                     dd = dt.next_sibling.next_sibling
@@ -83,7 +110,9 @@ def _process_dd(name, dd):
         if type_:
             if type_ == _IN_MODULE:
                 type_ = _guess_type_by_name(name)
-            yield _url_to_name(dt.a['href'], type_), type_, dt.a['href']
+            full_name = _url_to_name(dt.a['href'], type_)
+            if not full_name.startswith('index-'):
+                yield full_name, type_, dt.a['href']
 
 
 def _guess_type_by_name(name):
