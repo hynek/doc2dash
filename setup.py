@@ -12,7 +12,12 @@ setup(
     license=doc2dash.__license__,
     author=doc2dash.__author__,
     author_email='hs@ox.cx',
-    packages=['doc2dash'],
+    packages=[
+        'doc2dash',
+        'doc2dash.parsers',
+        'doc2dash.parsers.pydoctor',
+        'doc2dash.parsers.sphinx',
+    ],
     entry_points={
         'console_scripts': [
             'doc2dash = doc2dash.main:main',
