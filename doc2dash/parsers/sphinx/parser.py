@@ -64,7 +64,8 @@ def _strip_annotation(text):
 
 
 def _url_to_name(url, type_):
-    if type_ == types.PACKAGE:
+    """Certain types have prefixes in names we have to strip before adding."""
+    if type_ == types.PACKAGE or type_ == types.CONSTANT and 'opcode-' in url:
         return url.split('#')[1][7:]
     else:
         return url.split('#')[1]
@@ -107,6 +108,7 @@ TYPE_MAPPING = [
         (re.compile(r'(.*)\(built-in class\)$'), types.CLASS),
         (re.compile(r'(.*)\(built-in variable\)$'), types.CONSTANT),
         (re.compile(r'(.*)\(module\)$'), types.PACKAGE),
+        (re.compile(r'(.*)\(opcode\)$'), types.CONSTANT),
         (re.compile(r'(.*)\(in module \S+\)$'), _IN_MODULE),
 ]
 

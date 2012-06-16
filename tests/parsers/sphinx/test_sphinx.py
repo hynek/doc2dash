@@ -87,6 +87,7 @@ EXAMPLE_PARSE_RESULT = [
         ('os.abort', 'func', 'library/os.html#os.abort'),
         ('qux', 'clconst', 'api/foo#qux'),
         ('abc', types.PACKAGE, 'library/abc.html#module-abc'),
+        ('BINARY_AND', types.CONSTANT, 'library/dis.html#opcode-BINARY_AND'),
 ]
 
 
