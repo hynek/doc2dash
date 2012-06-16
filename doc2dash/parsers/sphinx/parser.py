@@ -41,7 +41,7 @@ def _parse_soup(soup):
                         continue
                     type_, name = _get_type_and_name(dt.a.string)
                     if name:
-                        yield name, type_, dt.a['href']
+                        yield dt.a['href'].split('#')[1], type_, dt.a['href']
                     else:
                         name = _strip_annotation(dt.a.string)
                     dd = dt.next_sibling.next_sibling
@@ -50,7 +50,7 @@ def _parse_soup(soup):
                             yield y
 
 
-RE_ANNO = re.compile(r'(\S+) \(.*\)')
+RE_ANNO = re.compile(r'([^ (]+)(:?\(\))? \(.*\)')
 
 
 def _strip_annotation(text):
@@ -59,7 +59,7 @@ def _strip_annotation(text):
     if m:
         return m.group(1)
     else:
-        return text.strip()
+        return text.strip(' ()')
 
 
 def _process_dd(name, dd):
@@ -74,7 +74,7 @@ def _process_dd(name, dd):
         if type_:
             if type_ == _IN_MODULE:
                 type_ = _guess_type_by_name(name)
-            yield name, type_, dt.a['href']
+            yield dt.a['href'].split('#')[1], type_, dt.a['href']
 
 
 def _guess_type_by_name(name):

@@ -99,7 +99,8 @@ def prepare_docset(args, dest):
             {
                 'CFBundleIdentifier': args.name,
                 'CFBundleName': args.name,
-                'DocSetPlatformFamily': args.name,
+                'DocSetPlatformFamily': 'python',
+                'DashDocSetFamily': 'python',
                 'isDashDocset': True,
             },
             os.path.join(dest, 'Contents/Info.plist')

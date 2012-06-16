@@ -133,7 +133,8 @@ def test_prepare_docset(monkeypatch):
         assert p == {
                 'CFBundleIdentifier': 'foo',
                 'CFBundleName': 'foo',
-                'DocSetPlatformFamily': 'foo',
+                'DocSetPlatformFamily': 'python',
+                'DashDocSetFamily': 'python',
                 'isDashDocset': True,
         }
         with sqlite3.connect('bar/Contents/Resources/docSet.dsidx') as db_conn:
