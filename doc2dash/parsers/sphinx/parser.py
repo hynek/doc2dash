@@ -91,8 +91,8 @@ def _get_type(text):
 
 _IN_MODULE = '_in_module'
 TYPE_MAPPING = [
-        (re.compile(r'(.*)\(\S+ method\)$'), types.METHOD),
-        (re.compile(r'(.*)\(.*function\)$'), types.FUNCTION),
+        (re.compile(r'([^ (]*)(?:\(\))? ?\(\S+ method\)$'), types.METHOD),
+        (re.compile(r'([^ (]*)(?:\(\))? ?\(.*function\)$'), types.FUNCTION),
         (re.compile(r'(.*)\(\S+ attribute\)$'), types.ATTRIBUTE),
         (re.compile(r'(.*)\(\S+ member\)$'), types.ATTRIBUTE),
         (re.compile(r'(.*)\(class in \S+\)$'), types.CLASS),
