@@ -7,7 +7,8 @@ intended to be used with the dash_ API browser for OS X.
 If you’ve never hear of dash, you’re missing out: Together with doc2dash it’s
 all your API documentation at your fingertips!
 
-It’s proudly written in `Python 3`_.
+doc2dash is proudly written in `Python 3`_ (but seems to work with 2.7 too at
+the moment).
 
 
 Supported input types
