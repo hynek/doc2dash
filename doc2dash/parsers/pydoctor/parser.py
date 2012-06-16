@@ -16,7 +16,7 @@ def parse(docpath):
     for tag in soup.body.find_all('a'):
         path = tag.get('href')
         if path and not path.startswith('#'):
-            name = tag.string.rsplit('.')[-1]
+            name = tag.string
             yield name, _guess_type(name, path), path
 
 
