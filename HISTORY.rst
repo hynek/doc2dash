@@ -3,7 +3,7 @@
 History
 -------
 
-0.2.2 (2012-06-XX)
+0.2.2 (2012-06-16)
 ++++++++++++++++++
 - Don't collect () as part of method/function names.
 - Index whole names: symbols are searchable by the whole name, including the
