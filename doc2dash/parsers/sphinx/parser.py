@@ -41,7 +41,8 @@ def _parse_soup(soup):
                         continue
                     type_, name = _get_type_and_name(dt.a.string)
                     if name:
-                        yield dt.a['href'].split('#')[1], type_, dt.a['href']
+                        href = dt.a['href']
+                        yield _url_to_name(href, type_), type_, href
                     else:
                         name = _strip_annotation(dt.a.string)
                     dd = dt.next_sibling.next_sibling
@@ -54,12 +55,19 @@ RE_ANNO = re.compile(r'(.+) \(.*\)')
 
 
 def _strip_annotation(text):
-    """ Transforms 'foo (class in bar)' to 'foo'.  """
+    """Transforms 'foo (class in bar)' to 'foo'."""
     m = RE_ANNO.match(text)
     if m:
         return m.group(1)
     else:
         return text.strip()
+
+
+def _url_to_name(url, type_):
+    if type_ == types.PACKAGE:
+        return url.split('#')[1][7:]
+    else:
+        return url.split('#')[1]
 
 
 def _process_dd(name, dd):
@@ -74,7 +82,7 @@ def _process_dd(name, dd):
         if type_:
             if type_ == _IN_MODULE:
                 type_ = _guess_type_by_name(name)
-            yield dt.a['href'].split('#')[1], type_, dt.a['href']
+            yield _url_to_name(dt.a['href'], type_), type_, dt.a['href']
 
 
 def _guess_type_by_name(name):

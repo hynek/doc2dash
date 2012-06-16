@@ -86,6 +86,7 @@ EXAMPLE_PARSE_RESULT = [
         ('ftplib.FTP.abort', 'clm', 'library/ftplib.html#ftplib.FTP.abort'),
         ('os.abort', 'func', 'library/os.html#os.abort'),
         ('qux', 'clconst', 'api/foo#qux'),
+        ('abc', types.PACKAGE, 'library/abc.html#module-abc'),
 ]
 
 
