@@ -22,7 +22,7 @@ def parse(docpath):
 
 def _guess_type(name, path):
     """Employ voodoo magic to guess the type of *name* in *path*."""
-    if name[0].isupper() and '#' not in path:
+    if name.rsplit('.', 1)[-1][0].isupper() and '#' not in path:
         return CLASS
     elif name.islower() and '#' not in path:
         return PACKAGE
