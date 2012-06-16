@@ -4,7 +4,11 @@ doc2dash: Create docsets for dash
 doc2dash is a MIT licensed extensible `Documentation Set`_ generator
 intended to be used with the dash_ API browser for OS X.
 
+If you’ve never hear of dash, you’re missing out: Together with doc2dash it’s
+all your API documentation at your fingertips!
+
 It’s proudly written in `Python 3`_.
+
 
 Supported input types
 ---------------------
@@ -12,7 +16,7 @@ Supported input types
 Currently, the following source types are supported:
 
 - Sphinx_ (nearly every single Python project out there)
-- pydoctor_ (Twisted_)
+- pydoctor_ (Twisted_!)
 
 Feel free to help adding more!
 
