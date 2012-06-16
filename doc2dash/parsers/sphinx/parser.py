@@ -50,7 +50,7 @@ def _parse_soup(soup):
                             yield y
 
 
-RE_ANNO = re.compile(r'([^ (]+)(:?\(\))? \(.*\)')
+RE_ANNO = re.compile(r'(.+) \(.*\)')
 
 
 def _strip_annotation(text):
@@ -59,7 +59,7 @@ def _strip_annotation(text):
     if m:
         return m.group(1)
     else:
-        return text.strip(' ()')
+        return text.strip()
 
 
 def _process_dd(name, dd):
@@ -91,8 +91,8 @@ def _get_type(text):
 
 _IN_MODULE = '_in_module'
 TYPE_MAPPING = [
-        (re.compile(r'([^ (]*)(?:\(\))? ?\(\S+ method\)$'), types.METHOD),
-        (re.compile(r'([^ (]*)(?:\(\))? ?\(.*function\)$'), types.FUNCTION),
+        (re.compile(r'(.*)\(\S+ method\)$'), types.METHOD),
+        (re.compile(r'(.*)\(.*function\)$'), types.FUNCTION),
         (re.compile(r'(.*)\(\S+ attribute\)$'), types.ATTRIBUTE),
         (re.compile(r'(.*)\(\S+ member\)$'), types.ATTRIBUTE),
         (re.compile(r'(.*)\(class in \S+\)$'), types.CLASS),

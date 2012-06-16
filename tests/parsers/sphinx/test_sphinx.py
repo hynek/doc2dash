@@ -48,7 +48,7 @@ def test_process_dd():
     assert list(parser._process_dd('__call__()', soup)) == \
            DD_EXAMPLE_PARSE_RESULT
     assert list(parser._process_dd(
-        'foo',
+        'foo()',
         BeautifulSoup('<dd><dl><dt>doesntmatchanything</dt></dl><dd>'))) == []
 
 
@@ -83,6 +83,8 @@ EXAMPLE_PARSE_RESULT = [
         ('pyramid.interfaces.IActionInfo.__str__', 'clm',
          'api/interfaces.html#pyramid.interfaces.IActionInfo.__str__'),
         ('dict', 'cl', 'library/stdtypes.html#dict'),
+        ('ftplib.FTP.abort', 'clm', 'library/ftplib.html#ftplib.FTP.abort'),
+        ('os.abort', 'func', 'library/os.html#os.abort'),
         ('qux', 'clconst', 'api/foo#qux'),
 ]
 
@@ -97,7 +99,7 @@ def test_parse_soup(monkeypatch):
 
 def test_strip_annotation():
     assert parser._strip_annotation('Foo') == 'Foo'
-    assert parser._strip_annotation('foo()') == 'foo'
+    assert parser._strip_annotation('foo()') == 'foo()'
     assert parser._strip_annotation('Foo (bar)') == 'Foo'
-    assert parser._strip_annotation('foo() (bar baz)') == 'foo'
-    assert parser._strip_annotation('foo() ()') == 'foo'
+    assert parser._strip_annotation('foo() (bar baz)') == 'foo()'
+    assert parser._strip_annotation('foo() ()') == 'foo()'
