@@ -3,6 +3,9 @@ TESTS=tests
 init:
 	python setup.py develop
 	pip install -r requirements.txt
+	mkdir -p test_data/sphinx
+	mkdir -p test_data/pydoctor
+	echo "\n\nNow fill test_data's data type directories with...well test data!"
 
 test:
 	py.test $(TESTS)
