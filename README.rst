@@ -19,7 +19,10 @@ Currently, the following source types are supported:
 - Sphinx_ (nearly every single Python project out there)
 - pydoctor_ (Twisted_!)
 
-Feel free to help adding more!
+Feel free to help adding more! While doc2dash is implemented in Python, the
+scope for the supported documentation types is unlimited.  So go on and submit
+a parser for your favourite Ruby, Haskell, Lisp, Erlang, JavaScript, ...
+format!
 
 
 Usage
