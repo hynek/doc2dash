@@ -37,6 +37,6 @@ def test_add_toc_single_entry(monkeypatch):
         toc = p.add_toc()
         for e in entries:
             toc.send(e)
-        with patch('builtins.print') as mock:
+        with patch('doc2dash.parsers.base.log.debug') as mock:
             toc.close()
             assert mock.call_count == 1

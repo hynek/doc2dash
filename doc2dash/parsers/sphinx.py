@@ -1,4 +1,5 @@
 import errno
+import logging
 import os
 import re
 
@@ -6,6 +7,9 @@ from bs4 import BeautifulSoup
 
 from . import types
 from .base import _BaseParser
+
+
+log = logging.getLogger(__name__)
 
 
 class SphinxParser(_BaseParser):
@@ -58,6 +62,7 @@ POSSIBLE_INDEXES = [
 
 
 def _parse_soup(soup):
+    log.info('Creating database...')
     for table in soup('table', {'class': 'genindextable'}):
         for td in table('td'):
             for dl in td('dl', recursive=False):

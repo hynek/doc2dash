@@ -1,9 +1,13 @@
+import logging
 import os
 
 from bs4 import BeautifulSoup
 
 from . import types
 from .base import _BaseParser
+
+
+log = logging.getLogger(__name__)
 
 
 class PyDoctorParser(_BaseParser):
@@ -27,7 +31,7 @@ class PyDoctorParser(_BaseParser):
             open(os.path.join(self.docpath, 'nameIndex.html')),
             'lxml'
         )
-        print('Creating database...')
+        log.info('Creating database...')
         for tag in soup.body.find_all('a'):
             path = tag.get('href')
             if path and not path.startswith('#'):

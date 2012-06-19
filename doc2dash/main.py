@@ -1,5 +1,6 @@
 import argparse
 import errno
+import logging
 import os
 import plistlib
 import shutil
@@ -7,6 +8,9 @@ import sqlite3
 import sys
 
 from . import __version__, __doc__, parsers
+
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -31,21 +35,39 @@ def main():
         action='version',
         version='%(prog)s {}'.format(__version__),
     )
+    parser.add_argument(
+        '--quiet', '-q',
+        action='store_true',
+        help='limit output to errors and warnings'
+    )
+    parser.add_argument(
+        '--verbose', '-v',
+        action='store_true',
+        help='be verbose'
+    )
     args = parser.parse_args()
+
+    try:
+        level = determine_log_level(args)
+        logging.basicConfig(format='%(message)s', level=level)
+    except ValueError as e:
+        print(e.args[0], '\n')
+        parser.print_help()
+        sys.exit(1)
 
     source, dest = setup_paths(args)
     dt = parsers.get_doctype(source)
     if dt is None:
-        print('"{}" does not contain a known documentation format.'
-              .format(source))
+        log.error('"{}" does not contain a known documentation format.'
+                  .format(source))
         sys.exit(errno.EINVAL)
     docs, db_conn = prepare_docset(args, dest)
     doc_parser = dt(docs)
-    print('Converting {} docs from "{}" to "{}".'
-          .format(dt.name, source, dest))
+    log.info('Converting {} docs from "{}" to "{}".'
+             .format(dt.name, source, dest))
 
     with db_conn:
-        print('Parsing HTML...')
+        log.info('Parsing HTML...')
         toc = doc_parser.add_toc()
         for entry in doc_parser.parse():
             db_conn.execute(
@@ -53,11 +75,25 @@ def main():
                 entry
             )
             toc.send(entry)
-        print('Added {0:,} index entries.'.format(
-              db_conn.execute('SELECT COUNT(1) FROM searchIndex')
-                     .fetchone()[0]))
-        print('Adding table of contents meta data...')
+        log.info('Added {0:,} index entries.'.format(
+            db_conn.execute('SELECT COUNT(1) FROM searchIndex')
+                   .fetchone()[0]))
+        log.info('Adding table of contents meta data...')
         toc.close()
+
+
+def determine_log_level(args):
+    """We use logging's levels as an easy-to-use verbosity controller."""
+    if args.verbose and args.quiet:
+        raise ValueError("Supplying both --quiet and --verbose doesn't make "
+                         "sense.")
+    elif args.verbose:
+        level = logging.DEBUG
+    elif args.quiet:
+        level = logging.ERROR
+    else:
+        level = logging.INFO
+    return level
 
 
 def setup_paths(args):
@@ -69,16 +105,16 @@ def setup_paths(args):
         args.name = args.name.replace('.docset', '')
     dest = args.name + '.docset'
     if not os.path.exists(source):
-        print('Source directory "{}" does not exist.'.format(source))
+        log.error('Source directory "{}" does not exist.'.format(source))
         sys.exit(errno.ENOENT)
     if not os.path.isdir(source):
-        print('Source "{}" is not a directory.'.format(source))
+        log.error('Source "{}" is not a directory.'.format(source))
         sys.exit(errno.ENOTDIR)
     dst_exists = os.path.lexists(dest)
     if dst_exists and args.force:
         shutil.rmtree(dest)
     elif dst_exists:
-        print('Destination path "{}" already exists.'.format(dest))
+        log.error('Destination path "{}" already exists.'.format(dest))
         sys.exit(errno.EEXIST)
     return source, dest
 

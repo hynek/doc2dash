@@ -1,9 +1,13 @@
 import errno
+import logging
 import os
 import sys
 from collections import defaultdict, namedtuple
 
 from bs4 import BeautifulSoup
+
+
+log = logging.getLogger(__name__)
 
 
 Entry = namedtuple('Entry', ['name', 'type', 'anchor'])
@@ -65,6 +69,7 @@ class _BaseParser:
                 soup = BeautifulSoup(fp, 'lxml')
                 for entry in entries:
                     if not self.find_and_patch_entry(soup, entry):
-                        print(fname, entry)
+                        log.debug("Can't find anchor {} in {}."
+                                  .format(entry.anchor, fname))
             with open(full_path, 'w') as fp:
                 fp.write(str(soup))

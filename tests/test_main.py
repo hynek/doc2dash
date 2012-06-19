@@ -1,4 +1,5 @@
 import errno
+import logging
 import os
 import plistlib
 import shutil
@@ -7,12 +8,13 @@ import sys
 import tempfile
 
 import pytest
-from mock import MagicMock
+from mock import MagicMock, patch
 
 import doc2dash
 from doc2dash import main
 
 
+log = logging.getLogger(__name__)
 args = MagicMock(name='args')
 
 
@@ -36,7 +38,7 @@ def test_handles_unknown_doc_types(monkeypatch):
         assert e.value.code == errno.EINVAL
 
 
-def test_normal_flow(monkeypatch, capsys):
+def test_normal_flow(monkeypatch):
 
     def _fake_prepare(args, dest):
         db_conn = sqlite3.connect(':memory:')
@@ -59,10 +61,11 @@ def test_normal_flow(monkeypatch, capsys):
         dt.name = 'testtype'
         dt.return_value = MagicMock(parse=_yielder)
         monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
-        main.main()
+        with patch('doc2dash.main.log.info') as mock:
+            main.main()
+            # assert mock.call_args_list is None
+            out = '\n'.join(call[0][0] for call in mock.call_args_list) + '\n'
 
-    out, err = capsys.readouterr()
-    assert err == ''
     assert out == '''\
 Converting testtype docs from "foo" to "bar.docset".
 Parsing HTML...
@@ -145,3 +148,25 @@ def test_prepare_docset(monkeypatch):
             # ensure table exists and is empty
             cur.execute('select count(1) from searchIndex')
             assert cur.fetchone()[0] == 0
+
+
+###########################################################################
+#                           setup_logging tests                           #
+###########################################################################
+
+
+def _check_logging(verbose, quiet, expect):
+    args.configure_mock(verbose=verbose, quiet=quiet)
+    assert main.determine_log_level(args) is expect
+
+
+def test_logging(monkeypatch):
+    with pytest.raises(ValueError):
+        _check_logging(True, True, logging.INFO)
+    _check_logging(False, False, logging.INFO)
+    _check_logging(True, False, logging.DEBUG)
+    _check_logging(False, True, logging.ERROR)
+
+    monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-q', '-v'])
+    with pytest.raises(SystemExit):
+        main.main()
