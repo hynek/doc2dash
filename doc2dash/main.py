@@ -13,23 +13,23 @@ def main():
     """Main cli entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-            'source',
-            help='Source directory containing API documentation in a supported'
-                 ' format.'
+        'source',
+        help='Source directory containing API documentation in a supported'
+             ' format.'
     )
     parser.add_argument(
-            '--force', '-f',
-            action='store_true',
-            help='force overwriting if destination already exists',
+        '--force', '-f',
+        action='store_true',
+        help='force overwriting if destination already exists',
     )
     parser.add_argument(
-            '--name', '-n',
-            help='name docset explicitly',
+        '--name', '-n',
+        help='name docset explicitly',
     )
     parser.add_argument(
-            '--version',
-            action='version',
-            version='%(prog)s {}'.format(__version__),
+        '--version',
+        action='version',
+        version='%(prog)s {}'.format(__version__),
     )
     args = parser.parse_args()
 
@@ -49,8 +49,8 @@ def main():
         toc = doc_parser.add_toc()
         for entry in doc_parser.parse():
             db_conn.execute(
-                    'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
-                    entry
+                'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
+                entry
             )
             toc.send(entry)
         print('Added {0:,} index entries.'.format(
@@ -96,20 +96,20 @@ def prepare_docset(args, dest):
     db_conn = sqlite3.connect(os.path.join(resources, 'docSet.dsidx'))
     db_conn.row_factory = sqlite3.Row
     db_conn.execute(
-            'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
-            'type TEXT, path TEXT)'
+        'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
+        'type TEXT, path TEXT)'
     )
     db_conn.commit()
 
     plistlib.writePlist(
-            {
-                'CFBundleIdentifier': args.name,
-                'CFBundleName': args.name,
-                'DocSetPlatformFamily': 'python',
-                'DashDocSetFamily': 'python',
-                'isDashDocset': True,
-            },
-            os.path.join(dest, 'Contents/Info.plist')
+        {
+            'CFBundleIdentifier': args.name,
+            'CFBundleName': args.name,
+            'DocSetPlatformFamily': 'python',
+            'DashDocSetFamily': 'python',
+            'isDashDocset': True,
+        },
+        os.path.join(dest, 'Contents/Info.plist')
     )
 
     shutil.copytree(args.source, docs)

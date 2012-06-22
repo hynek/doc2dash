@@ -24,8 +24,8 @@ class PyDoctorParser(_BaseParser):
 
         """
         soup = BeautifulSoup(
-                open(os.path.join(self.docpath, 'nameIndex.html')),
-                'lxml'
+            open(os.path.join(self.docpath, 'nameIndex.html')),
+            'lxml'
         )
         print('Creating database...')
         for tag in soup.body.find_all('a'):

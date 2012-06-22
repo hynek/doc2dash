@@ -52,8 +52,8 @@ class SphinxParser(_BaseParser):
 
 
 POSSIBLE_INDEXES = [
-        'genindex-all.html',
-        'genindex.html',
+    'genindex-all.html',
+    'genindex.html',
 ]
 
 
@@ -129,16 +129,16 @@ def _get_type(text):
 
 _IN_MODULE = '_in_module'
 TYPE_MAPPING = [
-        (re.compile(r'(.*)\(\S+ method\)$'), types.METHOD),
-        (re.compile(r'(.*)\(.*function\)$'), types.FUNCTION),
-        (re.compile(r'(.*)\(\S+ attribute\)$'), types.ATTRIBUTE),
-        (re.compile(r'(.*)\(\S+ member\)$'), types.ATTRIBUTE),
-        (re.compile(r'(.*)\(class in \S+\)$'), types.CLASS),
-        (re.compile(r'(.*)\(built-in class\)$'), types.CLASS),
-        (re.compile(r'(.*)\(built-in variable\)$'), types.CONSTANT),
-        (re.compile(r'(.*)\(module\)$'), types.PACKAGE),
-        (re.compile(r'(.*)\(opcode\)$'), types.CONSTANT),
-        (re.compile(r'(.*)\(in module \S+\)$'), _IN_MODULE),
+    (re.compile(r'(.*)\(\S+ method\)$'), types.METHOD),
+    (re.compile(r'(.*)\(.*function\)$'), types.FUNCTION),
+    (re.compile(r'(.*)\(\S+ attribute\)$'), types.ATTRIBUTE),
+    (re.compile(r'(.*)\(\S+ member\)$'), types.ATTRIBUTE),
+    (re.compile(r'(.*)\(class in \S+\)$'), types.CLASS),
+    (re.compile(r'(.*)\(built-in class\)$'), types.CLASS),
+    (re.compile(r'(.*)\(built-in variable\)$'), types.CONSTANT),
+    (re.compile(r'(.*)\(module\)$'), types.PACKAGE),
+    (re.compile(r'(.*)\(opcode\)$'), types.CONSTANT),
+    (re.compile(r'(.*)\(in module \S+\)$'), _IN_MODULE),
 ]
 
 

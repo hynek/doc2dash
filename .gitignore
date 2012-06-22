@@ -4,3 +4,4 @@ doc2dash.egg-info
 test_data
 *.docset
 dist
+.cache

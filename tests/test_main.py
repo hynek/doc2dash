@@ -42,8 +42,8 @@ def test_normal_flow(monkeypatch, capsys):
         db_conn = sqlite3.connect(':memory:')
         db_conn.row_factory = sqlite3.Row
         db_conn.execute(
-                'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
-                'type TEXT, path TEXT)'
+            'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
+            'type TEXT, path TEXT)'
         )
         return 'data', db_conn
 
@@ -128,17 +128,17 @@ def test_prepare_docset(monkeypatch):
         args.configure_mock(source='some/path/foo', name='foo')
         main.prepare_docset(args, 'bar')
         m_ct.assert_called_once_with(
-                'some/path/foo',
-                'bar/Contents/Resources/Documents',
+            'some/path/foo',
+            'bar/Contents/Resources/Documents',
         )
         assert os.path.isfile('bar/Contents/Resources/docSet.dsidx')
         p = plistlib.readPlist('bar/Contents/Info.plist')
         assert p == {
-                'CFBundleIdentifier': 'foo',
-                'CFBundleName': 'foo',
-                'DocSetPlatformFamily': 'python',
-                'DashDocSetFamily': 'python',
-                'isDashDocset': True,
+            'CFBundleIdentifier': 'foo',
+            'CFBundleName': 'foo',
+            'DocSetPlatformFamily': 'python',
+            'DashDocSetFamily': 'python',
+            'isDashDocset': True,
         }
         with sqlite3.connect('bar/Contents/Resources/docSet.dsidx') as db_conn:
             cur = db_conn.cursor()

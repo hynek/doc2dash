@@ -18,8 +18,8 @@ def test_toc_with_empty_db():
 
 def test_add_toc_single_entry(monkeypatch):
     entries = [
-            ('foo', 'clm', 'bar.html#foo'),
-            ('qux', 'cl', 'bar.html'),
+        ('foo', 'clm', 'bar.html#foo'),
+        ('qux', 'cl', 'bar.html'),
     ]
     with tempfile.TemporaryDirectory() as td:
         monkeypatch.chdir(td)

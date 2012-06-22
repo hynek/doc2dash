@@ -11,11 +11,7 @@ def test_get_doctype(monkeypatch):
     monkeypatch.setattr(doc2dash.parsers, 'DOCTYPES', [])
     assert doc2dash.parsers.get_doctype('foo') is None
     dt = MagicMock('testtype', detect=lambda _: True)
-    monkeypatch.setattr(
-            doc2dash.parsers,
-            'DOCTYPES',
-            [dt]
-    )
+    monkeypatch.setattr(doc2dash.parsers, 'DOCTYPES', [dt])
     assert doc2dash.parsers.get_doctype('foo') is dt
 
 

@@ -51,7 +51,7 @@ class _BaseParser:
                 try:
                     fname, anchor = entry[2].split('#')
                     files[fname].append(
-                            Entry(entry[0], entry[1], anchor)
+                        Entry(entry[0], entry[1], anchor)
                     )
                 except ValueError:
                     # pydoctor has no anchors for e.g. classes

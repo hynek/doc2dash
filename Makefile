@@ -13,5 +13,7 @@ test:
 cov:
 	py.test --cov=doc2dash --cov-report=term-missing $(TESTS)
 
+pep8:
+	py.test --pep8 doc2dash tests
 
-.PHONY: serve init test cov
+.PHONY: serve init test cov pep8
