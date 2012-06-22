@@ -105,7 +105,7 @@ def prepare_docset(args, dest):
         {
             'CFBundleIdentifier': args.name,
             'CFBundleName': args.name,
-            'DocSetPlatformFamily': 'python',
+            'DocSetPlatformFamily': args.name.lower(),
             'DashDocSetFamily': 'python',
             'isDashDocset': True,
         },

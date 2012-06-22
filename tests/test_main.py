@@ -136,7 +136,7 @@ def test_prepare_docset(monkeypatch):
         assert p == {
             'CFBundleIdentifier': 'foo',
             'CFBundleName': 'foo',
-            'DocSetPlatformFamily': 'python',
+            'DocSetPlatformFamily': 'foo',
             'DashDocSetFamily': 'python',
             'isDashDocset': True,
         }
