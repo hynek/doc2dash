@@ -62,10 +62,11 @@ def test_normal_flow(monkeypatch):
         dt.name = 'testtype'
         dt.return_value = MagicMock(parse=_yielder)
         monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
-        with patch('doc2dash.main.log.info') as mock:
+        with patch('doc2dash.main.log.info') as i, patch('os.system') as s:
             main.main()
             # assert mock.call_args_list is None
-            out = '\n'.join(call[0][0] for call in mock.call_args_list) + '\n'
+            out = '\n'.join(call[0][0] for call in i.call_args_list) + '\n'
+            assert s.call_args[0] == ('open -a dash "bar.docset"', )
 
     assert out == '''\
 Converting testtype docs from "foo" to "bar.docset".
