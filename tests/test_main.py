@@ -34,8 +34,8 @@ def test_fails_with_unknown_icon(capsys, monkeypatch):
         main.main()
 
     out, err = capsys.readouterr()
-    assert out == ''
-    assert 'Please supply a PNG icon.' in err
+    assert err == ''
+    assert 'Please supply a PNG icon.' in out
 
 
 def test_handles_unknown_doc_types(monkeypatch):

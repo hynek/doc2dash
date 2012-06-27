@@ -72,14 +72,14 @@ def main():
     args = parser.parse_args()
 
     if args.icon and not args.icon.endswith('.png'):
-        print('Please supply a PNG icon.', file=sys.stderr)
+        print('Please supply a PNG icon.')
         sys.exit(1)
 
     try:
         level = determine_log_level(args)
         logging.basicConfig(format='%(message)s', level=level)
     except ValueError as e:
-        print(e.args[0], '\n', file=sys.stderr)
+        print(e.args[0], '\n')
         parser.print_help()
         sys.exit(1)
 
