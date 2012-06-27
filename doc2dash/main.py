@@ -65,13 +65,21 @@ def main():
         help="create docset in doc2dash's default directory and add resulting "
              "docset to dash",
     )
+    parser.add_argument(
+        '--icon', '-i',
+        help='add PNG icon to docset'
+    )
     args = parser.parse_args()
+
+    if args.icon and not args.icon.endswith('.png'):
+        print('Please supply a PNG icon.', file=sys.stderr)
+        sys.exit(1)
 
     try:
         level = determine_log_level(args)
         logging.basicConfig(format='%(message)s', level=level)
     except ValueError as e:
-        print(e.args[0], '\n')
+        print(e.args[0], '\n', file=sys.stderr)
         parser.print_help()
         sys.exit(1)
 
@@ -100,6 +108,9 @@ def main():
                    .fetchone()[0]))
         log.info('Adding table of contents meta data...')
         toc.close()
+
+    if args.icon:
+        add_icon(args.icon, dest)
 
     if args.add_to_dash:
         log.info('Adding to dash...')
@@ -177,3 +188,8 @@ def prepare_docset(args, dest):
 
     shutil.copytree(args.source, docs)
     return docs, db_conn
+
+
+def add_icon(icon, dest):
+    """Add icon to docset"""
+    shutil.copy2(icon, os.path.join(dest, 'icon.png'))

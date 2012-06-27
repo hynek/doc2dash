@@ -28,6 +28,16 @@ def test_fails_without_source(capsys, monkeypatch):
     assert 'doc2dash: error: too few arguments' in err
 
 
+def test_fails_with_unknown_icon(capsys, monkeypatch):
+    monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-i', 'bar.bmp'])
+    with pytest.raises(SystemExit):
+        main.main()
+
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert 'Please supply a PNG icon.' in err
+
+
 def test_handles_unknown_doc_types(monkeypatch):
     with tempfile.TemporaryDirectory() as td:
         monkeypatch.chdir(td)
@@ -56,17 +66,20 @@ def test_normal_flow(monkeypatch):
         monkeypatch.chdir(td)
         os.mkdir('foo')
         monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-n', 'bar',
-                                          '-a'])
+                                          '-a', '-i', 'qux.png'])
         monkeypatch.setattr(main, 'prepare_docset', _fake_prepare)
         dt = MagicMock(detect=lambda _: True)
         dt.name = 'testtype'
         dt.return_value = MagicMock(parse=_yielder)
         monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
-        with patch('doc2dash.main.log.info') as i, patch('os.system') as s:
+        with patch('doc2dash.main.log.info') as info, \
+             patch('os.system') as system, \
+             patch('shutil.copy2') as cp:
             main.main()
             # assert mock.call_args_list is None
-            out = '\n'.join(call[0][0] for call in i.call_args_list) + '\n'
-            assert s.call_args[0] == ('open -a dash "bar.docset"', )
+            out = '\n'.join(call[0][0] for call in info.call_args_list) + '\n'
+            assert system.call_args[0] == ('open -a dash "bar.docset"', )
+            assert cp.call_args[0] == ('qux.png', 'bar.docset/icon.png')
 
     assert out == '''\
 Converting testtype docs from "foo" to "bar.docset".

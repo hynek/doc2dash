@@ -60,6 +60,7 @@ Full usage: ::
      --add-to-dash, -a     automatically add resulting docset to dash
      -A                    create docset in doc2dash's default directory and add
                            resulting docset to dash
+     --icon ICON, -i ICON  add PNG icon to docset
 
 
 Installation
