@@ -1,9 +1,13 @@
+import os
 from bs4 import BeautifulSoup
 from mock import patch
 
 from doc2dash.parsers import types
 from doc2dash.parsers.base import Entry
 from doc2dash.parsers.pydoctor import PyDoctorParser, _guess_type
+
+
+HERE = os.path.dirname(__file__)
 
 
 def test_guess_type():
@@ -47,7 +51,7 @@ EXAMPLE_PARSE_RESULT = [
 
 
 def test_parse():
-    example = open('tests/parsers/pydoctor/pydoctor_example.html').read()
+    example = open(os.path.join(HERE, 'pydoctor_example.html')).read()
     with patch('builtins.open') as mock:
         mock.return_value = example
         assert list(PyDoctorParser('foo').parse()) == EXAMPLE_PARSE_RESULT
@@ -55,7 +59,7 @@ def test_parse():
 
 def test_patcher():
     p = PyDoctorParser('foo')
-    soup = BeautifulSoup(open('tests/parsers/pydoctor/function_example.html'))
+    soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
     assert p.find_and_patch_entry(
         soup,
         Entry('twisted.application.app.ApplicationRunner.startReactor',

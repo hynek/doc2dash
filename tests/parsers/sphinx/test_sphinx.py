@@ -10,6 +10,9 @@ from doc2dash.parsers import sphinx, types
 from doc2dash.parsers.base import Entry
 
 
+HERE = os.path.dirname(__file__)
+
+
 def test_index_detection():
     with tempfile.TemporaryDirectory() as td:
         parser = sphinx.SphinxParser(td)
@@ -44,7 +47,7 @@ DD_EXAMPLE_PARSE_RESULT = [
 
 
 def test_process_dd():
-    soup = BeautifulSoup(open('tests/parsers/sphinx/dd_example.html'))
+    soup = BeautifulSoup(open(os.path.join(HERE, 'dd_example.html')))
     assert (list(sphinx._process_dd('__call__()', soup)) ==
             DD_EXAMPLE_PARSE_RESULT)
     assert list(sphinx._process_dd(
@@ -94,8 +97,8 @@ EXAMPLE_PARSE_RESULT = [
 
 def test_parse_soup(monkeypatch):
     monkeypatch.setattr(sphinx, 'POSSIBLE_INDEXES', ['sphinx_example.html'])
-    res = list(sphinx.SphinxParser('tests/parsers/sphinx').parse())
-    soup = BeautifulSoup(open('tests/parsers/sphinx/sphinx_example.html'))
+    res = list(sphinx.SphinxParser(HERE).parse())
+    soup = BeautifulSoup(open(os.path.join(HERE, 'sphinx_example.html')))
     assert res == list(sphinx._parse_soup(soup))
     assert res == EXAMPLE_PARSE_RESULT
 
@@ -110,7 +113,7 @@ def test_strip_annotation():
 
 def test_patcher():
     p = sphinx.SphinxParser('foo')
-    soup = BeautifulSoup(open('tests/parsers/sphinx/function_example.html'))
+    soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
     assert p.find_and_patch_entry(
         soup,
         Entry(
