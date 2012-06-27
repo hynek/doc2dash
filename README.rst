@@ -39,9 +39,9 @@ When finished, the docset can be imported into dash.
 
 Full usage: ::
 
-   usage: doc2dash [-h] [--force] [--name NAME] [--version] source
-
-   Convert docs to docsets.
+   usage: doc2dash [-h] [--force] [--name NAME] [--version] [--quiet] [--verbose]
+                [--destination DESTINATION] [--add-to-dash] [-A]
+                source
 
    positional arguments:
      source                Source directory containing API documentation in a
@@ -52,6 +52,14 @@ Full usage: ::
      --force, -f           force overwriting if destination already exists
      --name NAME, -n NAME  name docset explicitly
      --version             show program's version number and exit
+     --quiet, -q           limit output to errors and warnings
+     --verbose, -v         be verbose
+     --destination DESTINATION, -d DESTINATION
+                           destination directory for docset (default is current),
+                           ignored if -A is specified
+     --add-to-dash, -a     automatically add resulting docset to dash
+     -A                    create docset in doc2dash's default directory and add
+                           resulting docset to dash
 
 
 Installation

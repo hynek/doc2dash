@@ -12,6 +12,10 @@ from . import __version__, __doc__, parsers
 
 log = logging.getLogger(__name__)
 
+DEFAULT_DOCSET_PATH = os.path.expanduser(
+    '~/Library/Application Support/doc2dash/DocSets'
+)
+
 
 def main():
     """Main cli entry point."""
@@ -44,6 +48,22 @@ def main():
         '--verbose', '-v',
         action='store_true',
         help='be verbose'
+    )
+    parser.add_argument(
+        '--destination', '-d',
+        help='destination directory for docset (default is current), '
+             'ignored if -A is specified',
+    )
+    parser.add_argument(
+        '--add-to-dash', '-a',
+        action='store_true',
+        help='automatically add resulting docset to dash',
+    )
+    parser.add_argument(
+        '-A',
+        action='store_true',
+        help="create docset in doc2dash's default directory and add resulting "
+             "docset to dash",
     )
     args = parser.parse_args()
 
@@ -81,6 +101,10 @@ def main():
         log.info('Adding table of contents meta data...')
         toc.close()
 
+    if args.add_to_dash:
+        log.info('Adding to dash...')
+        os.system('open -a dash "{}"'.format(dest))
+
 
 def determine_log_level(args):
     """We use logging's levels as an easy-to-use verbosity controller."""
@@ -103,7 +127,10 @@ def setup_paths(args):
         args.name = os.path.split(source)[-1]
     elif args.name.endswith('.docset'):
         args.name = args.name.replace('.docset', '')
-    dest = args.name + '.docset'
+    if args.A:
+        args.destination = DEFAULT_DOCSET_PATH
+        args.add_to_dash = True
+    dest = os.path.join(args.destination or '', args.name + '.docset')
     if not os.path.exists(source):
         log.error('Source directory "{}" does not exist.'.format(source))
         sys.exit(errno.ENOENT)

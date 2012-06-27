@@ -15,7 +15,7 @@ from doc2dash import main
 
 
 log = logging.getLogger(__name__)
-args = MagicMock(name='args')
+args = MagicMock(name='args', A=False)
 
 
 def test_fails_without_source(capsys, monkeypatch):
@@ -55,7 +55,8 @@ def test_normal_flow(monkeypatch):
     with tempfile.TemporaryDirectory() as td:
         monkeypatch.chdir(td)
         os.mkdir('foo')
-        monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-n', 'bar'])
+        monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-n', 'bar',
+                                          '-a'])
         monkeypatch.setattr(main, 'prepare_docset', _fake_prepare)
         dt = MagicMock(detect=lambda _: True)
         dt.name = 'testtype'
@@ -71,6 +72,7 @@ Converting testtype docs from "foo" to "bar.docset".
 Parsing HTML...
 Added 1 index entries.
 Adding table of contents meta data...
+Adding to dash...
 '''
 
 
@@ -81,16 +83,28 @@ Adding table of contents meta data...
 
 def test_setup_paths_works(monkeypatch):
     with tempfile.TemporaryDirectory() as td:
-        monkeypatch.chdir(td)
-        os.mkdir('foo')
-        args.configure_mock(source='foo', name=None)
-        assert ('foo', 'foo.docset') == main.setup_paths(args)
-        args.source = os.path.abspath('foo')
-        assert (os.path.abspath('foo'), 'foo.docset') == main.setup_paths(args)
+        foo_path = os.path.join(td, 'foo')
+        os.mkdir(foo_path)
+        args.configure_mock(source=foo_path, name=None, destination=td)
+        assert ((foo_path, os.path.join(td, 'foo.docset')) ==
+                main.setup_paths(args))
+        abs_foo = os.path.abspath(foo_path)
+        args.source = abs_foo
+        assert ((abs_foo, os.path.join(td, 'foo.docset')) ==
+                main.setup_paths(args))
         assert args.name == 'foo'
         args.name = 'baz.docset'
-        assert (os.path.abspath('foo'), 'baz.docset') == main.setup_paths(args)
+        assert ((abs_foo, os.path.join(td, 'baz.docset')) ==
+                main.setup_paths(args))
         assert args.name == 'baz'
+
+
+def test_A_overrides_destination(monkeypatch):
+    assert '~' not in main.DEFAULT_DOCSET_PATH  # resolved?
+    args.configure_mock(source='doc2dash', name=None, destination='foobar',
+                        A=True)
+    assert ('foo', os.path.join(main.DEFAULT_DOCSET_PATH, 'foo.docset') ==
+            main.setup_paths(args))
 
 
 def test_setup_paths_detects_missing_source():
@@ -112,7 +126,8 @@ def test_setup_paths_detects_existing_dest(monkeypatch):
         monkeypatch.chdir(td)
         os.mkdir('foo')
         os.mkdir('foo.docset')
-        args.configure_mock(source='foo', force=False, name=None)
+        args.configure_mock(source='foo', force=False, name=None,
+                            destination=None, A=False)
         with pytest.raises(SystemExit) as e:
             main.setup_paths(args)
         assert e.value.code == errno.EEXIST
