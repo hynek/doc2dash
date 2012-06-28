@@ -28,7 +28,7 @@ format!
 Usage
 -----
 
-The usage is a simple as: ::
+The usage is as simple as: ::
 
    $ doc2dash -A <docdir>
 
