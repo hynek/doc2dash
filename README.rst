@@ -30,12 +30,12 @@ Usage
 
 The usage is a simple as: ::
 
-   $ doc2dash <docdir>
+   $ doc2dash -A <docdir>
 
-doc2dash will create a new directory called “<docdir>.docset” in the current
-directory containing a dash-compatible docset with a SQLite_ index.
-
-When finished, the docset can be imported into dash.
+doc2dash will create a new directory called “<docdir>.docset” in
+`~/Library/Application Support/doc2dash/DocSets` containing a dash-compatible
+docset with a SQLite_ index. When finished, the docset is automatically added
+to dash.
 
 Full usage: ::
 
