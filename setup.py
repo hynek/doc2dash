@@ -26,7 +26,7 @@ setup(
         'lxml==2.3.4',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.2',
         'Environment :: Console',
