@@ -32,6 +32,7 @@ The usage is as simple as: ::
 
    $ doc2dash -A <docdir>
 
+Note that <docdir> should contain the **built** HTML docs.
 doc2dash will create a new directory called “<docdir>.docset” in
 `~/Library/Application Support/doc2dash/DocSets` containing a dash-compatible
 docset with a SQLite_ index. When finished, the docset is automatically added
