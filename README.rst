@@ -4,11 +4,8 @@ doc2dash: Create docsets for dash
 doc2dash is a MIT licensed extensible `Documentation Set`_ generator
 intended to be used with the dash_ API browser for OS X.
 
-If you’ve never hear of dash, you’re missing out: Together with doc2dash it’s
+If you’ve never heard of dash, you’re missing out: Together with doc2dash it’s
 all your API documentation at your fingertips!
-
-doc2dash is proudly written in `Python 3`_ (but seems to work with 2.7 too at
-the moment).
 
 
 Supported input types
@@ -69,15 +66,14 @@ Installation
 The latest stable version can be always found on PyPI and can therefore be
 installed using a simple: ::
 
-   $ pip-3.2 install --user doc2dash
+   $ pip install --user doc2dash
 
-The easiest way known to me to get Python 3.2 on OS X is using homebrew_: ::
+If you haven’t pip_ yet, installation should be as easy as: ::
 
-   $ brew install python3
+   $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
 
-The installation of pip_ should be as easy as: ::
-
-   $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python3.2
+doc2dash is tested both under Python 3.2 and Python 2.7. Support for older
+Python releases won’t be added.
 
 
 
