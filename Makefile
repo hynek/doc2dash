@@ -16,4 +16,7 @@ cov:
 pep8:
 	py.test --pep8 doc2dash tests
 
-.PHONY: serve init test cov pep8
+pypi:
+	python setup.py sdist upload --sign
+
+.PHONY: serve init test cov pep8 pypi
