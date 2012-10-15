@@ -57,8 +57,7 @@ EXAMPLE_PARSE_RESULT = [
 def test_parse():
     example = open(os.path.join(HERE, 'pydoctor_example.html')).read()
     with patch('doc2dash.parsers.pydoctor.open', mock_open(read_data=example),
-               create=True) as mock:
-        mock.return_value = example
+               create=True):
         assert list(PyDoctorParser('foo').parse()) == EXAMPLE_PARSE_RESULT
 
 
