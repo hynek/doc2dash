@@ -56,12 +56,8 @@ EXAMPLE_PARSE_RESULT = [
 
 def test_parse():
     example = open(os.path.join(HERE, 'pydoctor_example.html')).read()
-    if sys.version_info.major > 2:
-        _open = 'builtins.open'
-    else:
-        _open = 'doc2dash.parsers.pydoctor.open'
-        doc2dash.parsers.pydoctor.open = None
-    with patch(_open, mock_open(read_data=example)) as mock:
+    with patch('doc2dash.parsers.pydoctor.open', mock_open(read_data=example),
+               create=True) as mock:
         mock.return_value = example
         assert list(PyDoctorParser('foo').parse()) == EXAMPLE_PARSE_RESULT
 
