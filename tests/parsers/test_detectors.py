@@ -15,20 +15,22 @@ def test_get_doctype(monkeypatch):
     assert doc2dash.parsers.get_doctype('foo') is dt
 
 
-def test_detectors_detect_no_false_positives():
-    for dt in DOCTYPES:
-        others = set(os.listdir('test_data')) - {dt.name}
-        for t in others:
-            type_path = os.path.join('test_data', t)
-            for d in os.listdir(type_path):
-                assert not dt.detect(os.path.join(type_path, d))
+if not os.path.exists('test_data'):
+    print('Skipping detector tests since no test_data is present.')
+else:
+    def test_detectors_detect_no_false_positives():
+        for dt in DOCTYPES:
+            others = set(os.listdir('test_data')) - {dt.name}
+            for t in others:
+                type_path = os.path.join('test_data', t)
+                for d in os.listdir(type_path):
+                    assert not dt.detect(os.path.join(type_path, d))
 
-
-def test_detectors_detect():
-    for dt in DOCTYPES:
-        type_dir = os.path.join('test_data', dt.name)
-        for d in os.listdir(type_dir):
-            assert dt.detect(os.path.join(type_dir, d))
+    def test_detectors_detect():
+        for dt in DOCTYPES:
+            type_dir = os.path.join('test_data', dt.name)
+            for d in os.listdir(type_dir):
+                assert dt.detect(os.path.join(type_dir, d))
 
 
 def test_detect_reraises_everything_except_enoent(monkeypatch):

@@ -1,6 +1,9 @@
 doc2dash: Create docsets for dash
 =================================
 
+.. image:: https://secure.travis-ci.org/hynek/doc2dash.png
+        :target: https://secure.travis-ci.org/hynek/doc2dash
+
 doc2dash is a MIT licensed extensible `Documentation Set`_ generator
 intended to be used with the dash_ API browser for OS X.
 
