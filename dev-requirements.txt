@@ -11,4 +11,4 @@ py==1.4.10
 pytest-cache==0.9
 pytest-cov==1.6
 pytest-pep8==1.0.2
-pytest==2.3.0
+pytest==2.3.1
