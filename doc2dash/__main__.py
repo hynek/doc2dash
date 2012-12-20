@@ -193,3 +193,6 @@ def prepare_docset(args, dest):
 def add_icon(icon, dest):
     """Add icon to docset"""
     shutil.copy2(icon, os.path.join(dest, 'icon.png'))
+
+if __name__ == '__main__':
+    main()
