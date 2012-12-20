@@ -11,7 +11,7 @@ import pytest
 from mock import MagicMock, patch
 
 import doc2dash
-from doc2dash import main
+from doc2dash import __main__ as main
 
 
 log = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ def test_normal_flow(monkeypatch):
         dt.name = 'testtype'
         dt.return_value = MagicMock(parse=_yielder)
         monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
-        with patch('doc2dash.main.log.info') as info, \
+        with patch('doc2dash.__main__.log.info') as info, \
              patch('os.system') as system, \
              patch('shutil.copy2') as cp:
             main.main()
