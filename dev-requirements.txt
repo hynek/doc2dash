@@ -1,7 +1,6 @@
 -r requirements.txt
 cov-core==1.7
 coverage==3.5.3
-distribute==0.6.28
 docutils==0.9.1
 execnet==1.1
 mock==1.0.0
