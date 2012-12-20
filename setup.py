@@ -18,7 +18,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'doc2dash = doc2dash.main:main',
+            'doc2dash = doc2dash.__main__:main',
         ],
     },
     install_requires=open('requirements.txt').read().splitlines(),
