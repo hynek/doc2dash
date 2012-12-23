@@ -195,4 +195,4 @@ def add_icon(icon, dest):
     shutil.copy2(icon, os.path.join(dest, 'icon.png'))
 
 if __name__ == '__main__':
-    main()
+    main()  # pragma: nocover
