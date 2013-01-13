@@ -3,6 +3,11 @@
 History
 =======
 
+1.1.0 (2013-01-13)
+------------------
+
+- Use better dash types for modules and attributes.
+
 1.0.0 (2012-10-14)
 ------------------
 
