@@ -1,6 +1,6 @@
 CLASS = 'cl'
-PACKAGE = 'cat'
+PACKAGE = 'Module'
 METHOD = 'clm'
 FUNCTION = 'func'
-ATTRIBUTE = 'instp'
+ATTRIBUTE = 'Attribute'
 CONSTANT = 'clconst'
