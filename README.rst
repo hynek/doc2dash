@@ -83,7 +83,7 @@ Python releases won’t be added.
 .. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html
 .. _dash: http://kapeli.com/dash/
 .. _`Python 3`: http://getpython3.com/
-.. _pydoctor: http://codespeak.net/~mwh/pydoctor/
+.. _pydoctor: https://launchpad.net/pydoctor
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _SQLite: http://www.sqlite.org/
 .. _PyPI: http://pypi.python.org/pypi/doc2dash/
