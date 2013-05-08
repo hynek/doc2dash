@@ -6,3 +6,4 @@ contributors:
 
 - Dirkjan Ochtman
 - Bogdan Popescu
+- Łukasz Langa
