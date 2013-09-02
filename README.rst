@@ -90,3 +90,9 @@ Python releases won’t be added.
 .. _Twisted: http://twistedmatrix.com/
 .. _homebrew: http://mxcl.github.com/homebrew/
 .. _pip: http://www.pip-installer.org/en/latest/installing.html#alternative-installation-procedures
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/hynek/doc2dash/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
