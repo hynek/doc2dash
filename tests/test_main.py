@@ -25,7 +25,8 @@ def test_fails_without_source(capsys, monkeypatch):
 
     out, err = capsys.readouterr()
     assert out == ''
-    assert 'doc2dash: error: too few arguments' in err
+    assert ('doc2dash: error: too few arguments' in err
+            or 'error: the following arguments are required: source' in err)
 
 
 def test_fails_with_unknown_icon(capsys, monkeypatch):
