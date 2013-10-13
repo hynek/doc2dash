@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 class PyDoctorParser(_BaseParser):
 
-    """Parser for pydoctor-based documenation: mainly Twisted."""
+    """Parser for pydoctor-based documentation: mainly Twisted."""
 
     name = 'pydoctor'
 
