@@ -3,6 +3,6 @@ python:
   - "2.7"
   - "3.2"
 install:
-  - "pip install -r dev-requirements.txt --use-mirrors"
-  - "pip install . --use-mirrors"
+  - "pip install -r dev-requirements.txt"
+  - "pip install ."
 script: make test

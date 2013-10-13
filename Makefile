@@ -2,7 +2,7 @@ TESTS=tests
 
 init:
 	python setup.py develop
-	pip install -r dev-requirements.txt --use-mirrors
+	pip install -r dev-requirements.txt
 	mkdir -p test_data/sphinx
 	mkdir -p test_data/pydoctor
 	echo "\n\nNow fill test_data's data type directories with...well test data!"
