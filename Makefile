@@ -13,10 +13,9 @@ test:
 cov:
 	py.test --cov=doc2dash --cov-report=term-missing $(TESTS)
 
-pep8:
-	py.test --pep8 doc2dash tests
-
-pypi:
+upload:
 	python setup.py sdist upload --sign
+	python setup.py bdist_wheel upload --sign
 
-.PHONY: serve init test cov pep8 pypi
+
+.PHONY: init test cov upload
