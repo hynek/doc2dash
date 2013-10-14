@@ -1,4 +1,6 @@
-"""Convert docs to docsets."""
+"""
+Convert docs to Dash.app's docset format.
+"""
 
 
 __author__ = 'Hynek Schlawack'

@@ -1,21 +1,36 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-import doc2dash
+import codecs
+import os
+import re
+
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+
+def read(*parts):
+    return codecs.open(os.path.join(here, *parts), 'r').read()
+
+
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
 
 
 setup(
     name='doc2dash',
-    version=doc2dash.__version__,
-    description=doc2dash.__doc__.strip(),
+    version=find_version('doc2dash', '__init__.py'),
+    description="Convert docs to Dash.app's docset format.",
     long_description=open('README.rst').read(),
     url='http://github.com/hynek/doc2dash/',
-    license=doc2dash.__license__,
-    author=doc2dash.__author__,
+    license='MIT',
+    author='Hynek Schlawack',
     author_email='hs@ox.cx',
-    packages=[
-        'doc2dash',
-        'doc2dash.parsers',
-    ],
+    packages=find_packages(exclude=['tests*']),
     entry_points={
         'console_scripts': [
             'doc2dash = doc2dash.__main__:main',
