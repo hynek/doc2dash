@@ -61,7 +61,7 @@ Full usage: ::
 Installation
 ------------
 
-The latest stable version can be always found on PyPI and can therefore be installed using a simple::
+The latest stable version can be always found on PyPI_ and can therefore be installed using a simple::
 
    $ pip install --user doc2dash
 
