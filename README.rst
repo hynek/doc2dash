@@ -4,11 +4,10 @@ doc2dash: Create docsets for dash
 .. image:: https://secure.travis-ci.org/hynek/doc2dash.png
         :target: https://secure.travis-ci.org/hynek/doc2dash
 
-doc2dash is a MIT licensed extensible `Documentation Set`_ generator
-intended to be used with the dash_ API browser for OS X.
+doc2dash is a MIT licensed extensible `Documentation Set`_ generator intended to be used with the dash_ API browser for OS X.
 
-If you’ve never heard of dash, you’re missing out: Together with doc2dash it’s
-all your API documentation at your fingertips!
+If you’ve never heard of dash, you’re missing out:
+Together with doc2dash it’s all your API documentation at your fingertips!
 
 
 Supported input types
@@ -19,10 +18,8 @@ Currently, the following source types are supported:
 - Sphinx_’s HTML output (nearly every single Python project out there)
 - pydoctor_’s HTML output (Twisted_!)
 
-Feel free to help adding more! While doc2dash is implemented in Python, the
-scope for the supported documentation types is unlimited.  So go on and submit
-a parser for your favourite Ruby, Haskell, Lisp, Erlang, JavaScript, ...
-format!
+Feel free to help adding more! While doc2dash is implemented in Python, the scope for the supported documentation types is unlimited.
+So go on and submit a parser for your favourite Ruby, Haskell, Lisp, Erlang, JavaScript, …  format!
 
 
 Usage
@@ -32,10 +29,8 @@ The usage is as simple as: ::
 
    $ doc2dash -A <docdir>
 
-doc2dash will create a new directory called “<docdir>.docset” in
-`~/Library/Application Support/doc2dash/DocSets` containing a dash-compatible
-docset with a SQLite_ index. When finished, the docset is automatically added
-to dash.
+doc2dash will create a new directory called “<docdir>.docset” in `~/Library/Application Support/doc2dash/DocSets` containing a dash-compatible docset with a SQLite_ index.
+When finished, the docset is automatically added to dash.
 
 Full usage: ::
 
@@ -66,18 +61,15 @@ Full usage: ::
 Installation
 ------------
 
-The latest stable version can be always found on PyPI and can therefore be
-installed using a simple: ::
+The latest stable version can be always found on PyPI and can therefore be installed using a simple::
 
    $ pip install --user doc2dash
 
-If you haven’t pip_ yet, installation should be as easy as: ::
+If you haven’t pip_ yet, installation should be as easy as::
 
    $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
 
-doc2dash is tested both under Python 3.2 and Python 2.7. Support for older
-Python releases won’t be added.
-
+doc2dash runs on Python 2.7, 3.2, and 3.3.
 
 
 .. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html

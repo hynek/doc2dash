@@ -6,6 +6,9 @@ History
 1.2.0 (UNRELEASED)
 ------------------
 
+- Run on Python 3.3.
+  This is achieved by upgrading dependencies that didn't play along well before on 3.3.
+
 
 1.1.0 (2013-01-13)
 ------------------
