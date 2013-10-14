@@ -1,10 +1,7 @@
 import os
-import sys
 
 from bs4 import BeautifulSoup
 from mock import patch, mock_open
-
-import doc2dash
 
 from doc2dash.parsers import types
 from doc2dash.parsers.base import Entry

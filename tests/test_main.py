@@ -74,8 +74,8 @@ def test_normal_flow(monkeypatch):
         dt.return_value = MagicMock(parse=_yielder)
         monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
         with patch('doc2dash.__main__.log.info') as info, \
-             patch('os.system') as system, \
-             patch('shutil.copy2') as cp:
+                patch('os.system') as system, \
+                patch('shutil.copy2') as cp:
             main.main()
             # assert mock.call_args_list is None
             out = '\n'.join(call[0][0] for call in info.call_args_list) + '\n'
