@@ -71,12 +71,16 @@ def main():
     )
     parser.add_argument(
         '--index-page', '-I',
-        help='set index page for docset'
+        help='set index html file for docset'
     )
     args = parser.parse_args()
 
     if args.icon and not args.icon.endswith('.png'):
         print('Please supply a PNG icon.')
+        sys.exit(1)
+
+    if args.index_page and not os.path.exists(args.index_page):
+        print('Index file %s dose not exists.' % args.index_page)
         sys.exit(1)
 
     try:
@@ -186,7 +190,7 @@ def prepare_docset(args, dest):
         'DashDocSetFamily': 'python',
         'isDashDocset': True,
     }
-    if args.index_page:
+    if args.index_page is not None:
         plist_cfg['dashIndexFilePath'] = args.index_page
 
     plistlib.writePlist(
