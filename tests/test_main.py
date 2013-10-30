@@ -168,7 +168,8 @@ def test_prepare_docset(monkeypatch):
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
-        args.configure_mock(source='some/path/foo', name='foo', index_page=None)
+        args.configure_mock(
+            source='some/path/foo', name='foo', index_page=None)
         main.prepare_docset(args, 'bar')
         m_ct.assert_called_once_with(
             'some/path/foo',
@@ -196,7 +197,8 @@ def test_prepare_docset_index_page(monkeypatch):
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
-        args.configure_mock(source='some/path/foo', name='foo', index_page='foo.html')
+        args.configure_mock(
+            source='some/path/foo', name='foo', index_page='foo.html')
         main.prepare_docset(args, 'bar')
         p = plistlib.readPlist('bar/Contents/Info.plist')
         assert p == {
