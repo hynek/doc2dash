@@ -69,10 +69,18 @@ def main():
         '--icon', '-i',
         help='add PNG icon to docset'
     )
+    parser.add_argument(
+        '--index-page', '-I',
+        help='set index html file for docset'
+    )
     args = parser.parse_args()
 
     if args.icon and not args.icon.endswith('.png'):
         print('Please supply a PNG icon.')
+        sys.exit(1)
+
+    if args.index_page and not os.path.exists(args.index_page):
+        print('Index file %s dose not exists.' % args.index_page)
         sys.exit(1)
 
     try:
@@ -175,14 +183,18 @@ def prepare_docset(args, dest):
     )
     db_conn.commit()
 
+    plist_cfg = {
+        'CFBundleIdentifier': args.name,
+        'CFBundleName': args.name,
+        'DocSetPlatformFamily': args.name.lower(),
+        'DashDocSetFamily': 'python',
+        'isDashDocset': True,
+    }
+    if args.index_page is not None:
+        plist_cfg['dashIndexFilePath'] = args.index_page
+
     plistlib.writePlist(
-        {
-            'CFBundleIdentifier': args.name,
-            'CFBundleName': args.name,
-            'DocSetPlatformFamily': args.name.lower(),
-            'DashDocSetFamily': 'python',
-            'isDashDocset': True,
-        },
+        plist_cfg,
         os.path.join(dest, 'Contents/Info.plist')
     )
 

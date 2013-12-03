@@ -39,6 +39,16 @@ def test_fails_with_unknown_icon(capsys, monkeypatch):
     assert 'Please supply a PNG icon.' in out
 
 
+def test_fails_with_not_exist_index_page(capsys, monkeypatch):
+    monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-I', 'bar.html'])
+    with pytest.raises(SystemExit):
+        main.main()
+
+    out, err = capsys.readouterr()
+    assert err == ''
+    assert 'Index file bar.html dose not exists.' in out
+
+
 def test_handles_unknown_doc_types(monkeypatch):
     with tempfile.TemporaryDirectory() as td:
         monkeypatch.chdir(td)
@@ -158,7 +168,8 @@ def test_prepare_docset(monkeypatch):
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
-        args.configure_mock(source='some/path/foo', name='foo')
+        args.configure_mock(
+            source='some/path/foo', name='foo', index_page=None)
         main.prepare_docset(args, 'bar')
         m_ct.assert_called_once_with(
             'some/path/foo',
@@ -178,6 +189,26 @@ def test_prepare_docset(monkeypatch):
             # ensure table exists and is empty
             cur.execute('select count(1) from searchIndex')
             assert cur.fetchone()[0] == 0
+
+
+def test_prepare_docset_index_page(monkeypatch):
+    with tempfile.TemporaryDirectory() as td:
+        monkeypatch.chdir(td)
+        m_ct = MagicMock()
+        monkeypatch.setattr(shutil, 'copytree', m_ct)
+        os.mkdir('bar')
+        args.configure_mock(
+            source='some/path/foo', name='foo', index_page='foo.html')
+        main.prepare_docset(args, 'bar')
+        p = plistlib.readPlist('bar/Contents/Info.plist')
+        assert p == {
+            'CFBundleIdentifier': 'foo',
+            'CFBundleName': 'foo',
+            'DocSetPlatformFamily': 'foo',
+            'DashDocSetFamily': 'python',
+            'isDashDocset': True,
+            'dashIndexFilePath': 'foo.html',
+        }
 
 
 ###########################################################################
