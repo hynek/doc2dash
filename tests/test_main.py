@@ -39,14 +39,17 @@ def test_fails_with_unknown_icon(capsys, monkeypatch):
     assert 'Please supply a PNG icon.' in out
 
 
-def test_fails_with_not_exist_index_page(capsys, monkeypatch):
+def test_fails_with_inxistent_index_page(capsys, monkeypatch):
+    """
+    Fail if an index is supplied but doesn't exit.
+    """
     monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-I', 'bar.html'])
     with pytest.raises(SystemExit):
         main.main()
 
     out, err = capsys.readouterr()
     assert err == ''
-    assert 'Index file bar.html dose not exists.' in out
+    assert 'Index file bar.html does not exists.' in out
 
 
 def test_handles_unknown_doc_types(monkeypatch):
@@ -191,24 +194,26 @@ def test_prepare_docset(monkeypatch):
             assert cur.fetchone()[0] == 0
 
 
-def test_prepare_docset_index_page(monkeypatch):
-    with tempfile.TemporaryDirectory() as td:
-        monkeypatch.chdir(td)
-        m_ct = MagicMock()
-        monkeypatch.setattr(shutil, 'copytree', m_ct)
-        os.mkdir('bar')
-        args.configure_mock(
-            source='some/path/foo', name='foo', index_page='foo.html')
-        main.prepare_docset(args, 'bar')
-        p = plistlib.readPlist('bar/Contents/Info.plist')
-        assert p == {
-            'CFBundleIdentifier': 'foo',
-            'CFBundleName': 'foo',
-            'DocSetPlatformFamily': 'foo',
-            'DashDocSetFamily': 'python',
-            'isDashDocset': True,
-            'dashIndexFilePath': 'foo.html',
-        }
+def test_prepare_docset_index_page(monkeypatch, tmpdir):
+    """
+    If an index page is passed, it is added to the plist.
+    """
+    monkeypatch.chdir(tmpdir)
+    m_ct = MagicMock()
+    monkeypatch.setattr(shutil, 'copytree', m_ct)
+    os.mkdir('bar')
+    args.configure_mock(
+        source='some/path/foo', name='foo', index_page='foo.html')
+    main.prepare_docset(args, 'bar')
+    p = plistlib.readPlist('bar/Contents/Info.plist')
+    assert p == {
+        'CFBundleIdentifier': 'foo',
+        'CFBundleName': 'foo',
+        'DocSetPlatformFamily': 'foo',
+        'DashDocSetFamily': 'python',
+        'isDashDocset': True,
+        'dashIndexFilePath': 'foo.html',
+    }
 
 
 ###########################################################################

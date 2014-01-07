@@ -80,7 +80,7 @@ def main():
         sys.exit(1)
 
     if args.index_page and not os.path.exists(args.index_page):
-        print('Index file %s dose not exists.' % args.index_page)
+        print('Index file {} does not exists.'.format(args.index_page))
         sys.exit(1)
 
     try:
