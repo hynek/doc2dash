@@ -57,7 +57,7 @@ Full usage: ::
                            resulting docset to dash
      --icon ICON, -i ICON  add PNG icon to docset
      --index-page INDEX_PAGE, -I INDEX_PAGE
-                             set index html file for docset
+                           set index html file for docset
 
 
 Installation
