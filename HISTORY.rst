@@ -3,11 +3,12 @@
 History
 =======
 
-1.2.0 (UNRELEASED)
+1.2.0 (2014-01-07)
 ------------------
 
-- Run on Python 3.3.
+- Runs now on Python 3.3.
   This is achieved by upgrading dependencies that didn't play along well before on 3.3.
+- Add ``--index`` option.
 
 
 1.1.0 (2013-01-13)
@@ -30,27 +31,24 @@ History
 0.3.0 (2012-06-28)
 ------------------
 
-- Add table of contents links to docs to get a nice TOC in dash when inside of
-  a module.
+- Add table of contents links to docs to get a nice TOC in dash when inside of a module.
 - Support DashDocSetFamily field.
-- Add `--verbose` and `--quiet` options.
-- Add `--destination` option.
-- Add `--add-to-dash` option.
-- Allow adding of an PNG icon to the docset (`--icon`).
+- Add ``--verbose`` and ``--quiet`` options.
+- Add ``--destination`` option.
+- Add ``--add-to-dash`` option.
+- Allow adding of an PNG icon to the docset (``--icon``).
 
 0.2.2 (2012-06-16)
 ------------------
 
 - Don't collect () as part of method/function names.
-- Index whole names: symbols are searchable by the whole name, including the
-  namespace.
+- Index whole names: symbols are searchable by the whole name, including the namespace.
 
 
 0.2.1 (2012-06-15)
 ------------------
 
-- Fix pypi package: add missing MANIFEST.in and add missing packages to
-  setup.py.
+- Fix PyPI package: add missing MANIFEST.in and add missing packages to setup.py.
 
 
 0.2.0 (2012-06-14)
