@@ -1,69 +1,84 @@
+from __future__ import absolute_import, division, print_function
+
 import errno
 import logging
 import os
 import plistlib
 import shutil
 import sqlite3
-import sys
-import tempfile
 
 import pytest
+
 from mock import MagicMock, patch
 
 import doc2dash
+
 from doc2dash import __main__ as main
 
 
 log = logging.getLogger(__name__)
-args = MagicMock(name='args', A=False)
 
 
-def test_fails_without_source(capsys, monkeypatch):
-    monkeypatch.setattr(sys, 'argv', ['doc2dash'])
-    with pytest.raises(SystemExit):
-        main.main()
-
-    out, err = capsys.readouterr()
-    assert out == ''
-    assert ('doc2dash: error: too few arguments' in err
-            or 'error: the following arguments are required: source' in err)
-
-
-def test_fails_with_unknown_icon(capsys, monkeypatch):
-    monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-i', 'bar.bmp'])
-    with pytest.raises(SystemExit):
-        main.main()
-
-    out, err = capsys.readouterr()
-    assert err == ''
-    assert 'Please supply a PNG icon.' in out
-
-
-def test_fails_with_inxistent_index_page(capsys, monkeypatch):
+@pytest.fixture
+def args():
     """
-    Fail if an index is supplied but doesn't exit.
+    Return a mock of an argument object.
     """
-    monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-I', 'bar.html'])
-    with pytest.raises(SystemExit):
-        main.main()
-
-    out, err = capsys.readouterr()
-    assert err == ''
-    assert 'Index file bar.html does not exists.' in out
+    return MagicMock(name='args', A=False)
 
 
-def test_handles_unknown_doc_types(monkeypatch):
-    with tempfile.TemporaryDirectory() as td:
-        monkeypatch.chdir(td)
-        monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo'])
+class TestArguments(object):
+    def test_fails_without_source(self, capsys):
+        """
+        Fail If no source is passed.
+        """
+        with pytest.raises(SystemExit):
+            main.main([])
+
+        out, err = capsys.readouterr()
+        assert out == ''
+        assert (
+            'error: too few arguments' in err
+            or 'error: the following arguments are required: source' in err
+        )
+
+    def test_fails_with_unknown_icon(self, capsys):
+        """
+        Fail if icon is not PNG.
+        """
+        with pytest.raises(SystemExit):
+            main.main(['foo', '-i', 'bar.bmp'])
+
+        out, err = capsys.readouterr()
+        assert err == ''
+        assert 'Please supply a PNG icon.' in out
+
+    def test_fails_with_inexistent_index_page(self, capsys):
+        """
+        Fail if an index is supplied but doesn't exit.
+        """
+        with pytest.raises(SystemExit):
+            main.main(['foo', '-I', 'bar.html'])
+
+        out, err = capsys.readouterr()
+        assert err == ''
+        assert 'Index file bar.html does not exists.' in out
+
+    def test_handles_unknown_doc_types(self, monkeypatch, tmpdir):
+        """
+        If docs are passed but are unknown, exit with EINVAL.
+        """
+        monkeypatch.chdir(tmpdir)
         os.mkdir('foo')
         with pytest.raises(SystemExit) as e:
-            main.main()
+            main.main(['foo'])
         assert e.value.code == errno.EINVAL
 
 
-def test_normal_flow(monkeypatch):
-
+def test_normal_flow(monkeypatch, tmpdir):
+    """
+    Integration test with a mocked out parser.
+    """
     def _fake_prepare(args, dest):
         db_conn = sqlite3.connect(':memory:')
         db_conn.row_factory = sqlite3.Row
@@ -76,24 +91,21 @@ def test_normal_flow(monkeypatch):
     def _yielder():
         yield 'testmethod', 'testpath', 'cm'
 
-    with tempfile.TemporaryDirectory() as td:
-        monkeypatch.chdir(td)
-        os.mkdir('foo')
-        monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-n', 'bar',
-                                          '-a', '-i', 'qux.png'])
-        monkeypatch.setattr(main, 'prepare_docset', _fake_prepare)
-        dt = MagicMock(detect=lambda _: True)
-        dt.name = 'testtype'
-        dt.return_value = MagicMock(parse=_yielder)
-        monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
-        with patch('doc2dash.__main__.log.info') as info, \
-                patch('os.system') as system, \
-                patch('shutil.copy2') as cp:
-            main.main()
-            # assert mock.call_args_list is None
-            out = '\n'.join(call[0][0] for call in info.call_args_list) + '\n'
-            assert system.call_args[0] == ('open -a dash "bar.docset"', )
-            assert cp.call_args[0] == ('qux.png', 'bar.docset/icon.png')
+    monkeypatch.chdir(tmpdir)
+    os.mkdir('foo')
+    monkeypatch.setattr(main, 'prepare_docset', _fake_prepare)
+    dt = MagicMock(detect=lambda _: True)
+    dt.name = 'testtype'
+    dt.return_value = MagicMock(parse=_yielder)
+    monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
+    with patch('doc2dash.__main__.log.info') as info, \
+            patch('os.system') as system, \
+            patch('shutil.copy2') as cp:
+        main.main(['foo', '-n', 'bar', '-a', '-i', 'qux.png'])
+        # assert mock.call_args_list is None
+        out = '\n'.join(call[0][0] for call in info.call_args_list) + '\n'
+        assert system.call_args[0] == ('open -a dash "bar.docset"', )
+        assert cp.call_args[0] == ('qux.png', 'bar.docset/icon.png')
 
     assert out == '''\
 Converting testtype docs from "foo" to "bar.docset".
@@ -104,54 +116,63 @@ Adding to dash...
 '''
 
 
-###########################################################################
-#                            setup_paths tests                            #
-###########################################################################
-
-
-def test_setup_paths_works(monkeypatch):
-    with tempfile.TemporaryDirectory() as td:
-        foo_path = os.path.join(td, 'foo')
+class TestSetupPaths(object):
+    def test_works(self, args, monkeypatch, tmpdir):
+        """
+        Integration test with mocked-out parser.
+        """
+        foo_path = str(tmpdir.join('foo'))
         os.mkdir(foo_path)
-        args.configure_mock(source=foo_path, name=None, destination=td)
-        assert ((foo_path, os.path.join(td, 'foo.docset')) ==
-                main.setup_paths(args))
+        args.configure_mock(
+            source=foo_path, name=None, destination=str(tmpdir)
+        )
+        assert (
+            (foo_path, str(tmpdir.join('foo.docset')))
+            == main.setup_paths(args)
+        )
         abs_foo = os.path.abspath(foo_path)
         args.source = abs_foo
-        assert ((abs_foo, os.path.join(td, 'foo.docset')) ==
-                main.setup_paths(args))
+        assert ((abs_foo, str(tmpdir.join('foo.docset')) ==
+                main.setup_paths(args)))
         assert args.name == 'foo'
         args.name = 'baz.docset'
-        assert ((abs_foo, os.path.join(td, 'baz.docset')) ==
-                main.setup_paths(args))
+        assert ((abs_foo, str(tmpdir.join('baz.docset')) ==
+                main.setup_paths(args)))
         assert args.name == 'baz'
 
+    def test_A_overrides_destination(self, args, monkeypatch):
+        """
+        Passing A computes the destination and overrides an argument.
+        """
+        assert '~' not in main.DEFAULT_DOCSET_PATH  # resolved?
+        args.configure_mock(source='doc2dash', name=None, destination='foobar',
+                            A=True)
+        assert ('foo', os.path.join(main.DEFAULT_DOCSET_PATH, 'foo.docset') ==
+                main.setup_paths(args))
 
-def test_A_overrides_destination(monkeypatch):
-    assert '~' not in main.DEFAULT_DOCSET_PATH  # resolved?
-    args.configure_mock(source='doc2dash', name=None, destination='foobar',
-                        A=True)
-    assert ('foo', os.path.join(main.DEFAULT_DOCSET_PATH, 'foo.docset') ==
-            main.setup_paths(args))
+    def test_detects_missing_source(self, args):
+        """
+        Exit wie ENOENT if source doesn't exist.
+        """
+        args.configure_mock(source='doesnotexist', name=None)
+        with pytest.raises(SystemExit) as e:
+            main.setup_paths(args)
+        assert e.value.code == errno.ENOENT
 
+    def test_detects_source_is_file(self, args):
+        """
+        Exit with ENOTDIR if a file is passed as source.
+        """
+        args.configure_mock(source='setup.py', name=None)
+        with pytest.raises(SystemExit) as e:
+            main.setup_paths(args)
+        assert e.value.code == errno.ENOTDIR
 
-def test_setup_paths_detects_missing_source():
-    args.configure_mock(source='doesnotexist', name=None)
-    with pytest.raises(SystemExit) as e:
-        main.setup_paths(args)
-    assert e.value.code == errno.ENOENT
-
-
-def test_setup_paths_detects_source_is_file():
-    args.configure_mock(source='setup.py', name=None)
-    with pytest.raises(SystemExit) as e:
-        main.setup_paths(args)
-    assert e.value.code == errno.ENOTDIR
-
-
-def test_setup_paths_detects_existing_dest(monkeypatch):
-    with tempfile.TemporaryDirectory() as td:
-        monkeypatch.chdir(td)
+    def test_detects_existing_dest(self, args, tmpdir, monkeypatch):
+        """
+        Exit with EEXIST if the selected destination already exists.
+        """
+        monkeypatch.chdir(tmpdir)
         os.mkdir('foo')
         os.mkdir('foo.docset')
         args.configure_mock(source='foo', force=False, name=None,
@@ -165,9 +186,12 @@ def test_setup_paths_detects_existing_dest(monkeypatch):
         assert not os.path.lexists('foo.docset')
 
 
-def test_prepare_docset(monkeypatch):
-    with tempfile.TemporaryDirectory() as td:
-        monkeypatch.chdir(td)
+class TestPrepareDocset(object):
+    def test_plist_creation(self, args, monkeypatch, tmpdir):
+        """
+        All arguments should be reflected in the plist.
+        """
+        monkeypatch.chdir(tmpdir)
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
@@ -193,46 +217,54 @@ def test_prepare_docset(monkeypatch):
             cur.execute('select count(1) from searchIndex')
             assert cur.fetchone()[0] == 0
 
-
-def test_prepare_docset_index_page(monkeypatch, tmpdir):
-    """
-    If an index page is passed, it is added to the plist.
-    """
-    monkeypatch.chdir(tmpdir)
-    m_ct = MagicMock()
-    monkeypatch.setattr(shutil, 'copytree', m_ct)
-    os.mkdir('bar')
-    args.configure_mock(
-        source='some/path/foo', name='foo', index_page='foo.html')
-    main.prepare_docset(args, 'bar')
-    p = plistlib.readPlist('bar/Contents/Info.plist')
-    assert p == {
-        'CFBundleIdentifier': 'foo',
-        'CFBundleName': 'foo',
-        'DocSetPlatformFamily': 'foo',
-        'DashDocSetFamily': 'python',
-        'isDashDocset': True,
-        'dashIndexFilePath': 'foo.html',
-    }
-
-
-###########################################################################
-#                           setup_logging tests                           #
-###########################################################################
+    def test_with_index_page(self, args, monkeypatch, tmpdir):
+        """
+        If an index page is passed, it is added to the plist.
+        """
+        monkeypatch.chdir(tmpdir)
+        m_ct = MagicMock()
+        monkeypatch.setattr(shutil, 'copytree', m_ct)
+        os.mkdir('bar')
+        args.configure_mock(
+            source='some/path/foo', name='foo', index_page='foo.html')
+        main.prepare_docset(args, 'bar')
+        p = plistlib.readPlist('bar/Contents/Info.plist')
+        assert p == {
+            'CFBundleIdentifier': 'foo',
+            'CFBundleName': 'foo',
+            'DocSetPlatformFamily': 'foo',
+            'DashDocSetFamily': 'python',
+            'isDashDocset': True,
+            'dashIndexFilePath': 'foo.html',
+        }
 
 
-def _check_logging(verbose, quiet, expect):
-    args.configure_mock(verbose=verbose, quiet=quiet)
-    assert main.determine_log_level(args) is expect
+class TestSetupLogging(object):
+    @pytest.mark.parametrize(
+        "verbose, quiet, expected", [
+            (False, False, logging.INFO),
+            (True, False, logging.DEBUG),
+            (False, True, logging.ERROR),
+        ]
+    )
+    def test_logging(self, args, verbose, quiet, expected):
+        """
+        Ensure verbosity options cause the correct log level.
+        """
+        args.configure_mock(verbose=verbose, quiet=quiet)
+        assert main.determine_log_level(args) is expected
 
+    def test_quiet_and_verbose(self, args):
+        """
+        Fail if both -q and -v are passed.
+        """
+        args.configure_mock(verbose=True, quiet=True)
+        with pytest.raises(ValueError):
+            main.determine_log_level(args)
 
-def test_logging(monkeypatch):
-    with pytest.raises(ValueError):
-        _check_logging(True, True, logging.INFO)
-    _check_logging(False, False, logging.INFO)
-    _check_logging(True, False, logging.DEBUG)
-    _check_logging(False, True, logging.ERROR)
-
-    monkeypatch.setattr(sys, 'argv', ['doc2dash', 'foo', '-q', '-v'])
-    with pytest.raises(SystemExit):
-        main.main()
+    def test_quiet_and_verbose_integration(self):
+        """
+        Ensure main() exists on -q + -v
+        """
+        with pytest.raises(SystemExit):
+            main.main(['foo', '-q', '-v'])

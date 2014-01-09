@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function
+
 import argparse
 import errno
 import logging
@@ -17,8 +19,10 @@ DEFAULT_DOCSET_PATH = os.path.expanduser(
 )
 
 
-def main():
-    """Main cli entry point."""
+def main(argv):
+    """
+    Main cli entry point.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         'source',
@@ -73,7 +77,7 @@ def main():
         '--index-page', '-I',
         help='set index html file for docset'
     )
-    args = parser.parse_args()
+    args = parser.parse_args(args=argv)
 
     if args.icon and not args.icon.endswith('.png'):
         print('Please supply a PNG icon.')
@@ -126,7 +130,9 @@ def main():
 
 
 def determine_log_level(args):
-    """We use logging's levels as an easy-to-use verbosity controller."""
+    """
+    We use logging's levels as an easy-to-use verbosity controller.
+    """
     if args.verbose and args.quiet:
         raise ValueError("Supplying both --quiet and --verbose doesn't make "
                          "sense.")
@@ -140,7 +146,9 @@ def determine_log_level(args):
 
 
 def setup_paths(args):
-    """Determine source and destination using the results of argparse."""
+    """
+    Determine source and destination using the results of argparse.
+    """
     source = args.source
     if not args.name:
         args.name = os.path.split(source)[-1]
@@ -166,10 +174,10 @@ def setup_paths(args):
 
 
 def prepare_docset(args, dest):
-    """Create boilerplate files & directories and copy vanilla docs inside.
+    """
+    Create boilerplate files & directories and copy vanilla docs inside.
 
     Return a tuple of path to resources and connection to sqlite db.
-
     """
     resources = os.path.join(dest, 'Contents/Resources/')
     docs = os.path.join(resources, 'Documents')
@@ -203,8 +211,11 @@ def prepare_docset(args, dest):
 
 
 def add_icon(icon, dest):
-    """Add icon to docset"""
+    """
+    Add icon to docset
+    """
     shutil.copy2(icon, os.path.join(dest, 'icon.png'))
 
+
 if __name__ == '__main__':
-    main()  # pragma: nocover
+    main(sys.argv[1:])  # pragma: nocover
