@@ -19,6 +19,13 @@ DEFAULT_DOCSET_PATH = os.path.expanduser(
 )
 
 
+def entry_point():
+    """
+    setuptools entry point that calls the real main with arguments.
+    """
+    main(sys.argv[1:])  # pragma: nocover
+
+
 def main(argv):
     """
     Main cli entry point.

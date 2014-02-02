@@ -34,7 +34,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     entry_points={
         'console_scripts': [
-            'doc2dash = doc2dash.__main__:main',
+            'doc2dash = doc2dash.__main__:entry_point',
         ],
     },
     install_requires=open('requirements.txt').read().splitlines(),
