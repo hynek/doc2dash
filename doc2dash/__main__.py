@@ -90,10 +90,6 @@ def main(argv):
         print('Please supply a PNG icon.')
         sys.exit(1)
 
-    if args.index_page and not os.path.exists(args.index_page):
-        print('Index file {} does not exists.'.format(args.index_page))
-        sys.exit(1)
-
     try:
         level = determine_log_level(args)
         logging.basicConfig(format='%(message)s', level=level)
