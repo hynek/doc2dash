@@ -53,17 +53,6 @@ class TestArguments(object):
         assert err == ''
         assert 'Please supply a PNG icon.' in out
 
-    def test_fails_with_inexistent_index_page(self, capsys):
-        """
-        Fail if an index is supplied but doesn't exit.
-        """
-        with pytest.raises(SystemExit):
-            main.main(['foo', '-I', 'bar.html'])
-
-        out, err = capsys.readouterr()
-        assert err == ''
-        assert 'Index file bar.html does not exists.' in out
-
     def test_handles_unknown_doc_types(self, monkeypatch, tmpdir):
         """
         If docs are passed but are unknown, exit with EINVAL.
