@@ -71,7 +71,7 @@ If you haven’t pip_ yet, installation should be as easy as::
 
    $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
 
-doc2dash runs on Python 2.7, 3.2, and 3.3.
+doc2dash runs on Python 2.7, and 3.3+.
 
 
 .. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html
