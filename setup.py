@@ -37,7 +37,10 @@ setup(
             'doc2dash = doc2dash.__main__:entry_point',
         ],
     },
-    install_requires=open('requirements.txt').read().splitlines(),
+    install_requires=[
+        "beautifulsoup4==4.3.2",
+        "lxml==3.3.5",
+    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',

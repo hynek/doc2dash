@@ -1,2 +1,0 @@
-beautifulsoup4==4.3.2
-lxml==3.2.3
