@@ -1,6 +1,5 @@
 import errno
 import os
-import tempfile
 
 from bs4 import BeautifulSoup
 from mock import patch
@@ -13,25 +12,26 @@ from doc2dash.parsers.base import Entry
 HERE = os.path.dirname(__file__)
 
 
-def test_index_detection():
-    with tempfile.TemporaryDirectory() as td:
-        parser = sphinx.SphinxParser(td)
-        with raises(IOError) as e:
-            list(parser.parse())
-        assert e.value.errno == errno.ENOENT
+def test_index_detection(tmpdir):
+    """
+    TODO: This is a terrible way to big test that need to get refactored.
+    """
+    parser = sphinx.SphinxParser(str(tmpdir))
+    with raises(IOError) as e:
+        list(parser.parse())
+    assert e.value.errno == errno.ENOENT
 
-        idx_all = os.path.join(td, 'genindex-all.html')
-        idx = os.path.join(td, 'genindex.html')
-        with open(idx_all, 'w') as f1, open(idx, 'w') as f2:
-            f1.write('all')
-            f2.write('reg')
+    idx_all = tmpdir.join('genindex-all.html')
+    idx = tmpdir.join('genindex.html')
+    idx_all.write('all')
+    idx.write('reg')
 
-        with patch('doc2dash.parsers.sphinx._parse_soup') as mock:
-            list(parser.parse())
-            assert 'all' in str(mock.call_args[0][0])
-            os.unlink(idx_all)
-            list(parser.parse())
-            assert 'reg' in str(mock.call_args[0][0])
+    with patch('doc2dash.parsers.sphinx._parse_soup') as mock:
+        list(parser.parse())
+        assert 'all' in str(mock.call_args[0][0])
+        idx_all.remove()
+        list(parser.parse())
+        assert 'reg' in str(mock.call_args[0][0])
 
 
 DD_EXAMPLE_PARSE_RESULT = [
