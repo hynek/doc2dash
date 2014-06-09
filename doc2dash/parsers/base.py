@@ -2,6 +2,7 @@ import errno
 import logging
 import os
 import sys
+
 from collections import defaultdict, namedtuple
 
 from bs4 import BeautifulSoup
@@ -29,10 +30,10 @@ else:
         return start
 
 
-class _BaseParser:
-
-    """Abstract parser base class."""
-
+class _BaseParser(object):
+    """
+    Abstract parser base class.
+    """
     APPLE_REF = '//apple_ref/cpp/{}/{}'
 
     def __init__(self, docpath):
@@ -40,7 +41,15 @@ class _BaseParser:
 
     @classmethod
     def detect(cl, path):
-        """Detect whether *path* is pydoctor documentation."""
+        """
+        Detect whether *path* is documentation of the type of the class
+        that sub-classes _BaseParser.  This is ugly and should be replaced by
+        composition eventually.
+
+        Until then, sub-classes need to set class-attributes DETECT_FILE with
+        a file name to check and DETECT_PATTERN that has to be contained within
+        that file.
+        """
         try:
             with open(os.path.join(path, cl.DETECT_FILE)) as f:
                 return cl.DETECT_PATTERN in f.read()
@@ -52,7 +61,9 @@ class _BaseParser:
 
     @coroutine
     def add_toc(self):
-        """Consume tuples as returned by parse(), then patch docs for TOCs."""
+        """
+        Consume tuples as returned by parse(), then patch docs for TOCs.
+        """
         files = defaultdict(list)
         try:
             while True:
