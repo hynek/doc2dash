@@ -13,15 +13,20 @@ log = logging.getLogger(__name__)
 Entry = namedtuple('Entry', ['name', 'type', 'anchor'])
 
 
-def coroutine(func):
-    def start(*args, **kwargs):
-        g = func(*args, **kwargs)
-        if sys.version_info.major > 2:
-            g.__next__()  # pragma: no cover
-        else:
-            g.next()  # pragma: no cover
-        return g
-    return start
+if sys.version_info.major > 2:
+    def coroutine(func):
+        def start(*args, **kwargs):
+            g = func(*args, **kwargs)
+            g.__next__()
+            return g
+        return start
+else:
+    def coroutine(func):
+        def start(*args, **kwargs):
+            g = func(*args, **kwargs)
+            g.next()
+            return g
+        return start
 
 
 class _BaseParser:
