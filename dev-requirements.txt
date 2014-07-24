@@ -1,7 +1,4 @@
 -e .
-docutils
 mock
 pytest-cov
 pytest
-twine
-wheel
