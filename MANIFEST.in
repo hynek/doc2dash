@@ -1,1 +1,2 @@
-include README.rst LICENSE HISTORY.rst requirements.txt
+include *.rst *.txt LICENSE tox.ini .travis.yml M
+recursive-include tests *.py *.html
