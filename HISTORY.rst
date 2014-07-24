@@ -3,6 +3,13 @@
 History
 =======
 
+
+1.2.1 (2014-07-24)
+------------------
+
+- Fix docset name deduction if the source path ends with a ``/`` (`#26 <https://github.com/hynek/doc2dash/issues/26>`_).
+
+
 1.2.0 (2014-01-07)
 ------------------
 
@@ -16,6 +23,7 @@ History
 
 - Use better dash types for modules and attributes.
 
+
 1.0.0 (2012-10-14)
 ------------------
 
@@ -23,10 +31,12 @@ History
 - Due to lack of known problems, pronouncing stable, thus 1.0.0.
 - Please note that no code except for the tests has changed since 0.3.1.
 
+
 0.3.1 (2012-06-28)
 ------------------
 
 - Pronounced beta – happy testing!
+
 
 0.3.0 (2012-06-28)
 ------------------
@@ -37,6 +47,7 @@ History
 - Add ``--destination`` option.
 - Add ``--add-to-dash`` option.
 - Allow adding of an PNG icon to the docset (``--icon``).
+
 
 0.2.2 (2012-06-16)
 ------------------

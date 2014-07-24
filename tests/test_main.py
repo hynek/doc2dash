@@ -174,6 +174,17 @@ class TestSetupPaths(object):
         main.setup_paths(args)
         assert not os.path.lexists('foo.docset')
 
+    def test_deducts_name_with_trailing_slash(self, args, tmpdir, monkeypatch):
+        """
+        If the source path ends with a /, the name is still correctly deducted.
+        """
+        monkeypatch.chdir(tmpdir)
+        os.mkdir('foo')
+        args.configure_mock(source='foo/', force=False, name=None,
+                            destination=None, A=False)
+        main.setup_paths(args)
+        assert "foo" == args.name
+
 
 class TestPrepareDocset(object):
     def test_plist_creation(self, args, monkeypatch, tmpdir):

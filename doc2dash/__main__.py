@@ -152,6 +152,8 @@ def setup_paths(args):
     """
     Determine source and destination using the results of argparse.
     """
+    if args.source[-1] == "/":
+        args.source = args.source[:-1]
     source = args.source
     if not args.name:
         args.name = os.path.split(source)[-1]
