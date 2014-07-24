@@ -1,13 +1,23 @@
-doc2dash: Create docsets for dash
-=================================
+doc2dash: Create docsets for Dash.app
+=====================================
+
+.. image:: https://pypip.in/version/doc2dash/badge.svg
+   :target: https://pypi.python.org/pypi/doc2dash/
+   :alt: Latest Version
 
 .. image:: https://travis-ci.org/hynek/doc2dash.png?branch=master
-           :target: https://travis-ci.org/hynek/doc2dash
+   :target: https://travis-ci.org/hynek/doc2dash
+   :alt: CI status
 
-doc2dash is a MIT licensed extensible `Documentation Set`_ generator intended to be used with the dash_ API browser for OS X.
+.. image:: https://coveralls.io/repos/hynek/doc2dash/badge.png?branch=master
+   :target: https://coveralls.io/r/hynek/doc2dash?branch=master
+   :alt: Current coverage
+
+
+``doc2dash`` is a MIT licensed extensible `Documentation Set`_ generator intended to be used with the dash_ API browser for OS X.
 
 If you’ve never heard of dash, you’re missing out:
-Together with doc2dash it’s all your API documentation at your fingertips!
+Together with ``doc2dash`` it’s all your API documentation at your fingertips!
 
 
 Supported input types
@@ -18,7 +28,7 @@ Currently, the following source types are supported:
 - Sphinx_’s HTML output (nearly every single Python project out there)
 - pydoctor_’s HTML output (Twisted_!)
 
-Feel free to help adding more! While doc2dash is implemented in Python, the scope for the supported documentation types is unlimited.
+Feel free to help adding more! While ``doc2dash`` is implemented in Python, the scope for the supported documentation types is unlimited.
 So go on and submit a parser for your favourite Ruby, Haskell, Lisp, Erlang, JavaScript, …  format!
 
 
@@ -29,7 +39,7 @@ The usage is as simple as: ::
 
    $ doc2dash -A <docdir>
 
-doc2dash will create a new directory called “<docdir>.docset” in `~/Library/Application Support/doc2dash/DocSets` containing a dash-compatible docset with a SQLite_ index.
+``doc2dash`` will create a new directory called ``<docdir>.docset`` in ``~/Library/Application Support/doc2dash/DocSets`` containing a dash-compatible docset with a SQLite_ index.
 When finished, the docset is automatically added to dash.
 
 Full usage: ::
@@ -71,7 +81,7 @@ If you haven’t pip_ yet, installation should be as easy as::
 
    $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
 
-doc2dash runs on Python 2.7, and 3.3+.
+``doc2dash`` runs on Python 2.7, and 3.3+.
 
 
 .. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html
