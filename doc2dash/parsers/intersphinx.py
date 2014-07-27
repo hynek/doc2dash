@@ -15,15 +15,24 @@ log = logging.getLogger(__name__)
 
 
 INV_TO_TYPE = {
-    "py:attribute": types.ATTRIBUTE,
-    "py:class": types.CLASS,
-    "py:classmethod": types.METHOD,
-    "py:exception": types.EXCEPTION,
-    "py:function": types.FUNCTION,
-    "py:interface": types.INTERFACE,
-    "py:method": types.METHOD,
-    "py:module": types.PACKAGE,
-    "py:staticmethod": types.METHOD,
+    "attribute": types.ATTRIBUTE,
+    "class": types.CLASS,
+    "classmethod": types.METHOD,
+    "data": types.VALUE,
+    "envvar": types.ENV,
+    "exception": types.EXCEPTION,
+    "function": types.FUNCTION,
+    "interface": types.INTERFACE,
+    "macro": types.MACRO,
+    "member": types.ATTRIBUTE,
+    "method": types.METHOD,
+    "module": types.PACKAGE,
+    "opcode": types.OPCODE,
+    "option": types.OPTION,
+    "staticmethod": types.METHOD,
+    "type": types.TYPE,
+    "variable": types.VARIABLE,
+    "var": types.VARIABLE,
 }
 
 
@@ -62,7 +71,7 @@ def _inv_to_elements(inv):
     """
     for type_key, val in iteritems(inv):
         try:
-            t = INV_TO_TYPE[type_key]
+            t = INV_TO_TYPE[type_key.split(":")[-1]]
             for el, data in iteritems(val):
                 yield el, t, data[2]
         except KeyError:
