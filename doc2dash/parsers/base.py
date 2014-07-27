@@ -54,6 +54,7 @@ class _BaseParser(object):
         """
         try:
             with codecs.open(os.path.join(path, cl.DETECT_FILE),
+                             "rb",
                              encoding="latin1") as f:
                 return cl.DETECT_PATTERN in f.read()
         except IOError as e:

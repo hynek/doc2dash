@@ -53,7 +53,7 @@ class InterSphinxParser(_BaseParser):
         yield tuples of symbol name, type and path
         """
         log.info('Creating database...')
-        with open(os.path.join(self.docpath, "objects.inv")) as inv_f:
+        with open(os.path.join(self.docpath, "objects.inv"), "rb") as inv_f:
             inv_f.readline()  # skip version line that is verified in detection
             for t in _inv_to_elements(
                     read_inventory_v2(inv_f, "", os.path.join)
