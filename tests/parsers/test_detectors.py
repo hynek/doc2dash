@@ -16,7 +16,7 @@ def test_get_doctype(monkeypatch):
 
 
 class TestDetectors(object):
-    @pytest.mark.skipif(os.path.exists('test_data'),
+    @pytest.mark.skipif(not os.path.exists('test_data'),
                         reason="No test_data present.")
     def test_detectors_detect(self):
         for dt in DOCTYPES:
