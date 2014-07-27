@@ -13,19 +13,19 @@ log = logging.getLogger(__name__)
 
 
 class SphinxParser(_BaseParser):
-
-    """Parser for Sphinx-based documenation: Python, Django, Pyramid..."""
-
+    """
+    Parser for Sphinx-based documenation: Python, Django, Pyramid...
+    """
     name = 'sphinx'
 
     DETECT_FILE = '_static/searchtools.js'
     DETECT_PATTERN = '* Sphinx JavaScript util'
 
     def parse(self):
-        """Parse sphinx docs at *path*.
+        """
+        Parse sphinx docs at *path*.
 
-        yield tuples of symbol name, type and path
-
+        yield tuples of symbol `name, type and path`
         """
         for idx in POSSIBLE_INDEXES:
             try:
@@ -40,7 +40,7 @@ class SphinxParser(_BaseParser):
         for t in _parse_soup(soup):
             yield t
 
-    def find_and_patch_entry(self, soup, entry):
+    def find_and_patch_entry(self, soup, entry):  # pragma: nocover
         return find_and_patch_entry(soup, entry)
 
 

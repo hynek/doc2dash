@@ -60,7 +60,7 @@ class InterSphinxParser(_BaseParser):
             ):  # this is what Guido gave us `yield from` for :-|
                 yield t
 
-    def find_and_patch_entry(self, soup, entry):
+    def find_and_patch_entry(self, soup, entry):  # pragma: nocover
         return find_and_patch_entry(soup, entry)
 
 
