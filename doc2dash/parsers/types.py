@@ -1,6 +1,8 @@
-CLASS = 'cl'
-PACKAGE = 'Module'
-METHOD = 'clm'
-FUNCTION = 'func'
-ATTRIBUTE = 'Attribute'
-CONSTANT = 'clconst'
+ATTRIBUTE = "Attribute"
+CLASS = "Class"
+CONSTANT = "Constant"
+EXCEPTION = "Exception"
+FUNCTION = "Function"
+INTERFACE = "Interface"
+METHOD = "Method"
+PACKAGE = "Module"

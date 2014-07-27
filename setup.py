@@ -38,8 +38,10 @@ setup(
         ],
     },
     install_requires=[
+        "Sphinx==1.2.2",
         "beautifulsoup4==4.3.2",
         "lxml==3.3.5",
+        "six==1.7.3",
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

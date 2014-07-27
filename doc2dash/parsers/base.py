@@ -1,3 +1,4 @@
+import codecs
 import errno
 import logging
 import os
@@ -30,12 +31,13 @@ else:
         return start
 
 
+APPLE_REF = '//apple_ref/cpp/{}/{}'
+
+
 class _BaseParser(object):
     """
     Abstract parser base class.
     """
-    APPLE_REF = '//apple_ref/cpp/{}/{}'
-
     def __init__(self, docpath):
         self.docpath = docpath
 
@@ -51,7 +53,8 @@ class _BaseParser(object):
         that file.
         """
         try:
-            with open(os.path.join(path, cl.DETECT_FILE)) as f:
+            with codecs.open(os.path.join(path, cl.DETECT_FILE),
+                             encoding="latin1") as f:
                 return cl.DETECT_PATTERN in f.read()
         except IOError as e:
             if e.errno == errno.ENOENT:

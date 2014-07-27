@@ -6,7 +6,7 @@ import re
 from bs4 import BeautifulSoup
 
 from . import types
-from .base import _BaseParser
+from .base import _BaseParser, APPLE_REF
 
 
 log = logging.getLogger(__name__)
@@ -41,18 +41,7 @@ class SphinxParser(_BaseParser):
             yield t
 
     def find_and_patch_entry(self, soup, entry):
-        """Modify soup so dash can generate TOCs on the fly."""
-        link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
-        tag = soup.new_tag('a')
-        tag['name'] = self.APPLE_REF.format(entry.type, entry.name)
-        if link:
-            link.parent.insert(0, tag)
-            return True
-        elif entry.anchor.startswith('module-'):
-            soup.h1.parent.insert(0, tag)
-            return True
-        else:
-            return False
+        return find_and_patch_entry(soup, entry)
 
 
 POSSIBLE_INDEXES = [
@@ -158,3 +147,20 @@ def _get_type_and_name(text):
             return type_, name
     else:
         return None, None
+
+
+def find_and_patch_entry(soup, entry):
+    """
+    Modify soup so dash can generate TOCs on the fly.
+    """
+    link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
+    tag = soup.new_tag('a')
+    tag['name'] = APPLE_REF.format(entry.type, entry.name)
+    if link:
+        link.parent.insert(0, tag)
+        return True
+    elif entry.anchor.startswith('module-'):
+        soup.h1.parent.insert(0, tag)
+        return True
+    else:
+        return False

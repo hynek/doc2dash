@@ -70,6 +70,12 @@ Full usage: ::
                            set index html file for docset
 
 
+Hints
+-----
+For Sphinx, you get the best results using the intersphinx_ parser that is used automatically if a version 2 ``objects.inv`` file is present.
+This approach obviates parsing problems completely by using that machine readable file using Sphinx’s own APIs.
+
+
 Installation
 ------------
 
@@ -94,3 +100,4 @@ If you haven’t pip_ yet, installation should be as easy as::
 .. _Twisted: http://twistedmatrix.com/
 .. _homebrew: http://mxcl.github.com/homebrew/
 .. _pip: http://www.pip-installer.org/en/latest/installing.html#alternative-installation-procedures
+.. _intersphinx: http://sphinx-doc.org/latest/ext/intersphinx.html

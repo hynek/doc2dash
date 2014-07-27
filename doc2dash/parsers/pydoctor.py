@@ -4,16 +4,16 @@ import os
 from bs4 import BeautifulSoup
 
 from . import types
-from .base import _BaseParser
+from .base import _BaseParser, APPLE_REF
 
 
 log = logging.getLogger(__name__)
 
 
 class PyDoctorParser(_BaseParser):
-
-    """Parser for pydoctor-based documentation: mainly Twisted."""
-
+    """
+    Parser for pydoctor-based documentation: mainly Twisted.
+    """
     name = 'pydoctor'
 
     DETECT_FILE = 'index.html'
@@ -22,10 +22,10 @@ class PyDoctorParser(_BaseParser):
       <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a>'''
 
     def parse(self):
-        """Parse pydoctor docs at *docpath*.
+        """
+        Parse pydoctor docs at *docpath*.
 
         yield tuples of symbol name, type and path
-
         """
         soup = BeautifulSoup(
             open(os.path.join(self.docpath, 'nameIndex.html')),
@@ -42,7 +42,7 @@ class PyDoctorParser(_BaseParser):
         link = soup.find('a', attrs={'name': entry.anchor})
         if link:
             tag = soup.new_tag('a')
-            tag['name'] = self.APPLE_REF.format(entry.type, entry.name)
+            tag['name'] = APPLE_REF.format(entry.type, entry.name)
             link.insert_before(tag)
             return True
         else:
@@ -50,7 +50,9 @@ class PyDoctorParser(_BaseParser):
 
 
 def _guess_type(name, path):
-    """Employ voodoo magic to guess the type of *name* in *path*."""
+    """
+    Employ voodoo magic to guess the type of *name* in *path*.
+    """
     if name.rsplit('.', 1)[-1][0].isupper() and '#' not in path:
         return types.CLASS
     elif name.islower() and '#' not in path:
