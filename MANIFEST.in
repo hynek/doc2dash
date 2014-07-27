@@ -1,2 +1,2 @@
-include *.rst *.txt LICENSE tox.ini .travis.yml M
-recursive-include tests *.py *.html
+include *.rst *.txt LICENSE tox.ini .travis.yml
+recursive-include tests *.py *.html *.inv
