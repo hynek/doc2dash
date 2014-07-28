@@ -19,7 +19,7 @@ class SphinxParser(_BaseParser):
     name = 'sphinx'
 
     DETECT_FILE = '_static/searchtools.js'
-    DETECT_PATTERN = '* Sphinx JavaScript util'
+    DETECT_PATTERN = b'* Sphinx JavaScript util'
 
     def parse(self):
         """

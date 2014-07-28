@@ -1,4 +1,3 @@
-import codecs
 import errno
 import logging
 import os
@@ -53,9 +52,7 @@ class _BaseParser(object):
         that file.
         """
         try:
-            with codecs.open(os.path.join(path, cl.DETECT_FILE),
-                             "rb",
-                             encoding="latin1") as f:
+            with open(os.path.join(path, cl.DETECT_FILE), "rb") as f:
                 return cl.DETECT_PATTERN in f.read()
         except IOError as e:
             if e.errno == errno.ENOENT:

@@ -44,7 +44,7 @@ class InterSphinxParser(_BaseParser):
     name = "intersphinx"
 
     DETECT_FILE = "objects.inv"
-    DETECT_PATTERN = "# Sphinx inventory version 2"
+    DETECT_PATTERN = b"# Sphinx inventory version 2"
 
     def parse(self):
         """
