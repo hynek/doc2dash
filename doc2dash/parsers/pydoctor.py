@@ -4,7 +4,7 @@ import os
 from bs4 import BeautifulSoup
 
 from . import types
-from .base import _BaseParser, APPLE_REF
+from .base import _BaseParser, APPLE_REF_TEMPLATE
 
 
 log = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class PyDoctorParser(_BaseParser):
         link = soup.find('a', attrs={'name': entry.anchor})
         if link:
             tag = soup.new_tag('a')
-            tag['name'] = APPLE_REF.format(entry.type, entry.name)
+            tag['name'] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
             link.insert_before(tag)
             return True
         else:

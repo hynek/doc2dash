@@ -6,7 +6,7 @@ import re
 from bs4 import BeautifulSoup
 
 from . import types
-from .base import _BaseParser, APPLE_REF
+from .base import _BaseParser, APPLE_REF_TEMPLATE
 
 
 log = logging.getLogger(__name__)
@@ -155,7 +155,7 @@ def find_and_patch_entry(soup, entry):
     """
     link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
     tag = soup.new_tag('a')
-    tag['name'] = APPLE_REF.format(entry.type, entry.name)
+    tag['name'] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
     if link:
         link.parent.insert(0, tag)
         return True

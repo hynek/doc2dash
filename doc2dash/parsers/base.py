@@ -30,13 +30,18 @@ else:
         return start
 
 
-APPLE_REF = '//apple_ref/cpp/{}/{}'
+APPLE_REF_TEMPLATE = '//apple_ref/cpp/{}/{}'
 
 
 class _BaseParser(object):
     """
     Abstract parser base class.
     """
+    APPLE_REF = APPLE_REF_TEMPLATE
+    """
+    Backward compatibility only, don't use in new code.
+    """
+
     def __init__(self, docpath):
         self.docpath = docpath
 
