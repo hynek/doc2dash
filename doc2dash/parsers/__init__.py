@@ -1,11 +1,19 @@
-from . import pydoctor, sphinx
+from __future__ import absolute_import, division, print_function
+
+from . import pydoctor, sphinx, intersphinx
 
 
-DOCTYPES = [sphinx.SphinxParser, pydoctor.PyDoctorParser]
+DOCTYPES = [
+    intersphinx.InterSphinxParser,
+    sphinx.SphinxParser,
+    pydoctor.PyDoctorParser,
+]
 
 
 def get_doctype(path):
-    """Gets the apropriate doctype for *path*."""
+    """
+    Gets the apropriate doctype for *path*.
+    """
     for dt in DOCTYPES:
         if dt.detect(path):
             return dt

@@ -112,9 +112,8 @@ def test_strip_annotation():
 
 
 def test_patcher():
-    p = sphinx.SphinxParser('foo')
     soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
-    assert p.find_and_patch_entry(
+    assert sphinx.find_and_patch_entry(
         soup,
         Entry(
             'pyramid.config.Configurator.add_route',
@@ -128,5 +127,9 @@ def test_patcher():
                        'add_route'}
     )
     assert toc_link
-    assert not p.find_and_patch_entry(soup, Entry('invented', 'cl', 'nonex'))
-    assert p.find_and_patch_entry(soup, Entry('somemodule', 'cl', 'module-sm'))
+    assert not sphinx.find_and_patch_entry(
+        soup, Entry('invented', 'cl', 'nonex')
+    )
+    assert sphinx.find_and_patch_entry(
+        soup, Entry('somemodule', 'cl', 'module-sm')
+    )
