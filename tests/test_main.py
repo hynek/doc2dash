@@ -7,9 +7,9 @@ import plistlib
 import shutil
 import sqlite3
 
+import click
 import pytest
 
-from colorama import Fore, Style
 from mock import MagicMock, patch
 
 import doc2dash
@@ -97,14 +97,14 @@ def test_normal_flow(monkeypatch, tmpdir):
         assert system.call_args[0] == ('open -a dash "bar.docset"', )
         assert cp.call_args[0] == ('qux.png', 'bar.docset/icon.png')
 
-    assert out == '''\
-Converting {bright}testtype{normal} docs from "foo" to "bar.docset".
+    assert out == ('''\
+Converting ''' + click.style("testtype", bold=True) + '''\
+ docs from "foo" to "bar.docset".
 Parsing HTML...
-Added {green}1{reset} index entries.
+Added ''' + click.style("1", fg="green") + ''' index entries.
 Adding table of contents meta data...
 Adding to dash...
-'''.format(bright=Style.BRIGHT, normal=Style.NORMAL, green=Fore.GREEN,
-           reset=Fore.RESET)
+''')
 
 
 class TestSetupPaths(object):

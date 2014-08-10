@@ -9,7 +9,7 @@ import shutil
 import sqlite3
 import sys
 
-from colorama import Fore, Style
+import click
 
 from . import __version__, __doc__, parsers
 
@@ -108,7 +108,7 @@ def main(argv):
         sys.exit(errno.EINVAL)
     docs, db_conn = prepare_docset(args, dest)
     doc_parser = dt(docs)
-    log.info(('Converting ' + Style.BRIGHT + '{parser_name}' + Style.NORMAL +
+    log.info(('Converting ' + click.style('{parser_name}', bold=True) +
               ' docs from "{src}" to "{dst}".')
              .format(parser_name=dt.name, src=source, dst=dest))
 
@@ -123,9 +123,11 @@ def main(argv):
             toc.send(entry)
         count = (db_conn.execute('SELECT COUNT(1) FROM searchIndex')
                  .fetchone()[0])
-        log.info(('Added {color}{count:,}' + Fore.RESET + ' index entries.')
-                 .format(count=count,
-                         color=Fore.GREEN if count > 0 else Fore.RED))
+        log.info(('Added ' +
+                  click.style('{count:,}',
+                              fg="green" if count > 0 else "red") +
+                  ' index entries.')
+                 .format(count=count))
         log.info('Adding table of contents meta data...')
         toc.close()
 

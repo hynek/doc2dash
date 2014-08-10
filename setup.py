@@ -72,6 +72,7 @@ setup(
         "Sphinx==1.2.2",
         "beautifulsoup4==4.3.2",
         "colorama==0.3.1",
+        "click==2.5",
         "lxml==3.3.5",
         "six==1.7.3",
     ],

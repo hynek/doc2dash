@@ -5,6 +5,8 @@ import sys
 
 from collections import defaultdict, namedtuple
 
+import click
+
 from bs4 import BeautifulSoup
 
 
@@ -85,13 +87,14 @@ class _BaseParser(object):
         except GeneratorExit:
             pass
 
-        for fname, entries in files.items():
-            full_path = os.path.join(self.docpath, fname)
-            with open(full_path) as fp:
-                soup = BeautifulSoup(fp, 'lxml')
-                for entry in entries:
-                    if not self.find_and_patch_entry(soup, entry):
-                        log.debug("Can't find anchor {} in {}."
-                                  .format(entry.anchor, fname))
-            with open(full_path, 'w') as fp:
-                fp.write(str(soup))
+        with click.progressbar(files.items()) as pbar:
+            for fname, entries in pbar:
+                full_path = os.path.join(self.docpath, fname)
+                with open(full_path) as fp:
+                    soup = BeautifulSoup(fp, 'lxml')
+                    for entry in entries:
+                        if not self.find_and_patch_entry(soup, entry):
+                            log.debug("Can't find anchor {} in {}."
+                                      .format(entry.anchor, fname))
+                with open(full_path, 'w') as fp:
+                    fp.write(str(soup))
