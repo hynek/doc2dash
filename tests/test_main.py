@@ -9,6 +9,7 @@ import sqlite3
 
 import pytest
 
+from colorama import Fore, Style
 from mock import MagicMock, patch
 
 import doc2dash
@@ -97,12 +98,13 @@ def test_normal_flow(monkeypatch, tmpdir):
         assert cp.call_args[0] == ('qux.png', 'bar.docset/icon.png')
 
     assert out == '''\
-Converting testtype docs from "foo" to "bar.docset".
+Converting {bright}testtype{normal} docs from "foo" to "bar.docset".
 Parsing HTML...
-Added 1 index entries.
+Added {green}1{reset} index entries.
 Adding table of contents meta data...
 Adding to dash...
-'''
+'''.format(bright=Style.BRIGHT, normal=Style.NORMAL, green=Fore.GREEN,
+           reset=Fore.RESET)
 
 
 class TestSetupPaths(object):
