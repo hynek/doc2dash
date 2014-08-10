@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 Entry = namedtuple('Entry', ['name', 'type', 'anchor'])
 
 
-if sys.version_info.major > 2:
+if sys.version_info.major > 2:  # pragma: nocover
     def coroutine(func):
         def start(*args, **kwargs):
             g = func(*args, **kwargs)
