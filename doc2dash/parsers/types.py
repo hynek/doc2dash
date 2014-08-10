@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function
+
 ATTRIBUTE = "Attribute"
 CLASS = "Class"
 CONSTANT = "Constant"
