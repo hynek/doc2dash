@@ -24,16 +24,14 @@ PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 @click.argument("source",
                 type=click.Path(exists=True, file_okay=False, readable=True))
 @click.option(
-    "--force", "-f", is_flag=True, default=False,
+    "--force", "-f", is_flag=True,
     help="force overwriting if destination already exists")
 @click.option("--name", "-n", help="name docset explicitly", metavar="NAME")
 @click.option(
-    "--quiet", "-q", is_flag=True, default=False,
-    help="limit output to errors and warnings"
+    "--quiet", "-q", is_flag=True, help="limit output to errors and warnings"
 )
 @click.option(
-    "--verbose", "-v", is_flag=True, default=False,
-    help="be verbose"
+    "--verbose", "-v", is_flag=True, help="be verbose"
 )
 @click.option(
     "--destination", "-d", type=click.Path(), default=".", show_default=True,
@@ -41,20 +39,19 @@ PNG_HEADER = b"\x89PNG\r\n\x1a\n"
     "-A is specified"
 )
 @click.option(
-    "--add-to-dash", "-a", is_flag=True, default=False,
+    "--add-to-dash", "-a", is_flag=True,
     help="automatically add resulting docset to Dash.app"
 )
 @click.option(
-    "--add-to-global", "-A", is_flag=True, default=False,
+    "--add-to-global", "-A", is_flag=True,
     help="create docset in doc2dash's default global directory [{}] "
-    "and add it to Dash.app".format(DEFAULT_DOCSET_PATH)
+    "and add it to Dash.app".format(click.format_filename(DEFAULT_DOCSET_PATH))
 )
 @click.option(
-    "--icon", "-i", type=click.File("rb"),
-    help="add PNG icon to docset"
+    "--icon", "-i", type=click.File("rb"), help="add PNG icon to docset"
 )
 @click.option(
-    "--index-page", "-I", metavar="FILENAME",
+    "--index-page", "-I", metavar="FILENAME", type=click.Path(),
     help="set the file that is shown when the docset is clicked within "
     "Dash.app"
 )
@@ -67,7 +64,9 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     if icon:
         icon_data = icon.read()
         if not icon_data.startswith(PNG_HEADER):
-            print("The supplied icon is not a valid PNG image.")
+            click.secho("'{}' is not a valid PNG image."
+                        .format(click.format_filename(icon.name)),
+                        fg="red")
             raise SystemExit(1)
     else:
         icon_data = None
@@ -87,14 +86,16 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     if dt is None:
         log.error(
             click.style('"{}" does not contain a known documentation format.'
-                        .format(source), fg="red")
+                        .format(click.format_filename(source)), fg="red")
         )
         raise SystemExit(errno.EINVAL)
     docs, db_conn = prepare_docset(source, dest, name, index_page)
     doc_parser = dt(docs)
     log.info(('Converting ' + click.style('{parser_name}', bold=True) +
               ' docs from "{src}" to "{dst}".')
-             .format(parser_name=dt.name, src=source, dst=dest))
+             .format(parser_name=dt.name,
+                     src=click.format_filename(source),
+                     dst=click.format_filename(dest)))
 
     with db_conn:
         log.info('Parsing HTML...')
