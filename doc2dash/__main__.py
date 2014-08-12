@@ -1,17 +1,15 @@
 from __future__ import absolute_import, division, print_function
 
-import argparse
 import errno
 import logging
 import os
 import plistlib
 import shutil
 import sqlite3
-import sys
 
 import click
 
-from . import __version__, __doc__, parsers
+from . import __version__, parsers
 
 
 log = logging.getLogger(__name__)
@@ -19,94 +17,80 @@ log = logging.getLogger(__name__)
 DEFAULT_DOCSET_PATH = os.path.expanduser(
     '~/Library/Application Support/doc2dash/DocSets'
 )
+PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 
 
-def entry_point():
+@click.command()
+@click.argument("source",
+                type=click.Path(exists=True, file_okay=False, readable=True))
+@click.option(
+    "--force", "-f", is_flag=True, default=False,
+    help="force overwriting if destination already exists")
+@click.option("--name", "-n", help="name docset explicitly", metavar="NAME")
+@click.option(
+    "--quiet", "-q", is_flag=True, default=False,
+    help="limit output to errors and warnings"
+)
+@click.option(
+    "--verbose", "-v", is_flag=True, default=False,
+    help="be verbose"
+)
+@click.option(
+    "--destination", "-d", type=click.Path(), default=".", show_default=True,
+    help="destination directory for docset, ignored if "
+    "-A is specified"
+)
+@click.option(
+    "--add-to-dash", "-a", is_flag=True, default=False,
+    help="automatically add resulting docset to Dash.app"
+)
+@click.option(
+    "--add-to-global", "-A", is_flag=True, default=False,
+    help="create docset in doc2dash's default global directory [{}] "
+    "and add it to Dash.app".format(DEFAULT_DOCSET_PATH)
+)
+@click.option(
+    "--icon", "-i", type=click.File("rb"),
+    help="add PNG icon to docset"
+)
+@click.option(
+    "--index-page", "-I", metavar="FILENAME",
+    help="set the file that is shown when the docset is clicked within "
+    "Dash.app"
+)
+@click.version_option(version=__version__)
+def main(source, force, name, quiet, verbose, destination, add_to_dash,
+         add_to_global, icon, index_page):
     """
-    setuptools entry point that calls the real main with arguments.
+    Convert docs from SOURCE to Dash.app's docset format.
     """
-    main(sys.argv[1:])  # pragma: nocover
-
-
-def main(argv):
-    """
-    Main cli entry point.
-    """
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        'source',
-        help='Source directory containing API documentation in a supported'
-             ' format.'
-    )
-    parser.add_argument(
-        '--force', '-f',
-        action='store_true',
-        help='force overwriting if destination already exists',
-    )
-    parser.add_argument(
-        '--name', '-n',
-        help='name docset explicitly',
-    )
-    parser.add_argument(
-        '--version',
-        action='version',
-        version='%(prog)s {}'.format(__version__),
-    )
-    parser.add_argument(
-        '--quiet', '-q',
-        action='store_true',
-        help='limit output to errors and warnings'
-    )
-    parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='be verbose'
-    )
-    parser.add_argument(
-        '--destination', '-d',
-        help='destination directory for docset (default is current), '
-             'ignored if -A is specified',
-    )
-    parser.add_argument(
-        '--add-to-dash', '-a',
-        action='store_true',
-        help='automatically add resulting docset to dash',
-    )
-    parser.add_argument(
-        '-A',
-        action='store_true',
-        help="create docset in doc2dash's default directory and add resulting "
-             "docset to dash",
-    )
-    parser.add_argument(
-        '--icon', '-i',
-        help='add PNG icon to docset'
-    )
-    parser.add_argument(
-        '--index-page', '-I',
-        help='set index html file for docset'
-    )
-    args = parser.parse_args(args=argv)
-
-    if args.icon and not args.icon.endswith('.png'):
-        print('Please supply a PNG icon.')
-        sys.exit(1)
+    if icon:
+        icon_data = icon.read()
+        if not icon_data.startswith(PNG_HEADER):
+            print("The supplied icon is not a valid PNG image.")
+            raise SystemExit(1)
+    else:
+        icon_data = None
 
     try:
-        level = determine_log_level(args)
-        logging.basicConfig(format='%(message)s', level=level)
+        level = determine_log_level(verbose=verbose, quiet=quiet)
     except ValueError as e:
-        print(e.args[0], '\n')
-        parser.print_help()
-        sys.exit(1)
+        click.echo(e.args[0] + '\n')
+        raise SystemExit(1)
+    logging.basicConfig(format='%(message)s', level=level)
 
-    source, dest = setup_paths(args)
+    source, dest, name = setup_paths(
+        source, destination, name=name, add_to_global=add_to_global,
+        force=force
+    )
     dt = parsers.get_doctype(source)
     if dt is None:
-        log.error('"{}" does not contain a known documentation format.'
-                  .format(source))
-        sys.exit(errno.EINVAL)
-    docs, db_conn = prepare_docset(args, dest)
+        log.error(
+            click.style('"{}" does not contain a known documentation format.'
+                        .format(source), fg="red")
+        )
+        raise SystemExit(errno.EINVAL)
+    docs, db_conn = prepare_docset(source, dest, name, index_page)
     doc_parser = dt(docs)
     log.info(('Converting ' + click.style('{parser_name}', bold=True) +
               ' docs from "{src}" to "{dst}".')
@@ -131,61 +115,54 @@ def main(argv):
         log.info('Adding table of contents meta data...')
         toc.close()
 
-    if args.icon:
-        add_icon(args.icon, dest)
+    if icon_data:
+        add_icon(icon_data, dest)
 
-    if args.add_to_dash:
+    if add_to_dash or add_to_global:
         log.info('Adding to dash...')
         os.system('open -a dash "{}"'.format(dest))
 
 
-def determine_log_level(args):
+def determine_log_level(verbose, quiet):
     """
     We use logging's levels as an easy-to-use verbosity controller.
     """
-    if args.verbose and args.quiet:
-        raise ValueError("Supplying both --quiet and --verbose doesn't make "
-                         "sense.")
-    elif args.verbose:
+    if verbose and quiet:
+        raise ValueError(
+            "Supplying both --quiet and --verbose makes no sense."
+        )
+    elif verbose:
         level = logging.DEBUG
-    elif args.quiet:
+    elif quiet:
         level = logging.ERROR
     else:
         level = logging.INFO
     return level
 
 
-def setup_paths(args):
+def setup_paths(source, destination, name, add_to_global, force):
     """
-    Determine source and destination using the results of argparse.
+    Determine source and destination using the options.
     """
-    if args.source[-1] == "/":
-        args.source = args.source[:-1]
-    source = args.source
-    if not args.name:
-        args.name = os.path.split(source)[-1]
-    elif args.name.endswith('.docset'):
-        args.name = args.name.replace('.docset', '')
-    if args.A:
-        args.destination = DEFAULT_DOCSET_PATH
-        args.add_to_dash = True
-    dest = os.path.join(args.destination or '', args.name + '.docset')
-    if not os.path.exists(source):
-        log.error('Source directory "{}" does not exist.'.format(source))
-        sys.exit(errno.ENOENT)
-    if not os.path.isdir(source):
-        log.error('Source "{}" is not a directory.'.format(source))
-        sys.exit(errno.ENOTDIR)
+    if source[-1] == "/":
+        source = source[:-1]
+    if not name:
+        name = os.path.split(source)[-1]
+    elif name.endswith('.docset'):
+        name = name.replace('.docset', '')
+    if add_to_global:
+        destination = DEFAULT_DOCSET_PATH
+    dest = os.path.join(destination or '', name + '.docset')
     dst_exists = os.path.lexists(dest)
-    if dst_exists and args.force:
+    if dst_exists and force:
         shutil.rmtree(dest)
     elif dst_exists:
         log.error('Destination path "{}" already exists.'.format(dest))
-        sys.exit(errno.EEXIST)
-    return source, dest
+        raise SystemExit(errno.EEXIST)
+    return source, dest, name
 
 
-def prepare_docset(args, dest):
+def prepare_docset(source, dest, name, index_page):
     """
     Create boilerplate files & directories and copy vanilla docs inside.
 
@@ -204,30 +181,27 @@ def prepare_docset(args, dest):
     db_conn.commit()
 
     plist_cfg = {
-        'CFBundleIdentifier': args.name,
-        'CFBundleName': args.name,
-        'DocSetPlatformFamily': args.name.lower(),
+        'CFBundleIdentifier': name,
+        'CFBundleName': name,
+        'DocSetPlatformFamily': name.lower(),
         'DashDocSetFamily': 'python',
         'isDashDocset': True,
     }
-    if args.index_page is not None:
-        plist_cfg['dashIndexFilePath'] = args.index_page
+    if index_page is not None:
+        plist_cfg['dashIndexFilePath'] = index_page
 
     plistlib.writePlist(
         plist_cfg,
         os.path.join(dest, 'Contents/Info.plist')
     )
 
-    shutil.copytree(args.source, docs)
+    shutil.copytree(source, docs)
     return docs, db_conn
 
 
-def add_icon(icon, dest):
+def add_icon(icon_data, dest):
     """
     Add icon to docset
     """
-    shutil.copy2(icon, os.path.join(dest, 'icon.png'))
-
-
-if __name__ == '__main__':
-    main(sys.argv[1:])  # pragma: nocover
+    with open(os.path.join(dest, 'icon.png'), "wb") as f:
+        f.write(icon_data)

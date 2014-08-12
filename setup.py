@@ -65,14 +65,14 @@ setup(
     packages=find_packages(exclude=['tests*']),
     entry_points={
         'console_scripts': [
-            'doc2dash = doc2dash.__main__:entry_point',
+            'doc2dash = doc2dash.__main__:main',
         ],
     },
     install_requires=[
         "Sphinx==1.2.2",
         "beautifulsoup4==4.3.2",
-        "colorama==0.3.1",
         "click==2.5",
+        "colorama==0.3.1",
         "lxml==3.3.5",
         "six==1.7.3",
     ],
