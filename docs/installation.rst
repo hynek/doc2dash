@@ -1,15 +1,16 @@
-Installation
-============
+Requirements and Installation
+=============================
 
-The latest stable version can be always found on PyPI_ and can therefore be installed using a simple::
+The latest stable version can be always found on PyPI_.
+
+Since it's a stand-alone tool, I recommend to install it using pipsi_.
+
+Of course, you can also install it as usual using pip_::
 
    $ pip install --user doc2dash
 
-If you haven’t pip_ yet, installation should be as easy as::
-
-   $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
-
 ``doc2dash`` runs on Python 2.7, and 3.3+, and PyPy.
+Both Linux and OS X are supported although certain features are only available on OS X.
 
 
 .. _clones:
@@ -30,5 +31,6 @@ Other alternatives have been developed in cooperation with Dash.app's developer 
 
 
 .. _pip: https://pip.pypa.io/en/latest/installing.html#install-pip
-.. _PyPI: https://pypi.python.org/pypi/doc2dash/
+.. _PyPI: https://warehouse.python.org/project/doc2dash/
 .. _`Dash.app`: http://kapeli.com/dash/
+.. _pipsi: https://github.com/mitsuhiko/pipsi
