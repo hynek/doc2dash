@@ -71,7 +71,7 @@ setup(
     install_requires=[
         "Sphinx==1.2.2",
         "beautifulsoup4==4.3.2",
-        "click==2.5",
+        "click==3.0",
         "colorama==0.3.1",
         "lxml==3.3.5",
         "six==1.7.3",
