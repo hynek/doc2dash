@@ -6,7 +6,7 @@ from mock import patch
 from pytest import raises
 
 from doc2dash.parsers import sphinx, types
-from doc2dash.parsers.base import Entry
+from doc2dash.parsers.base import TOCEntry
 
 
 HERE = os.path.dirname(__file__)
@@ -115,10 +115,10 @@ def test_patcher():
     soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
     assert sphinx.find_and_patch_entry(
         soup,
-        Entry(
-            'pyramid.config.Configurator.add_route',
-            'clm',
-            'pyramid.config.Configurator.add_route'
+        TOCEntry(
+            name='pyramid.config.Configurator.add_route',
+            type='clm',
+            anchor='pyramid.config.Configurator.add_route',
         )
     )
     toc_link = soup(
@@ -128,8 +128,8 @@ def test_patcher():
     )
     assert toc_link
     assert not sphinx.find_and_patch_entry(
-        soup, Entry('invented', 'cl', 'nonex')
+        soup, TOCEntry(name='invented', type='cl', anchor='nonex')
     )
     assert sphinx.find_and_patch_entry(
-        soup, Entry('somemodule', 'cl', 'module-sm')
+        soup, TOCEntry(name='somemodule', type='cl', anchor='module-sm')
     )

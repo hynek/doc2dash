@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+from doc2dash.parsers.base import ParserEntry
 from doc2dash.parsers.intersphinx import InterSphinxParser, _inv_to_entries
 
 
@@ -26,4 +27,6 @@ class TestInterSphinxParser(object):
                 "some_method": (None, None, u"some_module.py", u"-"),
             }})
         )
-        assert [('some_method', 'Method', 'some_module.py')] == result
+        assert [ParserEntry(
+            name='some_method', type='Method', path='some_module.py'
+        )] == result

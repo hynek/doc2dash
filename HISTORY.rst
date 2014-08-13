@@ -11,6 +11,9 @@ History
   That should lead to more reliable parsing and a better deduction of symbol types.
 - Added colors and styles to make output more comprehensible.
 - ``setup.py test`` works now.
+- Internally quite a few changes happened.
+  Most prominently tuples and namedtuples have been replaced by real classes.
+  Porting your parsers is trivial though.
 
 
 1.2.1 (2014-07-24)

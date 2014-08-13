@@ -15,6 +15,7 @@ from mock import MagicMock, patch
 import doc2dash
 
 from doc2dash import __main__ as main
+from doc2dash.parsers.base import ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -69,7 +70,7 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
         return 'data', db_conn
 
     def yielder():
-        yield 'testmethod', 'testpath', 'cm'
+        yield ParserEntry(name='testmethod', type='cm', path='testpath')
 
     monkeypatch.chdir(tmpdir)
     png_file = tmpdir.join("icon.png")

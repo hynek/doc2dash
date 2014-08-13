@@ -7,7 +7,7 @@ from six import iteritems
 from sphinx.ext.intersphinx import read_inventory_v2
 
 from . import types
-from .base import _BaseParser
+from .base import _BaseParser, ParserEntry
 from .sphinx import find_and_patch_entry
 
 
@@ -55,10 +55,10 @@ class InterSphinxParser(_BaseParser):
         log.info('Creating database...')
         with open(os.path.join(self.docpath, "objects.inv"), "rb") as inv_f:
             inv_f.readline()  # skip version line that is verified in detection
-            for t in _inv_to_entries(
+            for pe in _inv_to_entries(
                     read_inventory_v2(inv_f, "", os.path.join)
             ):  # this is what Guido gave us `yield from` for :-|
-                yield t
+                yield pe
 
     def find_and_patch_entry(self, soup, entry):  # pragma: nocover
         return find_and_patch_entry(soup, entry)
@@ -67,12 +67,12 @@ class InterSphinxParser(_BaseParser):
 def _inv_to_entries(inv):
     """
     Iterate over a dictionary as returned from Sphinx's object.inv parser and
-    yield `name, type, path` tuples.
+    yield `ParserEntry`s.
     """
     for type_key, val in iteritems(inv):
         try:
             t = INV_TO_TYPE[type_key.split(":")[-1]]
             for el, data in iteritems(val):
-                yield el, t, data[2]
+                yield ParserEntry(name=el, type=t, path=data[2])
         except KeyError:
             pass

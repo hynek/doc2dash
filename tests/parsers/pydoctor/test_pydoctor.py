@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from mock import patch, mock_open
 
 from doc2dash.parsers import types
-from doc2dash.parsers.base import Entry
+from doc2dash.parsers.base import TOCEntry
 from doc2dash.parsers.pydoctor import PyDoctorParser, _guess_type
 
 
@@ -63,8 +63,8 @@ def test_patcher():
     soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
     assert p.find_and_patch_entry(
         soup,
-        Entry('twisted.application.app.ApplicationRunner.startReactor',
-              'clm', 'startReactor')
+        TOCEntry(name='twisted.application.app.ApplicationRunner.startReactor',
+                 type='clm', anchor='startReactor')
     )
     toc_link = soup(
         'a',
@@ -75,4 +75,6 @@ def test_patcher():
     next_tag = toc_link[0].next_sibling
     assert next_tag.name == 'a'
     assert (next_tag['name'] == 'startReactor')
-    assert not p.find_and_patch_entry(soup, Entry('invented', 'cl', 'nonex'))
+    assert not p.find_and_patch_entry(
+        soup, TOCEntry(name='invented', type='cl', anchor='nonex')
+    )

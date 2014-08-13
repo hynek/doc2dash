@@ -121,7 +121,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         for entry in doc_parser.parse():
             db_conn.execute(
                 'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
-                entry
+                entry.as_tuple()
             )
             toc.send(entry)
         count = (db_conn.execute('SELECT COUNT(1) FROM searchIndex')

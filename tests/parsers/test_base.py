@@ -2,7 +2,7 @@ import os
 
 from mock import patch
 
-from doc2dash.parsers.base import _BaseParser
+from doc2dash.parsers.base import _BaseParser, ParserEntry
 
 
 class TestParser(_BaseParser):
@@ -24,8 +24,8 @@ def test_toc_with_empty_db():
 
 def test_add_toc_single_entry(monkeypatch, tmpdir):
     entries = [
-        ('foo', 'clm', 'bar.html#foo'),
-        ('qux', 'cl', 'bar.html'),
+        ParserEntry(name='foo', type='clm', path='bar.html#foo'),
+        ParserEntry(name='qux', type='cl', path='bar.html'),
     ]
     monkeypatch.chdir(tmpdir)
     p = TestParser('foo')
