@@ -55,7 +55,7 @@ class InterSphinxParser(_BaseParser):
         log.info('Creating database...')
         with open(os.path.join(self.docpath, "objects.inv"), "rb") as inv_f:
             inv_f.readline()  # skip version line that is verified in detection
-            for t in _inv_to_elements(
+            for t in _inv_to_entries(
                     read_inventory_v2(inv_f, "", os.path.join)
             ):  # this is what Guido gave us `yield from` for :-|
                 yield t
@@ -64,7 +64,7 @@ class InterSphinxParser(_BaseParser):
         return find_and_patch_entry(soup, entry)
 
 
-def _inv_to_elements(inv):
+def _inv_to_entries(inv):
     """
     Iterate over a dictionary as returned from Sphinx's object.inv parser and
     yield `name, type, path` tuples.
