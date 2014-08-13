@@ -32,8 +32,10 @@ class ClickEchoHandler(logging.Handler):
     }
 
     def emit(self, record):
-        click.secho(record.getMessage(),
-                    fg=self._level_to_fg.get(record.levelno, "reset"))
+        click.echo(click.style(
+            record.getMessage(),
+            fg=self._level_to_fg.get(record.levelno, "reset")
+        ), err=record.levelno >= logging.WARN)
 
 
 @click.command()
