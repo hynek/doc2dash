@@ -97,6 +97,7 @@ class _BaseParser(object):
                     for entry in entries:
                         if not self.find_and_patch_entry(soup, entry):
                             log.debug("Can't find anchor {} in {}."
-                                      .format(entry.anchor, fname))
+                                      .format(entry.anchor,
+                                              click.format_filename(fname)))
                 with open(full_path, 'w') as fp:
                     fp.write(str(soup))

@@ -7,7 +7,6 @@ import plistlib
 import shutil
 import sqlite3
 
-import click
 import pytest
 
 from click.testing import CliRunner
@@ -81,23 +80,20 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     dt.name = 'testtype'
     dt.return_value = MagicMock(parse=yielder)
     monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
-    with patch("doc2dash.__main__.log.info") as info, \
-            patch("os.system") as system:
+    with patch("os.system") as system:
         result = runner.invoke(
             main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
         )
 
     assert 0 == result.exit_code
-    out = '\n'.join(call[0][0] for call in info.call_args_list) + '\n'
-    assert out == ('''\
-Converting ''' + click.style("testtype", bold=True) + '''\
- docs from "foo" to "./bar.docset".
+    assert '''\
+Converting testtype docs from "foo" to "./bar.docset".
 Parsing HTML...
-Added ''' + click.style("1", fg="green") + ''' index entries.
+Added 1 index entries.
 Adding table of contents meta data...
 Adding to dash...
-''')
-    assert system.call_args[0] == ('open -a dash "./bar.docset"', )
+''' == result.output
+    assert ('open -a dash "./bar.docset"', ) == system.call_args[0]
 
 
 class TestSetupPaths(object):
@@ -248,12 +244,15 @@ class TestSetupLogging(object):
         """
         Ensure verbosity options cause the correct log level.
         """
-        assert main.determine_log_level(verbose, quiet) is expected
+        level = main.create_log_config(
+            verbose, quiet
+        )["loggers"]["doc2dash"]["level"]
+        assert level is expected
 
     def test_quiet_and_verbose(self):
         """
         Fail if both -q and -v are passed.
         """
         with pytest.raises(ValueError) as e:
-            main.determine_log_level(verbose=True, quiet=True)
+            main.create_log_config(verbose=True, quiet=True)
         assert "makes no sense" in e.value.args[0]

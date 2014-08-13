@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 import errno
 import logging
+import logging.config
 import os
 import plistlib
 import shutil
@@ -18,6 +19,15 @@ DEFAULT_DOCSET_PATH = os.path.expanduser(
     '~/Library/Application Support/doc2dash/DocSets'
 )
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
+
+
+class ClickEchoHandler(logging.Handler):
+    """
+    Use click.echo() for logging.  Has the advantage of stripping color codes
+    if output is redirected.  Also is generally more predictable.
+    """
+    def emit(self, record):
+        click.echo(record.getMessage())
 
 
 @click.command()
@@ -72,11 +82,12 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         icon_data = None
 
     try:
-        level = determine_log_level(verbose=verbose, quiet=quiet)
+        logging.config.dictConfig(
+            create_log_config(verbose=verbose, quiet=quiet)
+        )
     except ValueError as e:
-        click.echo(e.args[0] + '\n')
+        click.secho(e.args[0], fg="red")
         raise SystemExit(1)
-    logging.basicConfig(format='%(message)s', level=level)
 
     source, dest, name = setup_paths(
         source, destination, name=name, add_to_global=add_to_global,
@@ -124,7 +135,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         os.system('open -a dash "{}"'.format(dest))
 
 
-def determine_log_level(verbose, quiet):
+def create_log_config(verbose, quiet):
     """
     We use logging's levels as an easy-to-use verbosity controller.
     """
@@ -138,7 +149,27 @@ def determine_log_level(verbose, quiet):
         level = logging.ERROR
     else:
         level = logging.INFO
-    return level
+    return {
+        "version": 1,
+        "formatters": {
+            "click_formatter": {
+                "format": '%(message)s',
+            },
+        },
+        "handlers": {
+            "click_handler": {
+                'level': level,
+                'class': 'doc2dash.__main__.ClickEchoHandler',
+                'formatter': 'click_formatter',
+            }
+        },
+        "loggers": {
+            "doc2dash": {
+                "handlers": ["click_handler"],
+                "level": level,
+            },
+        }
+    }
 
 
 def setup_paths(source, destination, name, add_to_global, force):
