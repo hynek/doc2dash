@@ -26,8 +26,14 @@ class ClickEchoHandler(logging.Handler):
     Use click.echo() for logging.  Has the advantage of stripping color codes
     if output is redirected.  Also is generally more predictable.
     """
+    _level_to_fg = {
+        logging.ERROR: "red",
+        logging.WARN: "yellow",
+    }
+
     def emit(self, record):
-        click.echo(record.getMessage())
+        click.secho(record.getMessage(),
+                    fg=self._level_to_fg.get(record.levelno, "reset"))
 
 
 @click.command()
@@ -71,16 +77,6 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     """
     Convert docs from SOURCE to Dash.app's docset format.
     """
-    if icon:
-        icon_data = icon.read()
-        if not icon_data.startswith(PNG_HEADER):
-            click.secho("'{}' is not a valid PNG image."
-                        .format(click.format_filename(icon.name)),
-                        fg="red")
-            raise SystemExit(1)
-    else:
-        icon_data = None
-
     try:
         logging.config.dictConfig(
             create_log_config(verbose=verbose, quiet=quiet)
@@ -89,6 +85,15 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         click.secho(e.args[0], fg="red")
         raise SystemExit(1)
 
+    if icon:
+        icon_data = icon.read()
+        if not icon_data.startswith(PNG_HEADER):
+            log.error('"{}" is not a valid PNG image.'
+                      .format(click.format_filename(icon.name)))
+            raise SystemExit(1)
+    else:
+        icon_data = None
+
     source, dest, name = setup_paths(
         source, destination, name=name, add_to_global=add_to_global,
         force=force
@@ -96,8 +101,8 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     dt = parsers.get_doctype(source)
     if dt is None:
         log.error(
-            click.style('"{}" does not contain a known documentation format.'
-                        .format(click.format_filename(source)), fg="red")
+            '"{}" does not contain a known documentation format.'
+            .format(click.format_filename(source))
         )
         raise SystemExit(errno.EINVAL)
     docs, db_conn = prepare_docset(source, dest, name, index_page)
@@ -188,7 +193,8 @@ def setup_paths(source, destination, name, add_to_global, force):
     if dst_exists and force:
         shutil.rmtree(dest)
     elif dst_exists:
-        log.error('Destination path "{}" already exists.'.format(dest))
+        log.error('Destination path "{}" already exists.'
+                  .format(click.format_filename(dest)))
         raise SystemExit(errno.EEXIST)
     return source, dest, name
 

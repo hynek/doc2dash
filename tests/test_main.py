@@ -34,7 +34,7 @@ class TestArguments(object):
         p.write("GIF89afoobarbaz")
         result = runner.invoke(main.main, [str(tmpdir), '-i', str(p)])
 
-        assert result.output.endswith("' is not a valid PNG image.\n")
+        assert result.output.endswith(" is not a valid PNG image.\n")
         assert 1 == result.exit_code
 
     def test_handles_unknown_doc_types(self, tmpdir, runner):
