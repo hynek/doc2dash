@@ -1,7 +1,7 @@
 .. :changelog:
 
-History
-=======
+Changelog
+=========
 
 
 2.0.0 (UNRELEASED)
@@ -14,6 +14,7 @@ History
 - Internally quite a few changes happened.
   Most prominently tuples and namedtuples have been replaced by real classes.
   Porting your parsers is trivial though.
+- Added Sphinx-based documentation.
 
 
 1.2.1 (2014-07-24)

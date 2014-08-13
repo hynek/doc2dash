@@ -1,2 +1,4 @@
-include *.rst *.txt LICENSE tox.ini .travis.yml
+include *.rst *.txt LICENSE tox.ini .travis.yml docs/Makefile
 recursive-include tests *.py *.html *.inv
+recursive-include docs *.rst *.py *.bat
+prune docs/_build

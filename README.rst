@@ -1,5 +1,5 @@
-doc2dash: Create docsets for Dash.app
-=====================================
+doc2dash: Create docsets for Dash.app and clones
+================================================
 
 .. image:: https://pypip.in/version/doc2dash/badge.svg
    :target: https://pypi.python.org/pypi/doc2dash/
@@ -13,87 +13,18 @@ doc2dash: Create docsets for Dash.app
    :target: https://coveralls.io/r/hynek/doc2dash?branch=master
    :alt: Current coverage
 
+.. begin
 
-``doc2dash`` is a MIT licensed extensible `Documentation Set`_ generator intended to be used with the dash_ API browser for OS X.
 
-If you’ve never heard of dash, you’re missing out:
+``doc2dash`` is an MIT-licensed extensible `Documentation Set`_ generator intended to be used with the `Dash.app`_ API browser for OS X or one of its many :ref:`clones <clones>`.
+
+If you’ve never heard of Dash.app, you’re missing out:
 Together with ``doc2dash`` it’s all your API documentation at your fingertips!
 
-
-Supported input types
----------------------
-
-Currently, the following source types are supported:
-
-- Sphinx_’s HTML output (nearly every single Python project out there)
-- pydoctor_’s HTML output (Twisted_!)
-
-Feel free to help adding more! While ``doc2dash`` is implemented in Python, the scope for the supported documentation types is unlimited.
-So go on and submit a parser for your favourite Ruby, Haskell, Lisp, Erlang, JavaScript, …  format!
+``doc2dash``\ ’s documentation lives at `Read the Docs <http://doc2dash.readthedocs.org/>`_, the code on `GitHub <https://github.com/hynek/doc2dash>`_.
+It’s tested on Python 2.7, 3.3+, and PyPy.
+Both Linux and OS X are supported although certain features are only available on OS X.
 
 
-Usage
------
-
-The usage is as simple as: ::
-
-   $ doc2dash -A <docdir>
-
-``doc2dash`` will create a new directory called ``<docdir>.docset`` in ``~/Library/Application Support/doc2dash/DocSets`` containing a dash-compatible docset with a SQLite_ index.
-When finished, the docset is automatically added to dash.
-
-Full usage: ::
-
-   Usage: doc2dash [OPTIONS] SOURCE
-
-   Convert docs from SOURCE to Dash.app's docset format.
-
-   Options:
-   -f, --force                force overwriting if destination already exists
-   -n, --name NAME            name docset explicitly
-   -q, --quiet                limit output to errors and warnings
-   -v, --verbose              be verbose
-   -d, --destination PATH     destination directory for docset, ignored if -A
-                              is specified  [default: .]
-   -a, --add-to-dash          automatically add resulting docset to Dash.app
-   -A, --add-to-global        create docset in doc2dash's default global
-                              directory [~/Library/Application Support/
-                              doc2dash/DocSets] and add it to Dash.app
-   -i, --icon FILENAME        add PNG icon to docset
-   -I, --index-page FILENAME  set the file that is shown when the docset is
-                              clicked within Dash.app
-   --version                  Show the version and exit.
-   --help                     Show this message and exit.
-
-
-Hints
------
-For Sphinx, you get the best results using the intersphinx_ parser that is used automatically if a version 2 ``objects.inv`` file is present.
-This approach obviates parsing problems completely by using that machine readable file using Sphinx’s own APIs.
-
-
-Installation
-------------
-
-The latest stable version can be always found on PyPI_ and can therefore be installed using a simple::
-
-   $ pip install --user doc2dash
-
-If you haven’t pip_ yet, installation should be as easy as::
-
-   $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
-
-``doc2dash`` runs on Python 2.7, and 3.3+, and PyPy.
-
-
-.. _`Documentation Set`: https://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/Documentation_Sets/000-Introduction/introduction.html
-.. _dash: http://kapeli.com/dash/
-.. _`Python 3`: http://getpython3.com/
-.. _pydoctor: https://launchpad.net/pydoctor
-.. _Sphinx: http://sphinx.pocoo.org/
-.. _SQLite: http://www.sqlite.org/
-.. _PyPI: http://pypi.python.org/pypi/doc2dash/
-.. _Twisted: http://twistedmatrix.com/
-.. _homebrew: http://mxcl.github.com/homebrew/
-.. _pip: http://www.pip-installer.org/en/latest/installing.html#alternative-installation-procedures
-.. _intersphinx: http://sphinx-doc.org/latest/ext/intersphinx.html
+.. _`Documentation Set`: https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6
+.. _`Dash.app`: http://kapeli.com/dash/
