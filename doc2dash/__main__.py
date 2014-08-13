@@ -63,7 +63,9 @@ class ClickEchoHandler(logging.Handler):
 @click.option(
     "--add-to-global", "-A", is_flag=True,
     help="create docset in doc2dash's default global directory [{}] "
-    "and add it to Dash.app".format(click.format_filename(DEFAULT_DOCSET_PATH))
+    "and add it to Dash.app (works only on OS X)".format(
+        click.format_filename(DEFAULT_DOCSET_PATH)
+    )
 )
 @click.option(
     "--icon", "-i", type=click.File("rb"), help="add PNG icon to docset"
