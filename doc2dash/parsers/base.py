@@ -8,6 +8,7 @@ import sys
 from collections import defaultdict, namedtuple
 
 import click
+import six
 
 from bs4 import BeautifulSoup
 
@@ -70,7 +71,7 @@ class _BaseParser(object):
                 raise
 
     @coroutine
-    def add_toc(self):
+    def add_toc(self, show_progressbar):
         """
         Consume tuples as returned by parse(), then patch docs for TOCs.
         """
@@ -89,8 +90,8 @@ class _BaseParser(object):
         except GeneratorExit:
             pass
 
-        with click.progressbar(files.items()) as pbar:
-            for fname, entries in pbar:
+        def patch_files(files):
+            for fname, entries in files:
                 full_path = os.path.join(self.docpath, fname)
                 with open(full_path) as fp:
                     soup = BeautifulSoup(fp, 'lxml')
@@ -101,3 +102,11 @@ class _BaseParser(object):
                                               click.format_filename(fname)))
                 with open(full_path, 'w') as fp:
                     fp.write(str(soup))
+
+        if show_progressbar is True:
+            with click.progressbar(
+                    six.iteritems(files), width=0, length=len(files),
+                    label='Adding table of contents meta data...') as pbar:
+                patch_files(pbar)
+        else:
+            patch_files(six.iteritems(files))

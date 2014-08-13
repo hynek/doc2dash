@@ -109,8 +109,8 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
                      dst=click.format_filename(dest)))
 
     with db_conn:
-        log.info('Parsing HTML...')
-        toc = doc_parser.add_toc()
+        log.info('Parsing documentation...')
+        toc = doc_parser.add_toc(show_progressbar=not quiet)
         for entry in doc_parser.parse():
             db_conn.execute(
                 'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
@@ -124,7 +124,6 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
                               fg="green" if count > 0 else "red") +
                   ' index entries.')
                  .format(count=count))
-        log.info('Adding table of contents meta data...')
         toc.close()
 
     if icon_data:
