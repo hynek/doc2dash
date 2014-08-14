@@ -12,6 +12,10 @@ Of course, you can also install it as usual using pip_::
 ``doc2dash`` runs on Python 2.7, and 3.3+, and PyPy.
 Both Linux and OS X are supported although certain features are only available on OS X.
 
+.. note::
+
+   For best performance when converting large pieces documentation, I *strongly* recommend using PyPy as the interpreter of choice.
+
 
 .. _clones:
 

@@ -37,5 +37,4 @@ Hints
 For Sphinx, you get the best results using the intersphinx_ parser that is used automatically if a version 2 ``objects.inv`` file is present.
 This approach obviates parsing problems completely by using that machine readable file using Sphinx’s own APIs.
 
-.. _intersphinx: http://sphinx-doc.org/latest/ext/intersphinx.html
 .. _SQLite: http://www.sqlite.org/
