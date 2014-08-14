@@ -28,5 +28,5 @@ Both Linux and OS X are supported although certain features are only available o
 
 .. _`Documentation Set`: https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6
 .. _`Dash.app`: http://kapeli.com/dash/
-.. _`Read the Docs`: <http://doc2dash.readthedocs.org/>
+.. _`Read the Docs`: http://doc2dash.readthedocs.org/
 .. _`GitHub`:  https://github.com/hynek/doc2dash
