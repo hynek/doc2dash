@@ -9,12 +9,12 @@ Changelog
 
 - Added a new parser for Sphinx documentation that uses `intersphinx <http://sphinx-doc.org/latest/ext/intersphinx.html>`_ files that are machine readable.
   That should lead to more reliable parsing and a better deduction of symbol types.
+- Added Sphinx-based documentation.
 - Added colors and styles to make output more comprehensible.
 - ``setup.py test`` works now.
 - Internally quite a few changes happened.
-  Most prominently tuples and namedtuples have been replaced by real classes.
-  Porting your parsers is trivial though.
-- Added Sphinx-based documentation.
+  Most prominently tuples and namedtuples have been replaced by real classes and parsers don't inherit from anything anymore.
+  The fundamental working principal stayed the same though so porting your parsers is trivial.
 
 
 1.2.1 (2014-07-24)

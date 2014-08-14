@@ -3,12 +3,18 @@ from __future__ import absolute_import, division, print_function
 import logging
 import os
 
+from characteristic import attributes
 from six import iteritems
 from sphinx.ext.intersphinx import read_inventory_v2
+from zope.interface import implementer
 
 from . import types
-from .base import _BaseParser, ParserEntry
-from .sphinx import find_and_patch_entry
+from .utils import (
+    APPLE_REF_TEMPLATE,
+    IParser,
+    ParserEntry,
+    has_file_with,
+)
 
 
 log = logging.getLogger(__name__)
@@ -36,24 +42,28 @@ INV_TO_TYPE = {
 }
 
 
-class InterSphinxParser(_BaseParser):
+@implementer(IParser)
+@attributes(["doc_path"])
+class InterSphinxParser(object):
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for
     the intersphinx extension.
     """
     name = "intersphinx"
 
-    DETECT_FILE = "objects.inv"
-    DETECT_PATTERN = b"# Sphinx inventory version 2"
+    @staticmethod
+    def detect(path):
+        return has_file_with(
+            path, "objects.inv", b"# Sphinx inventory version 2"
+        )
 
     def parse(self):
         """
-        Parse sphinx docs at self.docpath.
+        Parse sphinx docs at self.doc_path.
 
-        yield tuples of symbol name, type and path
+        yield `ParserEntry`s.
         """
-        log.info('Creating database...')
-        with open(os.path.join(self.docpath, "objects.inv"), "rb") as inv_f:
+        with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
             inv_f.readline()  # skip version line that is verified in detection
             for pe in _inv_to_entries(
                     read_inventory_v2(inv_f, "", os.path.join)
@@ -62,6 +72,23 @@ class InterSphinxParser(_BaseParser):
 
     def find_and_patch_entry(self, soup, entry):  # pragma: nocover
         return find_and_patch_entry(soup, entry)
+
+
+def find_and_patch_entry(soup, entry):
+    """
+    Modify soup so Dash.app can generate TOCs on the fly.
+    """
+    link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
+    tag = soup.new_tag('a')
+    tag['name'] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
+    if link:
+        link.parent.insert(0, tag)
+        return True
+    elif entry.anchor.startswith('module-'):
+        soup.h1.parent.insert(0, tag)
+        return True
+    else:
+        return False
 
 
 def _inv_to_entries(inv):

@@ -11,6 +11,7 @@ import sqlite3
 import click
 
 from . import __version__, parsers
+from .parsers.utils import patch_anchors
 
 
 log = logging.getLogger(__name__)
@@ -110,7 +111,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         )
         raise SystemExit(errno.EINVAL)
     docs, db_conn = prepare_docset(source, dest, name, index_page)
-    doc_parser = dt(docs)
+    doc_parser = dt(doc_path=docs)
     log.info(('Converting ' + click.style('{parser_name}', bold=True) +
               ' docs from "{src}" to "{dst}".')
              .format(parser_name=dt.name,
@@ -119,7 +120,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
 
     with db_conn:
         log.info('Parsing documentation...')
-        toc = doc_parser.add_toc(show_progressbar=not quiet)
+        toc = patch_anchors(doc_parser, show_progressbar=not quiet)
         for entry in doc_parser.parse():
             db_conn.execute(
                 'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
@@ -139,7 +140,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         add_icon(icon_data, dest)
 
     if add_to_dash or add_to_global:
-        log.info('Adding to dash...')
+        log.info('Adding to Dash.app...')
         os.system('open -a dash "{}"'.format(dest))
 
 

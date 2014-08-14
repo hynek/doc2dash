@@ -6,13 +6,22 @@ import pytest
 
 from bs4 import BeautifulSoup
 from mock import patch, mock_open
+from zope.interface.verify import verifyObject
 
 from doc2dash.parsers import types
-from doc2dash.parsers.base import TOCEntry, ParserEntry
 from doc2dash.parsers.pydoctor import PyDoctorParser, _guess_type
+from doc2dash.parsers.utils import IParser, TOCEntry, ParserEntry
 
 
 HERE = os.path.dirname(__file__)
+
+
+class TestPyDoctorParser(object):
+    def test_interface(self):
+        """
+        PyDoctorParser fully implements IParser.
+        """
+        verifyObject(IParser, PyDoctorParser(doc_path="foo"))
 
 
 @pytest.mark.parametrize(
@@ -68,11 +77,12 @@ def test_parse():
     example = open(os.path.join(HERE, 'pydoctor_example.html')).read()
     with patch('doc2dash.parsers.pydoctor.open', mock_open(read_data=example),
                create=True):
-        assert list(PyDoctorParser('foo').parse()) == EXAMPLE_PARSE_RESULT
+        assert (list(PyDoctorParser(doc_path='foo').parse())
+                == EXAMPLE_PARSE_RESULT)
 
 
 def test_patcher():
-    p = PyDoctorParser('foo')
+    p = PyDoctorParser(doc_path='foo')
     soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
     assert p.find_and_patch_entry(
         soup,

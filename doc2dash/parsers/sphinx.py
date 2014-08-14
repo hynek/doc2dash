@@ -6,32 +6,40 @@ import os
 import re
 
 from bs4 import BeautifulSoup
+from characteristic import attributes
+from zope.interface import implementer
 
 from . import types
-from .base import _BaseParser, APPLE_REF_TEMPLATE
+from .utils import IParser, ParserEntry, has_file_with
+from .intersphinx import find_and_patch_entry
 
 
 log = logging.getLogger(__name__)
 
 
-class SphinxParser(_BaseParser):
+@implementer(IParser)
+@attributes(["doc_path"])
+class SphinxParser(object):
     """
-    Parser for Sphinx-based documenation: Python, Django, Pyramid...
+    Fallback HTML-based parser for Sphinx.
     """
     name = 'sphinx'
 
-    DETECT_FILE = '_static/searchtools.js'
-    DETECT_PATTERN = b'* Sphinx JavaScript util'
+    @staticmethod
+    def detect(path):
+        return has_file_with(
+            path,  "_static/searchtools.js", b'* Sphinx JavaScript util'
+        )
 
     def parse(self):
         """
-        Parse sphinx docs at *path*.
+        Parse sphinx HTML docs at self.doc_path*.
 
-        yield tuples of symbol `name, type and path`
+        yield `ParserEntry`s
         """
         for idx in POSSIBLE_INDEXES:
             try:
-                soup = BeautifulSoup(open(os.path.join(self.docpath, idx)),
+                soup = BeautifulSoup(open(os.path.join(self.doc_path, idx)),
                                      'lxml')
                 break
             except IOError:
@@ -53,7 +61,6 @@ POSSIBLE_INDEXES = [
 
 
 def _parse_soup(soup):
-    log.info('Creating database...')
     for table in soup('table', {'class': 'genindextable'}):
         for td in table('td'):
             for dl in td('dl', recursive=False):
@@ -65,7 +72,9 @@ def _parse_soup(soup):
                         href = dt.a['href']
                         tmp_name = _url_to_name(href, type_)
                         if not tmp_name.startswith('index-'):
-                            yield tmp_name, type_, href
+                            yield ParserEntry(name=tmp_name,
+                                              type=type_,
+                                              path=href)
                     else:
                         name = _strip_annotation(dt.a.string)
                     dd = dt.next_sibling.next_sibling
@@ -78,7 +87,9 @@ RE_ANNO = re.compile(r'(.+) \(.*\)')
 
 
 def _strip_annotation(text):
-    """Transforms 'foo (class in bar)' to 'foo'."""
+    """
+    Transforms 'foo (class in bar)' to 'foo'.
+    """
     m = RE_ANNO.match(text)
     if m:
         return m.group(1)
@@ -87,7 +98,9 @@ def _strip_annotation(text):
 
 
 def _url_to_name(url, type_):
-    """Certain types have prefixes in names we have to strip before adding."""
+    """
+    Certain types have prefixes in names we have to strip before adding.
+    """
     if type_ == types.PACKAGE or type_ == types.CONSTANT and 'opcode-' in url:
         return url.split('#')[1][7:]
     else:
@@ -95,10 +108,10 @@ def _url_to_name(url, type_):
 
 
 def _process_dd(name, dd):
-    """Process a <dd> block as used by Sphinx on multiple symbols/name.
+    """
+    Process a <dd> block as used by Sphinx on multiple symbols/name.
 
     All symbols inherit the *name* of the first.
-
     """
     for dt in dd('dt'):
         text = dt.text.strip()
@@ -108,11 +121,15 @@ def _process_dd(name, dd):
                 type_ = _guess_type_by_name(name)
             full_name = _url_to_name(dt.a['href'], type_)
             if not full_name.startswith('index-'):
-                yield full_name, type_, dt.a['href']
+                yield ParserEntry(name=full_name,
+                                  type=type_,
+                                  path=dt.a['href'])
 
 
 def _guess_type_by_name(name):
-    """Module level functions and constants are not distinguishable."""
+    """
+    Module level functions and constants are not distinguishable.
+    """
     if name.endswith('()'):
         return types.FUNCTION
     else:
@@ -149,20 +166,3 @@ def _get_type_and_name(text):
             return type_, name
     else:
         return None, None
-
-
-def find_and_patch_entry(soup, entry):
-    """
-    Modify soup so dash can generate TOCs on the fly.
-    """
-    link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
-    tag = soup.new_tag('a')
-    tag['name'] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
-    if link:
-        link.parent.insert(0, tag)
-        return True
-    elif entry.anchor.startswith('module-'):
-        soup.h1.parent.insert(0, tag)
-        return True
-    else:
-        return False

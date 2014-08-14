@@ -9,13 +9,15 @@ import sqlite3
 
 import pytest
 
+from characteristic import attributes
 from click.testing import CliRunner
 from mock import MagicMock, patch
+from zope.interface import implementer
 
 import doc2dash
 
 from doc2dash import __main__ as main
-from doc2dash.parsers.base import ParserEntry
+from doc2dash.parsers.utils import ParserEntry, IParser
 
 
 log = logging.getLogger(__name__)
@@ -23,6 +25,9 @@ log = logging.getLogger(__name__)
 
 @pytest.fixture
 def runner():
+    """
+    Click's test helper.
+    """
     return CliRunner()
 
 
@@ -69,29 +74,42 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
         )
         return 'data', db_conn
 
-    def yielder():
-        yield ParserEntry(name='testmethod', type='cm', path='testpath')
-
     monkeypatch.chdir(tmpdir)
     png_file = tmpdir.join("icon.png")
     png_file.write(main.PNG_HEADER, mode="wb")
     os.mkdir('foo')
     monkeypatch.setattr(main, 'prepare_docset', fake_prepare)
-    dt = MagicMock(detect=lambda _: True)
-    dt.name = 'testtype'
-    dt.return_value = MagicMock(parse=yielder)
-    monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: dt)
+
+    @implementer(IParser)
+    @attributes(["doc_path"])
+    class FakeParser(object):
+        name = "testtype"
+
+        @staticmethod
+        def detect(path):
+            return True
+
+        def parse(self):
+            yield ParserEntry(name='testmethod', type='cm', path='testpath')
+
+        def find_and_patch_entry(self, soup, entry):
+            pass
+
+    monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: FakeParser)
     with patch("os.system") as system:
         result = runner.invoke(
             main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
         )
 
     assert 0 == result.exit_code
+    # TODO: WTH does click.progressbar print the title twice?
     assert '''\
 Converting testtype docs from "foo" to "./bar.docset".
 Parsing documentation...
 Added 1 index entries.
-Adding to dash...
+Adding table of contents meta data...
+Adding table of contents meta data...
+Adding to Dash.app...
 ''' == result.output
     assert ('open -a dash "./bar.docset"', ) == system.call_args[0]
 

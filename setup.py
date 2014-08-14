@@ -76,6 +76,7 @@ setup(
         "colorama==0.3.1",
         "lxml==3.3.5",
         "six==1.7.3",
+        "zope.interface==4.1.1",
     ],
     tests_require=[
         "pytest",
