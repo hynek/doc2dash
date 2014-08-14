@@ -10,6 +10,8 @@ import sqlite3
 
 import click
 
+from characteristic import attributes
+
 from . import __version__, parsers
 from .parsers.utils import patch_anchors
 
@@ -110,24 +112,24 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
             .format(click.format_filename(source))
         )
         raise SystemExit(errno.EINVAL)
-    docs, db_conn = prepare_docset(source, dest, name, index_page)
-    doc_parser = dt(doc_path=docs)
+    docset = prepare_docset(source, dest, name, index_page)
+    doc_parser = dt(doc_path=docset.docs)
     log.info(('Converting ' + click.style('{parser_name}', bold=True) +
               ' docs from "{src}" to "{dst}".')
              .format(parser_name=dt.name,
                      src=click.format_filename(source),
                      dst=click.format_filename(dest)))
 
-    with db_conn:
+    with docset.db_conn:
         log.info('Parsing documentation...')
         toc = patch_anchors(doc_parser, show_progressbar=not quiet)
         for entry in doc_parser.parse():
-            db_conn.execute(
+            docset.db_conn.execute(
                 'INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)',
                 entry.as_tuple()
             )
             toc.send(entry)
-        count = (db_conn.execute('SELECT COUNT(1) FROM searchIndex')
+        count = (docset.db_conn.execute('SELECT COUNT(1) FROM searchIndex')
                  .fetchone()[0])
         log.info(('Added ' +
                   click.style('{count:,}',
@@ -204,13 +206,18 @@ def setup_paths(source, destination, name, add_to_global, force):
     return source, dest, name
 
 
+@attributes(["path", "docs", "plist", "db_conn"])
+class DocSet(object):
+    pass
+
+
 def prepare_docset(source, dest, name, index_page):
     """
     Create boilerplate files & directories and copy vanilla docs inside.
 
     Return a tuple of path to resources and connection to sqlite db.
     """
-    resources = os.path.join(dest, 'Contents/Resources/')
+    resources = os.path.join(dest, "Contents", "Resources")
     docs = os.path.join(resources, 'Documents')
     os.makedirs(resources)
 
@@ -222,6 +229,7 @@ def prepare_docset(source, dest, name, index_page):
     )
     db_conn.commit()
 
+    plist_path = os.path.join(dest, "Contents", "Info.plist")
     plist_cfg = {
         'CFBundleIdentifier': name,
         'CFBundleName': name,
@@ -234,11 +242,11 @@ def prepare_docset(source, dest, name, index_page):
 
     plistlib.writePlist(
         plist_cfg,
-        os.path.join(dest, 'Contents/Info.plist')
+        plist_path,
     )
 
     shutil.copytree(source, docs)
-    return docs, db_conn
+    return DocSet(path=dest, docs=docs, plist=plist_path, db_conn=db_conn)
 
 
 def add_icon(icon_data, dest):

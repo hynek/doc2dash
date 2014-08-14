@@ -72,7 +72,8 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
             'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
             'type TEXT, path TEXT)'
         )
-        return 'data', db_conn
+        return main.DocSet(path=str(tmpdir), docs='data', plist=None,
+                           db_conn=db_conn)
 
     monkeypatch.chdir(tmpdir)
     png_file = tmpdir.join("icon.png")
@@ -207,7 +208,7 @@ class TestPrepareDocset(object):
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
-        main.prepare_docset(
+        docset = main.prepare_docset(
             "some/path/foo", 'bar', name="foo", index_page=None
         )
         m_ct.assert_called_once_with(
@@ -215,7 +216,7 @@ class TestPrepareDocset(object):
             'bar/Contents/Resources/Documents',
         )
         assert os.path.isfile('bar/Contents/Resources/docSet.dsidx')
-        p = plistlib.readPlist('bar/Contents/Info.plist')
+        p = plistlib.readPlist(docset.plist)
         assert p == {
             'CFBundleIdentifier': 'foo',
             'CFBundleName': 'foo',
@@ -237,9 +238,9 @@ class TestPrepareDocset(object):
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
-        main.prepare_docset('some/path/foo', 'bar', name='foo',
-                            index_page='foo.html')
-        p = plistlib.readPlist('bar/Contents/Info.plist')
+        docset = main.prepare_docset('some/path/foo', 'bar', name='foo',
+                                     index_page='foo.html')
+        p = plistlib.readPlist(docset.plist)
         assert p == {
             'CFBundleIdentifier': 'foo',
             'CFBundleName': 'foo',
