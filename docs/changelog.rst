@@ -4,14 +4,14 @@ Changelog
 =========
 
 
-2.0.0 (UNRELEASED)
+2.0.0 (2014-08-14)
 ------------------
 
 - Added a new parser for Sphinx documentation that uses `intersphinx <http://sphinx-doc.org/latest/ext/intersphinx.html>`_ files that are machine readable.
   That should lead to more reliable parsing and a better deduction of symbol types.
   (`#28 <https://github.com/hynek/doc2dash/issues/28>`_)
 - Added Sphinx-based documentation.
-- Added colors and styles to make output more comprehensible.
+- Added colors, styles, and a progress bar to make output more comprehensible.
 - ``setup.py test`` works now.
 - Internally quite a few changes happened.
   Most prominently tuples and namedtuples have been replaced by real classes and parsers don't inherit from anything anymore.
