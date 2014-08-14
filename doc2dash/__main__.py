@@ -41,39 +41,39 @@ class ClickEchoHandler(logging.Handler):
 @click.command()
 @click.argument("source",
                 type=click.Path(exists=True, file_okay=False, readable=True))
-@click.option(
-    "--force", "-f", is_flag=True,
-    help="force overwriting if destination already exists")
-@click.option("--name", "-n", help="name docset explicitly", metavar="NAME")
-@click.option(
-    "--quiet", "-q", is_flag=True, help="limit output to errors and warnings"
-)
-@click.option(
-    "--verbose", "-v", is_flag=True, help="be verbose"
-)
+@click.option("--name", "-n", help="Name docset explicitly.", metavar="NAME")
 @click.option(
     "--destination", "-d", type=click.Path(), default=".", show_default=True,
-    help="destination directory for docset, ignored if "
-    "-A is specified"
+    help="Destination directory for docset, ignored if "
+    "-A is specified."
+)
+@click.option(
+    "--force", "-f", is_flag=True,
+    help="Force overwriting if destination already exists.")
+@click.option(
+    "--icon", "-i", type=click.File("rb"), help="Add PNG icon to docset."
+)
+@click.option(
+    "--index-page", "-I", metavar="FILENAME", type=click.Path(),
+    help="Set the file that is shown when the docset is clicked within "
+    "Dash.app."
 )
 @click.option(
     "--add-to-dash", "-a", is_flag=True,
-    help="automatically add resulting docset to Dash.app"
+    help="Automatically add resulting docset to Dash.app."
 )
 @click.option(
     "--add-to-global", "-A", is_flag=True,
-    help="create docset in doc2dash's default global directory [{}] "
-    "and add it to Dash.app (works only on OS X)".format(
+    help="Create docset in doc2dash's default global directory [{}] "
+    "and add it to Dash.app (works only on OS X).".format(
         click.format_filename(DEFAULT_DOCSET_PATH)
     )
 )
 @click.option(
-    "--icon", "-i", type=click.File("rb"), help="add PNG icon to docset"
+    "--quiet", "-q", is_flag=True, help="Limit output to errors and warnings."
 )
 @click.option(
-    "--index-page", "-I", metavar="FILENAME", type=click.Path(),
-    help="set the file that is shown when the docset is clicked within "
-    "Dash.app"
+    "--verbose", "-v", is_flag=True, help="Be verbose."
 )
 @click.version_option(version=__version__)
 def main(source, force, name, quiet, verbose, destination, add_to_dash,
