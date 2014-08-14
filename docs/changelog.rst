@@ -22,7 +22,7 @@ Changelog
 ------------------
 
 - Fix docset name deduction if the source path ends with a ``/``.
-  (`#26 <https://github.com/hynek/doc2dash/issues/26>`_
+  (`#26 <https://github.com/hynek/doc2dash/issues/26>`_)
 
 
 1.2.0 (2014-01-07)
