@@ -6,7 +6,7 @@ import os
 from bs4 import BeautifulSoup
 
 from . import types
-from .base import _BaseParser, APPLE_REF_TEMPLATE
+from .base import _BaseParser, APPLE_REF_TEMPLATE, ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class PyDoctorParser(_BaseParser):
         """
         Parse pydoctor docs at *docpath*.
 
-        yield tuples of symbol name, type and path
+        yield ParserEntrys
         """
         soup = BeautifulSoup(
             open(os.path.join(self.docpath, 'nameIndex.html')),
@@ -38,7 +38,11 @@ class PyDoctorParser(_BaseParser):
             path = tag.get('href')
             if path and not path.startswith('#'):
                 name = tag.string
-                yield name, _guess_type(name, path), path
+                yield ParserEntry(
+                    name=name,
+                    type=_guess_type(name, path),
+                    path=path
+                )
 
     def find_and_patch_entry(self, soup, entry):
         link = soup.find('a', attrs={'name': entry.anchor})
