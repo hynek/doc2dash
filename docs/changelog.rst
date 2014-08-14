@@ -9,6 +9,7 @@ Changelog
 
 - Added a new parser for Sphinx documentation that uses `intersphinx <http://sphinx-doc.org/latest/ext/intersphinx.html>`_ files that are machine readable.
   That should lead to more reliable parsing and a better deduction of symbol types.
+  (`#28 <https://github.com/hynek/doc2dash/issues/28>`_)
 - Added Sphinx-based documentation.
 - Added colors and styles to make output more comprehensible.
 - ``setup.py test`` works now.
@@ -20,7 +21,8 @@ Changelog
 1.2.1 (2014-07-24)
 ------------------
 
-- Fix docset name deduction if the source path ends with a ``/`` (`#26 <https://github.com/hynek/doc2dash/issues/26>`_).
+- Fix docset name deduction if the source path ends with a ``/``.
+  (`#26 <https://github.com/hynek/doc2dash/issues/26>`_
 
 
 1.2.0 (2014-01-07)
