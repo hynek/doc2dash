@@ -20,8 +20,17 @@ Sphinx_ is a very common documentation format in the Python world and beyond.
 ``doc2dash`` offers two approaches to parsing it.
 The preferable one is used whenever a machine-readable intersphinx_ index file is present and it results in very precise and reliable parsing.
 
-If none is found, ``doc2dash`` attempts to parse the HTML API index file (``genindex.html`` or ``genindex-all.html``).  
+If none is found, ``doc2dash`` attempts to parse the HTML API index file (``genindex.html`` or ``genindex-all.html``).
 Simply point ``doc2dash`` at Sphinx's HTML output (usually ``_build/html`` if you built it yourself) and it will do the right thing.
+
+Building Sphinx documentation is usually easy:
+after installing the ``sphinx`` package, ``cd`` into their documentation directory (usually ``docs`` or ``doc``) and enter ``make html``.
+
+.. warning::
+
+   Do **not** attempt to run ``doc2dash`` over pre-built HTML documentation downloaded from Read The Docs.
+   Those downloads aren't direct equivalents of the actual, pristine builds and indexing will not work.
+
 
 
 .. _pydoctor-sec:
