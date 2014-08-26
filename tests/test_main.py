@@ -84,14 +84,14 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     @implementer(IParser)
     @attributes(["doc_path"])
     class FakeParser(object):
-        name = "testtype"
+        name = u"testtype"
 
         @staticmethod
         def detect(path):
             return True
 
         def parse(self):
-            yield ParserEntry(name='testmethod', type='cm', path='testpath')
+            yield ParserEntry(name=u'testmethod', type=u'cm', path=u'testpath')
 
         def find_and_patch_entry(self, soup, entry):
             pass

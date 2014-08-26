@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function
 
+import codecs
 import os
 
 from bs4 import BeautifulSoup
@@ -37,11 +38,11 @@ class TestInterSphinxParser(object):
         """
         result = list(
             _inv_to_entries({"py:method": {
-                "some_method": (None, None, u"some_module.py", u"-"),
+                u"some_method": (None, None, u"some_module.py", u"-"),
             }})
         )
         assert [ParserEntry(
-            name='some_method', type='Method', path='some_module.py'
+            name=u'some_method', type=u'Method', path=u'some_module.py'
         )] == result
 
 
@@ -50,37 +51,41 @@ class TestFindAndPatchEntry(object):
         """
         Patching a method adds a TOC entry.
         """
-        soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
+        soup = BeautifulSoup(
+            codecs.open(os.path.join(HERE, 'function_example.html'),
+                        mode="r", encoding="utf-8")
+        )
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
-                name='pyramid.config.Configurator.add_route',
-                type='Method',
-                anchor='pyramid.config.Configurator.add_route',
+                name=u'pyramid.config.Configurator.add_route',
+                type=u'Method',
+                anchor=u'pyramid.config.Configurator.add_route',
             )
         )
         toc_link = soup(
-            'a',
+            u'a',
             attrs={
-                'name': '//apple_ref/cpp/Method/pyramid.config.Configurator.'
-                        'add_route'
+                u'name': u'//apple_ref/cpp/Method/pyramid.config.Configurator.'
+                         u'add_route'
             }
         )
         assert toc_link
 
     def test_patch_modules(self):
         """
-        Patching a module adds the TOC entry into the next <h1>.
+        Patching a module adds the TOC entry into the next <h1>.  Non-ASCII
+        works.
         """
         soup = BeautifulSoup(
-            "<h1>Some Module</h1>",
+            u"<h1>Some Module</h1>",
         )
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
-                name="some_module",
-                type="Module",
-                anchor="module-some_module",
+                name=u"some_module",
+                type=u"M\xc3\xb6dule",
+                anchor=u"module-some_module",
             )
         )
         assert '<a name="//apple_ref' in str(soup)
@@ -89,12 +94,15 @@ class TestFindAndPatchEntry(object):
         """
         Return `False` if anchor can't be found
         """
-        soup = BeautifulSoup(open(os.path.join(HERE, 'function_example.html')))
+        soup = BeautifulSoup(
+            codecs.open(os.path.join(HERE, 'function_example.html'),
+                        mode="r", encoding="utf-8")
+        )
         assert False is find_and_patch_entry(
             soup,
             TOCEntry(
-                name="foo",
-                type="Nothing",
-                anchor="does-not-exist",
+                name=u"foo",
+                type=u"Nothing",
+                anchor=u"does-not-exist",
             )
         )
