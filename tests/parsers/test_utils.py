@@ -1,8 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+import six
 
-from characteristic import attributes
+from characteristic import Attribute, attributes
 from mock import patch
 from zope.interface import implementer
 
@@ -15,14 +16,15 @@ from doc2dash.parsers.utils import (
 
 
 @implementer(IParser)
-@attributes(["name",
-             "doc_path",
-             "_succeed_patching",
-             "_patched_entries"],
-            defaults={"name": "testparser",
-                      "_succeed_patching": True,
-                      "_patched_entries": None})
+@attributes([
+    Attribute("name", exclude_from_init=True, instance_of=six.text_type),
+    Attribute("doc_path", instance_of=six.text_type),
+    Attribute("_succeed_patching", default_value=True),
+    Attribute("_patched_entries", default_factory=list)
+])
 class TestParser(object):
+    name = "testparser"
+
     @staticmethod
     def detect(path):
         return True
@@ -43,8 +45,8 @@ def entries():
     Test `ParserEntry`s
     """
     return [
-        ParserEntry(name='foo', type='Method', path='bar.html#foo'),
-        ParserEntry(name='qux', type='Class', path='bar.html'),
+        ParserEntry(name=u'foo', type=u'Method', path=u'bar.html#foo'),
+        ParserEntry(name=u'qux', type=u'Class', path=u'bar.html'),
     ]
 
 
@@ -57,7 +59,7 @@ class TestPatchTOCAnchors(object):
         """
         Adding no entries does not cause an error.
         """
-        parser = TestParser(doc_path="foo")
+        parser = TestParser(doc_path=u"foo")
         toc = patch_anchors(parser, show_progressbar=progressbar)
         toc.close()
 
@@ -67,14 +69,14 @@ class TestPatchTOCAnchors(object):
         """
         foo = tmpdir.mkdir('foo')
         foo.join("bar.html").write("docs!")
-        parser = TestParser(doc_path=str(foo))
+        parser = TestParser(doc_path=six.text_type(foo))
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             print(e)
             toc.send(e)
         toc.close()
         assert [
-            TOCEntry(name='foo', type='Method', anchor='foo'),
+            TOCEntry(name=u'foo', type=u'Method', anchor=u'foo'),
         ] == parser._patched_entries
 
     def test_complains(self, entries, tmpdir):
@@ -83,7 +85,8 @@ class TestPatchTOCAnchors(object):
         """
         foo = tmpdir.mkdir('foo')
         foo.join("bar.html").write("docs!")
-        parser = TestParser(doc_path=str(foo), _succeed_patching=False)
+        parser = TestParser(doc_path=six.text_type(foo),
+                            succeed_patching=False)
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             toc.send(e)

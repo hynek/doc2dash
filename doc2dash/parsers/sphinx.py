@@ -1,9 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+import codecs
 import errno
 import logging
 import os
 import re
+
+import six
 
 from bs4 import BeautifulSoup
 from characteristic import attributes
@@ -39,8 +42,11 @@ class SphinxParser(object):
         """
         for idx in POSSIBLE_INDEXES:
             try:
-                soup = BeautifulSoup(open(os.path.join(self.doc_path, idx)),
-                                     'lxml')
+                soup = BeautifulSoup(
+                    codecs.open(os.path.join(self.doc_path, idx),
+                                mode="r", encoding="utf-8"),
+                    'lxml'
+                )
                 break
             except IOError:
                 pass
@@ -69,9 +75,9 @@ def _parse_soup(soup):
                         continue
                     type_, name = _get_type_and_name(dt.a.string)
                     if name:
-                        href = dt.a['href']
+                        href = six.text_type(dt.a['href'])
                         tmp_name = _url_to_name(href, type_)
-                        if not tmp_name.startswith('index-'):
+                        if not tmp_name.startswith(u'index-'):
                             yield ParserEntry(name=tmp_name,
                                               type=type_,
                                               path=href)
@@ -83,7 +89,7 @@ def _parse_soup(soup):
                             yield y
 
 
-RE_ANNO = re.compile(r'(.+) \(.*\)')
+RE_ANNO = re.compile(six.text_type(r'(.+) \(.*\)'))
 
 
 def _strip_annotation(text):
@@ -101,10 +107,10 @@ def _url_to_name(url, type_):
     """
     Certain types have prefixes in names we have to strip before adding.
     """
-    if type_ == types.PACKAGE or type_ == types.CONSTANT and 'opcode-' in url:
-        return url.split('#')[1][7:]
+    if type_ == types.PACKAGE or type_ == types.CONSTANT and u'opcode-' in url:
+        return url.split(u'#')[1][7:]
     else:
-        return url.split('#')[1]
+        return url.split(u'#')[1]
 
 
 def _process_dd(name, dd):
@@ -119,11 +125,11 @@ def _process_dd(name, dd):
         if type_:
             if type_ == _IN_MODULE:
                 type_ = _guess_type_by_name(name)
-            full_name = _url_to_name(dt.a['href'], type_)
-            if not full_name.startswith('index-'):
+            full_name = _url_to_name(six.text_type(dt.a[u'href']), type_)
+            if not full_name.startswith(u'index-'):
                 yield ParserEntry(name=full_name,
                                   type=type_,
-                                  path=dt.a['href'])
+                                  path=six.text_type(dt.a[u'href']))
 
 
 def _guess_type_by_name(name):
