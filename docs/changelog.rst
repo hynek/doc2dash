@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-2.0.1 (UNRELEASED)
+2.0.1 (2014-09-16)
 ------------------
 
 - Better Unicode support.
