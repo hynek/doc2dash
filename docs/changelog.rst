@@ -10,6 +10,7 @@ Changelog
 - Better Unicode support.
   The move from ``unicode_literals`` to explicit prefixes broke some things that are fixed now.
   (`#29 <https://github.com/hynek/doc2dash/issues/29>`_, `#30 <https://github.com/hynek/doc2dash/issues/30>`_)
+- Fix detection of `pydoctor 0.5 <http://bazaar.launchpad.net/~mwhudson/pydoctor/dev/revision/605>`_. (`#31 <https://github.com/hynek/doc2dash/issues/31>`_)
 
 
 2.0.0 (2014-08-14)
