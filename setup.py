@@ -46,7 +46,7 @@ class PyTest(TestCommand):
         self.test_suite = True
 
     def run_tests(self):
-        # import here, cause outside the eggs aren't loaded
+        # import here, because outside the eggs aren't loaded
         import pytest
         errno = pytest.main(self.pytest_args or [] +
                             ["tests"])
@@ -57,7 +57,7 @@ setup(
     name='doc2dash',
     version=find_version('doc2dash', '__init__.py'),
     description="Convert docs to Dash.app's docset format.",
-    long_description=open('README.rst').read(),
+    long_description=read('README.rst'),
     url='http://github.com/hynek/doc2dash/',
     license='MIT',
     author='Hynek Schlawack',
