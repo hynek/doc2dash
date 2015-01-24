@@ -126,7 +126,7 @@ def patch_anchors(parser, show_progressbar):
                 soup = BeautifulSoup(fp, 'lxml')
                 for entry in entries:
                     if not parser.find_and_patch_entry(soup, entry):
-                        log.debug("Can't find anchor {} in {}."
+                        log.debug(u"Can't find anchor {} in {}."
                                   .format(entry.anchor,
                                           click.format_filename(fname)))
             with open(full_path, mode="wb") as fp:

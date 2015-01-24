@@ -95,7 +95,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     if icon:
         icon_data = icon.read()
         if not icon_data.startswith(PNG_HEADER):
-            log.error('"{}" is not a valid PNG image.'
+            log.error(u'"{}" is not a valid PNG image.'
                       .format(click.format_filename(icon.name)))
             raise SystemExit(1)
     else:
@@ -108,20 +108,20 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     dt = parsers.get_doctype(source)
     if dt is None:
         log.error(
-            '"{}" does not contain a known documentation format.'
+            u'"{}" does not contain a known documentation format.'
             .format(click.format_filename(source))
         )
         raise SystemExit(errno.EINVAL)
     docset = prepare_docset(source, dest, name, index_page)
     doc_parser = dt(doc_path=docset.docs)
-    log.info(('Converting ' + click.style('{parser_name}', bold=True) +
-              ' docs from "{src}" to "{dst}".')
+    log.info((u'Converting ' + click.style('{parser_name}', bold=True) +
+              u' docs from "{src}" to "{dst}".')
              .format(parser_name=dt.name,
                      src=click.format_filename(source),
                      dst=click.format_filename(dest)))
 
     with docset.db_conn:
-        log.info('Parsing documentation...')
+        log.info(u'Parsing documentation...')
         toc = patch_anchors(doc_parser, show_progressbar=not quiet)
         for entry in doc_parser.parse():
             docset.db_conn.execute(
@@ -131,10 +131,10 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
             toc.send(entry)
         count = (docset.db_conn.execute('SELECT COUNT(1) FROM searchIndex')
                  .fetchone()[0])
-        log.info(('Added ' +
+        log.info((u'Added ' +
                   click.style('{count:,}',
                               fg="green" if count > 0 else "red") +
-                  ' index entries.')
+                  u' index entries.')
                  .format(count=count))
         toc.close()
 
@@ -142,8 +142,8 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         add_icon(icon_data, dest)
 
     if add_to_dash or add_to_global:
-        log.info('Adding to Dash.app...')
-        os.system('open -a dash "{}"'.format(dest))
+        log.info(u'Adding to Dash.app...')
+        os.system(u'open -a dash "{}"'.format(dest))
 
 
 def create_log_config(verbose, quiet):
@@ -200,7 +200,7 @@ def setup_paths(source, destination, name, add_to_global, force):
     if dst_exists and force:
         shutil.rmtree(dest)
     elif dst_exists:
-        log.error('Destination path "{}" already exists.'
+        log.error(u'Destination path "{}" already exists.'
                   .format(click.format_filename(dest)))
         raise SystemExit(errno.EEXIST)
     return source, dest, name
