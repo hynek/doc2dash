@@ -3,8 +3,6 @@ from __future__ import absolute_import, division, print_function
 import codecs
 import os
 
-import pytest
-
 from bs4 import BeautifulSoup
 from mock import patch, mock_open
 from zope.interface.verify import verifyObject
@@ -23,7 +21,6 @@ class TestPyDoctorParser(object):
         PyDoctorParser fully implements IParser.
         """
         verifyObject(IParser, PyDoctorParser(doc_path=u"foo"))
-
 
 
 EXAMPLE_PARSE_RESULT = [

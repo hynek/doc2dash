@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from characteristic import Attribute, attributes
 from zope.interface import implementer
 
-from . import types
 from .utils import APPLE_REF_TEMPLATE, ParserEntry, has_file_with, IParser
 
 
