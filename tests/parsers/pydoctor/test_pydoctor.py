@@ -10,7 +10,7 @@ from mock import patch, mock_open
 from zope.interface.verify import verifyObject
 
 from doc2dash.parsers import types
-from doc2dash.parsers.pydoctor import PyDoctorParser, _guess_type
+from doc2dash.parsers.pydoctor import PyDoctorParser
 from doc2dash.parsers.utils import IParser, TOCEntry, ParserEntry
 
 
@@ -24,23 +24,6 @@ class TestPyDoctorParser(object):
         """
         verifyObject(IParser, PyDoctorParser(doc_path=u"foo"))
 
-
-@pytest.mark.parametrize(
-    "name, path, expected", [
-        ('startServer',
-         'twisted.conch.test.test_cftp.CFTPClientTestBase.html#startServer',
-         types.METHOD
-         ),
-        ('A', 'twisted.test.myrebuilder1.A.html', types.CLASS),
-        ('epollreactor', 'twisted.internet.epollreactor.html',
-         types.PACKAGE)
-    ]
-)
-def test_guess_type(name, path, expected):
-    """
-    Symbol types are correctly guessed.
-    """
-    assert _guess_type(name, path) == expected
 
 
 EXAMPLE_PARSE_RESULT = [
@@ -58,6 +41,8 @@ EXAMPLE_PARSE_RESULT = [
          u'twisted.test.test_jelly.A.html'),
         (u'twisted.test.test_persisted.A', types.CLASS,
          u'twisted.test.test_persisted.A.html'),
+        (u'twisted.internet.task.LoopingCall.a', types.VARIABLE,
+         u'twisted.internet.task.LoopingCall.html#a'),
         (u'twisted.test.myrebuilder1.A.a', types.METHOD,
          u'twisted.test.myrebuilder1.A.html#a'),
         (u'twisted.test.myrebuilder1.Inherit.a', types.METHOD,
@@ -82,6 +67,7 @@ def test_parse():
     with patch('doc2dash.parsers.pydoctor.codecs.open',
                mock_open(read_data=example),
                create=True):
+        print(list(PyDoctorParser(doc_path=u'foo').parse()))
         assert (list(PyDoctorParser(doc_path=u'foo').parse())
                 == EXAMPLE_PARSE_RESULT)
 
