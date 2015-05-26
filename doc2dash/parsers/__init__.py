@@ -4,8 +4,8 @@ from . import pydoctor, sphinx, intersphinx
 
 
 DOCTYPES = [
-    intersphinx.InterSphinxParser,
     pydoctor.PyDoctorParser,
+    intersphinx.InterSphinxParser,
     sphinx.SphinxParser,
 ]
 
