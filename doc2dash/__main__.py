@@ -43,7 +43,8 @@ class ClickEchoHandler(logging.Handler):
 
 @click.command()
 @click.argument("source",
-                type=click.Path(exists=True, file_okay=False, readable=True))
+                type=click.Path(exists=True, file_okay=False, readable=True,
+                resolve_path=True))
 @click.option("--name", "-n", help="Name docset explicitly.", metavar="NAME")
 @click.option(
     "--destination", "-d", type=click.Path(), default=".", show_default=True,
@@ -117,7 +118,7 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
     log.info((u'Converting ' + click.style('{parser_name}', bold=True) +
               u' docs from "{src}" to "{dst}".')
              .format(parser_name=dt.name,
-                     src=click.format_filename(source),
+                     src=click.format_filename(source, shorten=True),
                      dst=click.format_filename(dest)))
 
     with docset.db_conn:
