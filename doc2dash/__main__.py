@@ -43,8 +43,8 @@ class ClickEchoHandler(logging.Handler):
 
 @click.command()
 @click.argument("source",
-                type=click.Path(exists=True, file_okay=False, readable=True,
-                resolve_path=True))
+                type=click.Path(exists=True, file_okay=False,
+                                readable=True, resolve_path=True))
 @click.option("--name", "-n", help="Name docset explicitly.", metavar="NAME")
 @click.option(
     "--destination", "-d", type=click.Path(), default=".", show_default=True,
