@@ -1,10 +1,6 @@
 doc2dash: Create docsets for Dash.app and clones
 ================================================
 
-.. image:: https://pypip.in/version/doc2dash/badge.svg
-   :target: https://pypi.python.org/pypi/doc2dash/
-   :alt: Latest Version
-
 .. image:: https://travis-ci.org/hynek/doc2dash.png?branch=master
    :target: https://travis-ci.org/hynek/doc2dash
    :alt: CI status
