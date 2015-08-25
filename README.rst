@@ -5,9 +5,9 @@ doc2dash: Create docsets for Dash.app and clones
    :target: https://travis-ci.org/hynek/doc2dash
    :alt: CI status
 
-.. image:: https://coveralls.io/repos/hynek/doc2dash/badge.png?branch=master
-   :target: https://coveralls.io/r/hynek/doc2dash?branch=master
-   :alt: Current coverage
+.. image:: https://codecov.io/github/hynek/doc2dash/coverage.svg?branch=master
+   :target: https://codecov.io/github/hynek/doc2dash?branch=master
+   :alt: Coverage
 
 .. begin
 

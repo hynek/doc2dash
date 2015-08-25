@@ -1,19 +1,27 @@
+sudo: false
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 language: python
 python: 2.7
 env:
-    - TOX_ENV=py27
-    - TOX_ENV=py33
-    - TOX_ENV=py34
-    - TOX_ENV=pypy
-    - TOX_ENV=flake8
-    - TOX_ENV=manifest
-    - TOX_ENV=docs
+  - TOX_ENV=py27
+  - TOX_ENV=py33
+  - TOX_ENV=py34
+  - TOX_ENV=pypy
+  - TOX_ENV=flake8
+  - TOX_ENV=manifest
+  - TOX_ENV=docs
 
 install:
-    - pip install tox coveralls
+  - pip install tox coveralls
 
 script:
-    - tox -e $TOX_ENV
+  - tox -e $TOX_ENV
+
+before_install:
+  - pip install codecov
 
 after_success:
-    - coveralls
+  - codecov
