@@ -79,9 +79,18 @@ class ClickEchoHandler(logging.Handler):
 @click.option(
     "--verbose", "-v", is_flag=True, help="Be verbose."
 )
+@click.option(
+    "--enable-js", "-j", is_flag=True,
+    help="Enable bundled and external Javascript."
+)
+@click.option(
+    "--online-redirect-url", "-u", default=None,
+    help="The base URL of the online documentation."
+)
 @click.version_option(version=__version__)
 def main(source, force, name, quiet, verbose, destination, add_to_dash,
-         add_to_global, icon, index_page):
+         add_to_global, icon, index_page, enable_js,
+         online_redirect_url):
     """
     Convert docs from SOURCE to Dash.app's docset format.
     """
@@ -113,7 +122,8 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
             .format(click.format_filename(source))
         )
         raise SystemExit(errno.EINVAL)
-    docset = prepare_docset(source, dest, name, index_page)
+    docset = prepare_docset(source, dest, name, index_page, enable_js,
+                            online_redirect_url)
     doc_parser = dt(doc_path=docset.docs)
     log.info((u'Converting ' + click.style('{parser_name}', bold=True) +
               u' docs from "{src}" to "{dst}".')
@@ -212,7 +222,8 @@ class DocSet(object):
     pass
 
 
-def prepare_docset(source, dest, name, index_page):
+def prepare_docset(source, dest, name, index_page, enable_js,
+                   online_redirect_url):
     """
     Create boilerplate files & directories and copy vanilla docs inside.
 
@@ -237,9 +248,12 @@ def prepare_docset(source, dest, name, index_page):
         'DocSetPlatformFamily': name.lower(),
         'DashDocSetFamily': 'python',
         'isDashDocset': True,
+        'isJavaScriptEnabled': enable_js,
     }
     if index_page is not None:
         plist_cfg['dashIndexFilePath'] = index_page
+    if online_redirect_url is not None:
+        plist_cfg['DashDocSetFallbackURL'] = online_redirect_url
 
     plistlib.writePlist(
         plist_cfg,
