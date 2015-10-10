@@ -52,6 +52,16 @@ Valid ``OPTIONS`` are the following:
    Create docset in doc2dash's default global directory [``~/Library/Application Support/ doc2dash/DocSets``] and add it to Dash.app
    Works only on OS X and when Dash.app is installed.
 
+.. option:: -j, --enable-js
+
+    Enable bundled and external javascript.
+
+.. option:: -u, --online-redirect-url
+
+    As of Dash 3.0 users can open the online version of pages from within docsets.
+    To enable this, you must set this value to the base URL of your online documentation.
+    e.g. ``https://doc2dash.readthedocs.org/``
+
 .. option:: -q, --quiet
 
    Limit output to errors and warnings.
