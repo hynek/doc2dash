@@ -8,3 +8,4 @@ contributors:
 - `Dirkjan Ochtman <https://github.com/djc>`_
 - `Henrique Bastos <https://github.com/henriquebastos>`_
 - `Łukasz Langa <https://github.com/ambv>`_
+- `Paul Kehrer <https://github.com/reaperhulk>`_
