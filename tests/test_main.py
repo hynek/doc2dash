@@ -64,7 +64,8 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     """
     Integration test with a mocked out parser.
     """
-    def fake_prepare(source, dest, name, index_page):
+    def fake_prepare(source, dest, name, index_page, enable_js,
+                     online_redirect_url):
         os.mkdir(dest)
         db_conn = sqlite3.connect(':memory:')
         db_conn.row_factory = sqlite3.Row
@@ -209,7 +210,8 @@ class TestPrepareDocset(object):
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
         docset = main.prepare_docset(
-            "some/path/foo", 'bar', name="foo", index_page=None
+            "some/path/foo", 'bar', name="foo", index_page=None,
+            enable_js=False, online_redirect_url=None
         )
         m_ct.assert_called_once_with(
             'some/path/foo',
@@ -223,6 +225,7 @@ class TestPrepareDocset(object):
             'DocSetPlatformFamily': 'foo',
             'DashDocSetFamily': 'python',
             'isDashDocset': True,
+            'isJavaScriptEnabled': False,
         }
         with sqlite3.connect('bar/Contents/Resources/docSet.dsidx') as db_conn:
             cur = db_conn.cursor()
@@ -239,7 +242,9 @@ class TestPrepareDocset(object):
         monkeypatch.setattr(shutil, 'copytree', m_ct)
         os.mkdir('bar')
         docset = main.prepare_docset('some/path/foo', 'bar', name='foo',
-                                     index_page='foo.html')
+                                     index_page='foo.html',
+                                     enable_js=False,
+                                     online_redirect_url=None)
         p = plistlib.readPlist(docset.plist)
         assert p == {
             'CFBundleIdentifier': 'foo',
@@ -248,6 +253,54 @@ class TestPrepareDocset(object):
             'DashDocSetFamily': 'python',
             'isDashDocset': True,
             'dashIndexFilePath': 'foo.html',
+            'isJavaScriptEnabled': False,
+        }
+
+    def test_with_javascript_enabled(self, monkeypatch, tmpdir):
+        """
+        If an index page is passed, it is added to the plist.
+        """
+        monkeypatch.chdir(tmpdir)
+        m_ct = MagicMock()
+        monkeypatch.setattr(shutil, 'copytree', m_ct)
+        os.mkdir('bar')
+        docset = main.prepare_docset('some/path/foo', 'bar', name='foo',
+                                     index_page='foo.html',
+                                     enable_js=True,
+                                     online_redirect_url=None)
+        p = plistlib.readPlist(docset.plist)
+        assert p == {
+            'CFBundleIdentifier': 'foo',
+            'CFBundleName': 'foo',
+            'DocSetPlatformFamily': 'foo',
+            'DashDocSetFamily': 'python',
+            'isDashDocset': True,
+            'dashIndexFilePath': 'foo.html',
+            'isJavaScriptEnabled': True,
+        }
+
+    def test_with_online_redirect_url(self, monkeypatch, tmpdir):
+        """
+        If an index page is passed, it is added to the plist.
+        """
+        monkeypatch.chdir(tmpdir)
+        m_ct = MagicMock()
+        monkeypatch.setattr(shutil, 'copytree', m_ct)
+        os.mkdir('bar')
+        docset = main.prepare_docset('some/path/foo', 'bar', name='foo',
+                                     index_page='foo.html',
+                                     enable_js=False,
+                                     online_redirect_url="https://domain.com")
+        p = plistlib.readPlist(docset.plist)
+        assert p == {
+            'CFBundleIdentifier': 'foo',
+            'CFBundleName': 'foo',
+            'DocSetPlatformFamily': 'foo',
+            'DashDocSetFamily': 'python',
+            'isDashDocset': True,
+            'dashIndexFilePath': 'foo.html',
+            'isJavaScriptEnabled': False,
+            'DashDocSetFallbackURL': "https://domain.com",
         }
 
 
