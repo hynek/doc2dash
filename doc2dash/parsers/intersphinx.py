@@ -100,6 +100,15 @@ def _inv_to_entries(inv):
         try:
             t = INV_TO_TYPE[type_key.split(":")[-1]]
             for el, data in iteritems(val):
-                yield ParserEntry(name=el, type=t, path=data[2])
+                """
+                Discard the anchors between head and tail to make it
+                compatible with situations that extra meta information encoded
+                """
+                path_tuple = data[2].split("#")
+                if len(path_tuple) > 1:
+                    path_str = "#".join((path_tuple[0], path_tuple[-1]))
+                else:
+                    path_str = data[2]
+                yield ParserEntry(name=el, type=t, path=path_str)
         except KeyError:
             pass
