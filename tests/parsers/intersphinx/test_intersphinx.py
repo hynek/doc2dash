@@ -39,8 +39,7 @@ class TestInterSphinxParser(object):
         result = list(
             _inv_to_entries({"py:method": {
                 u"some_method": (None, None, u"some_module.py", u"-"),
-            },
-            "std:option": {
+            }, "std:option": {
                 u"--destination": (
                     u"doc2dash",
                     u"2.0",
