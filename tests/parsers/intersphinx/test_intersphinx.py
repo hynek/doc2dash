@@ -39,11 +39,24 @@ class TestInterSphinxParser(object):
         result = list(
             _inv_to_entries({"py:method": {
                 u"some_method": (None, None, u"some_module.py", u"-"),
+            }, "std:option": {
+                u"--destination": (
+                    u"doc2dash",
+                    u"2.0",
+                    u"index.html#document-usage#cmdoption--destination",
+                    u"-"
+                )
             }})
         )
-        assert [ParserEntry(
+        assert set([ParserEntry(
             name=u'some_method', type=u'Method', path=u'some_module.py'
-        )] == result
+            ),
+            ParserEntry(
+                name=u'--destination',
+                type=u'Option',
+                path=u'index.html#cmdoption--destination'
+            )
+        ]) == set(result)
 
 
 class TestFindAndPatchEntry(object):
