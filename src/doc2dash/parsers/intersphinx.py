@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function
 import logging
 import os
 
-from characteristic import attributes
+import attr
+
 from six import iteritems
 from sphinx.ext.intersphinx import read_inventory_v2
 from zope.interface import implementer
@@ -43,12 +44,14 @@ INV_TO_TYPE = {
 
 
 @implementer(IParser)
-@attributes(["doc_path"])
+@attr.s
 class InterSphinxParser(object):
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for
     the intersphinx extension.
     """
+    doc_path = attr.ib()
+
     name = "intersphinx"
 
     @staticmethod

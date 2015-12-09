@@ -6,10 +6,10 @@ import logging
 import os
 import re
 
+import attr
 import six
 
 from bs4 import BeautifulSoup
-from characteristic import attributes
 from zope.interface import implementer
 
 from . import types
@@ -21,12 +21,14 @@ log = logging.getLogger(__name__)
 
 
 @implementer(IParser)
-@attributes(["doc_path"])
+@attr.s
 class SphinxParser(object):
     """
     Fallback HTML-based parser for Sphinx.
     """
-    name = 'sphinx'
+    doc_path = attr.ib()
+
+    name = "sphinx"
 
     @staticmethod
     def detect(path):

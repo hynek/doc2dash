@@ -4,10 +4,10 @@ import codecs
 import logging
 import os
 
+import attr
 import six
 
 from bs4 import BeautifulSoup
-from characteristic import Attribute, attributes
 from zope.interface import implementer
 
 from .utils import APPLE_REF_TEMPLATE, ParserEntry, has_file_with, IParser
@@ -30,12 +30,14 @@ PYDOCTOR_HEADER_REALLY_OLD = b'''\
 
 
 @implementer(IParser)
-@attributes([Attribute("doc_path")])
+@attr.s
 class PyDoctorParser(object):
     """
     Parser for pydoctor-based documentation: mainly Twisted.
     """
-    name = 'pydoctor'
+    doc_path = attr.ib()
+
+    name = "pydoctor"
 
     @classmethod
     def detect(cls, path):

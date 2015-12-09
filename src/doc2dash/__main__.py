@@ -8,9 +8,8 @@ import plistlib
 import shutil
 import sqlite3
 
+import attr
 import click
-
-from characteristic import attributes
 
 from . import __version__, parsers
 from .parsers.utils import patch_anchors
@@ -217,11 +216,15 @@ def setup_paths(source, destination, name, add_to_global, force):
     return source, dest, name
 
 
-@attributes(["path", "docs", "plist", "db_conn"])
+@attr.s
 class DocSet(object):
     """
     Summary of docset path and parameters.
     """
+    path = attr.ib()
+    docs = attr.ib()
+    plist = attr.ib()
+    db_conn = attr.ib()
 
 
 def prepare_docset(source, dest, name, index_page, enable_js,

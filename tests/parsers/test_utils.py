@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+import attr
 import pytest
 import six
 
-from characteristic import Attribute, attributes
 from mock import patch
 from zope.interface import implementer
 
@@ -16,13 +16,12 @@ from doc2dash.parsers.utils import (
 
 
 @implementer(IParser)
-@attributes([
-    Attribute("name", exclude_from_init=True, instance_of=six.text_type),
-    Attribute("doc_path", instance_of=six.text_type),
-    Attribute("_succeed_patching", default_value=True),
-    Attribute("_patched_entries", default_factory=list)
-])
+@attr.s
 class FakeParser(object):
+    doc_path = attr.ib(validator=attr.validators.instance_of(six.text_type))
+    _succeed_patching = attr.ib(default=True)
+    _patched_entries = attr.ib(default=attr.Factory(list))
+
     name = "FakeParser"
 
     @staticmethod

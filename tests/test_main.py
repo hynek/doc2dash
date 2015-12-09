@@ -7,9 +7,10 @@ import plistlib
 import shutil
 import sqlite3
 
+import attr
 import pytest
+import six
 
-from characteristic import attributes
 from click.testing import CliRunner
 from mock import MagicMock, patch
 from zope.interface import implementer
@@ -62,29 +63,32 @@ class TestArguments(object):
 
 def test_normal_flow(monkeypatch, tmpdir, runner):
     """
-    Integration test with a mocked out parser.
+    Integration test with a mock parser.
     """
     def fake_prepare(source, dest, name, index_page, enable_js,
                      online_redirect_url):
         os.mkdir(dest)
-        db_conn = sqlite3.connect(':memory:')
+        db_conn = sqlite3.connect(":memory:")
         db_conn.row_factory = sqlite3.Row
         db_conn.execute(
-            'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, '
-            'type TEXT, path TEXT)'
+            "CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, "
+            "type TEXT, path TEXT)"
         )
-        return main.DocSet(path=str(tmpdir), docs='data', plist=None,
+        return main.DocSet(path=str(tmpdir), docs=u"data", plist=None,
                            db_conn=db_conn)
 
     monkeypatch.chdir(tmpdir)
     png_file = tmpdir.join("icon.png")
     png_file.write(main.PNG_HEADER, mode="wb")
-    os.mkdir('foo')
-    monkeypatch.setattr(main, 'prepare_docset', fake_prepare)
+    os.mkdir("foo")
+    monkeypatch.setattr(main, "prepare_docset", fake_prepare)
 
     @implementer(IParser)
-    @attributes(["doc_path"])
+    @attr.s
     class FakeParser(object):
+        doc_path = attr.ib(
+            validator=attr.validators.instance_of(six.text_type))
+
         name = u"testtype"
 
         @staticmethod
@@ -92,24 +96,22 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
             return True
 
         def parse(self):
-            yield ParserEntry(name=u'testmethod', type=u'cm', path=u'testpath')
+            yield ParserEntry(name=u"testmethod", type=u"cm", path=u"testpath")
 
         def find_and_patch_entry(self, soup, entry):
             pass
 
-    monkeypatch.setattr(doc2dash.parsers, 'get_doctype', lambda _: FakeParser)
+    monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
     with patch("os.system") as system:
         result = runner.invoke(
             main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
         )
 
     assert 0 == result.exit_code
-    # TODO: WTH does click.progressbar print the title twice?
     assert '''\
 Converting testtype docs from "foo" to "./bar.docset".
 Parsing documentation...
 Added 1 index entries.
-Adding table of contents meta data...
 Adding table of contents meta data...
 Adding to Dash.app...
 ''' == result.output
