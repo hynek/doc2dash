@@ -14,11 +14,13 @@ matrix:
       env: TOXENV=py33
     - python: "3.4"
       env: TOXENV=py34
+    - python: "3.5"
+      env: TOXENV=py35
     - python: "pypy"
       env: TOXENV=pypy
 
     # Meta
-    - python: "2.7"
+    - python: "3.5"
       env: TOXENV=flake8
     - python: "2.7"
       env: TOXENV=manifest
@@ -27,7 +29,7 @@ matrix:
 
 
 install:
-  - pip install tox coveralls
+  - pip install tox
 
 script:
   - tox

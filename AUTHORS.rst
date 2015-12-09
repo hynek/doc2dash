@@ -1,12 +1,8 @@
 Credits
 -------
 
-``doc2dash`` is written and maintained by Hynek Schlawack and various
-contributors:
+``doc2dash`` is written and maintained by Hynek Schlawack.
 
-- `Ashera Scout <https://github.com/asherascout>`_
-- `Bogdan Popescu <https://kapeli.com/dash>`_
-- `Dirkjan Ochtman <https://github.com/djc>`_
-- `Henrique Bastos <https://github.com/henriquebastos>`_
-- `Łukasz Langa <https://github.com/ambv>`_
-- `Paul Kehrer <https://github.com/reaperhulk>`_
+The development is kindly supported by `Variomedia AG <https://www.variomedia.de/>`_.
+
+A full list of contributors can be found on `GitHub <https://github.com/hynek/doc2dash/graphs/contributors>`_.

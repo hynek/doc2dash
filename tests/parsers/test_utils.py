@@ -22,8 +22,8 @@ from doc2dash.parsers.utils import (
     Attribute("_succeed_patching", default_value=True),
     Attribute("_patched_entries", default_factory=list)
 ])
-class TestParser(object):
-    name = "testparser"
+class FakeParser(object):
+    name = "FakeParser"
 
     @staticmethod
     def detect(path):
@@ -59,7 +59,7 @@ class TestPatchTOCAnchors(object):
         """
         Adding no entries does not cause an error.
         """
-        parser = TestParser(doc_path=u"foo")
+        parser = FakeParser(doc_path=u"foo")
         toc = patch_anchors(parser, show_progressbar=progressbar)
         toc.close()
 
@@ -69,7 +69,7 @@ class TestPatchTOCAnchors(object):
         """
         foo = tmpdir.mkdir('foo')
         foo.join("bar.html").write("docs!")
-        parser = TestParser(doc_path=six.text_type(foo))
+        parser = FakeParser(doc_path=six.text_type(foo))
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             print(e)
@@ -85,7 +85,7 @@ class TestPatchTOCAnchors(object):
         """
         foo = tmpdir.mkdir('foo')
         foo.join("bar.html").write("docs!")
-        parser = TestParser(doc_path=six.text_type(foo),
+        parser = FakeParser(doc_path=six.text_type(foo),
                             succeed_patching=False)
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:

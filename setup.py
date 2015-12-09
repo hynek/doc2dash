@@ -1,10 +1,53 @@
+from __future__ import absolute_import, division, print_function
+
 import codecs
 import os
 import re
-import sys
 
 from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
+
+
+###############################################################################
+
+NAME = "doc2dash"
+INSTALL_REQUIRES = [
+    "Sphinx==1.3.1",
+    "beautifulsoup4==4.4.0",
+    "characteristic==14.3.0",
+    "click==5.1",
+    "colorama==0.3.3",
+    "lxml==3.4.4",
+    "six==1.9.0",
+    "zope.interface==4.1.2",
+]
+ENTRY_POINTS = {
+    "console_scripts": [
+        "doc2dash = doc2dash.__main__:main",
+    ],
+}
+CLASSIFIERS = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Python",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development",
+    "Topic :: Text Processing",
+]
+
+###############################################################################
 
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -19,90 +62,44 @@ def read(*parts):
     with codecs.open(os.path.join(here, *parts), "rb", "utf-8") as f:
         return f.read()
 
+try:
+    META_PATH
+except NameError:
+    META_PATH = os.path.join(here, "src", NAME, "__init__.py")
 
-def find_version(*file_paths):
+META_FILE = read(META_PATH)
+
+
+def find_meta(meta):
     """
-    Build a path from *file_paths* and search for a ``__version__``
-    string inside.
+    Extract __*meta*__ from META_FILE.
     """
-    version_file = read(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
-                              version_file, re.M)
-    if version_match:
-        return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
+    meta_match = re.search(
+        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta),
+        META_FILE, re.M
+    )
+    if meta_match:
+        return meta_match.group(1)
+    raise RuntimeError("Unable to find __{meta}__ string.".format(meta=meta))
 
 
-class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
-
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.pytest_args = None
-
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        # import here, because outside the eggs aren't loaded
-        import pytest
-        errno = pytest.main(self.pytest_args or [] +
-                            ["tests"])
-        sys.exit(errno)
-
-
-setup(
-    name='doc2dash',
-    version=find_version('doc2dash', '__init__.py'),
-    description="Convert docs to Dash.app's docset format.",
-    long_description=read('README.rst'),
-    url='http://github.com/hynek/doc2dash/',
-    license='MIT',
-    author='Hynek Schlawack',
-    author_email='hs@ox.cx',
-    packages=find_packages(exclude=['tests*']),
-    entry_points={
-        'console_scripts': [
-            'doc2dash = doc2dash.__main__:main',
-        ],
-    },
-    install_requires=[
-        "Sphinx==1.3.1",
-        "beautifulsoup4==4.4.0",
-        "characteristic==14.3.0",
-        "click==5.1",
-        "colorama==0.3.3",
-        "lxml==3.4.4",
-        "six==1.9.0",
-        "zope.interface==4.1.2",
-    ],
-    tests_require=[
-        "pytest",
-    ],
-    cmdclass={
-        "test": PyTest,
-    },
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Environment :: Console",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: MacOS :: MacOS X",
-        "Operating System :: POSIX",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: PyPy",
-        "Programming Language :: Python",
-        "Topic :: Documentation",
-        "Topic :: Software Development :: Documentation",
-        "Topic :: Software Development",
-        "Topic :: Text Processing",
-    ],
-)
+if __name__ == "__main__":
+    setup(
+        name=NAME,
+        version=find_meta("version"),
+        description=find_meta("description"),
+        long_description=(
+            read("README.rst") + "\n\n" +
+            read("AUTHORS.rst") + "\n\n" +
+            read("CHANGELOG.rst")
+        ),
+        url=find_meta("url"),
+        license=find_meta("license"),
+        author=find_meta("author"),
+        author_email=find_meta("email"),
+        packages=find_packages(where="src"),
+        package_dir={"": "src"},
+        entry_points=ENTRY_POINTS,
+        install_requires=INSTALL_REQUIRES,
+        classifiers=CLASSIFIERS,
+    )

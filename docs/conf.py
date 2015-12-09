@@ -76,7 +76,7 @@ master_doc = 'index'
 # General information about the project.
 project = u'doc2dash'
 year = datetime.date.today().year
-copyright = u'2014{0}, Hynek Schlawack'.format(
+copyright = u'2012{0}, Hynek Schlawack'.format(
     u'-{0}'.format(year) if year != 2014 else u""
 )
 
@@ -85,7 +85,7 @@ copyright = u'2014{0}, Hynek Schlawack'.format(
 # built documents.
 version = '2.0'
 # The full version, including alpha/beta/rc tags.
-release = find_version("../doc2dash/__init__.py")
+release = find_version("../src/doc2dash/__init__.py")
 # The short X.Y version.
 version = release.rsplit(u".", 1)[0]
 

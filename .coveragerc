@@ -1,0 +1,12 @@
+[run]
+branch = True
+source = doc2dash
+
+[paths]
+source =
+   src/doc2dash
+   .tox/*/lib/python*/site-packages/doc2dash
+   .tox/pypy/site-packages/doc2dash
+
+[report]
+show_missing = True

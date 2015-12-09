@@ -146,17 +146,16 @@ class TestSetupPaths(object):
             )
         )
 
-    def test_A_overrides_destination(self):
+    def test_add_to_global_overrides_destination(self):
         """
-        Passing A computes the destination and overrides an argument.
+        Passing -A computes the destination and overrides an argument.
         """
-        assert '~' not in main.DEFAULT_DOCSET_PATH  # resolved?
+        assert "~" not in main.DEFAULT_DOCSET_PATH  # resolved?
         assert (
-            'foo', os.path.join(main.DEFAULT_DOCSET_PATH, 'foo.docset'), "foo"
-            == main.setup_paths(
-                source='doc2dash', name=None, destination='foobar',
-                add_to_global=True, force=False
-            )
+            "foo", os.path.join(main.DEFAULT_DOCSET_PATH, "foo.docset"), "foo"
+        ) == main.setup_paths(
+            source="foo", name=None, destination="foobar",
+            add_to_global=True, force=False
         )
 
     def test_detects_existing_dest(self, tmpdir, monkeypatch):
