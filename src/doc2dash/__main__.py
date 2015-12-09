@@ -219,7 +219,9 @@ def setup_paths(source, destination, name, add_to_global, force):
 
 @attributes(["path", "docs", "plist", "db_conn"])
 class DocSet(object):
-    pass
+    """
+    Summary of docset path and parameters.
+    """
 
 
 def prepare_docset(source, dest, name, index_page, enable_js,

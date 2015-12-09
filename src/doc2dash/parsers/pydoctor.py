@@ -38,7 +38,7 @@ class PyDoctorParser(object):
     name = 'pydoctor'
 
     @classmethod
-    def detect(self, path):
+    def detect(cls, path):
         return has_file_with(
             path, "index.html", PYDOCTOR_HEADER
         ) or has_file_with(

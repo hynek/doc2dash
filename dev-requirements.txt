@@ -1,4 +1,4 @@
 -e .
+coverage
 mock
-pytest-cov
 pytest
