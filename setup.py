@@ -11,14 +11,14 @@ from setuptools import setup, find_packages
 
 NAME = "doc2dash"
 INSTALL_REQUIRES = [
-    "Sphinx==1.3.1",
-    "beautifulsoup4==4.4.0",
+    "Sphinx==1.3.3",
+    "beautifulsoup4==4.4.1",
     "characteristic==14.3.0",
     "click==5.1",
     "colorama==0.3.3",
     "lxml==3.4.4",
-    "six==1.9.0",
-    "zope.interface==4.1.2",
+    "six==1.10.0",
+    "zope.interface==4.1.3",
 ]
 ENTRY_POINTS = {
     "console_scripts": [
