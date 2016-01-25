@@ -126,26 +126,23 @@ class TestSetupPaths(object):
         foo_path = str(tmpdir.join('foo'))
         os.mkdir(foo_path)
         assert (
-            (foo_path, str(tmpdir.join('foo.docset')), "foo")
-            == main.setup_paths(
-                foo_path, str(tmpdir), name=None, add_to_global=False,
-                force=False
-            )
+            foo_path, str(tmpdir.join('foo.docset')), "foo"
+        ) == main.setup_paths(
+            foo_path, str(tmpdir), name=None, add_to_global=False,
+            force=False
         )
         abs_foo = os.path.abspath(foo_path)
         assert (
-            (abs_foo, str(tmpdir.join('foo.docset')), "foo") ==
-            main.setup_paths(
-                abs_foo, str(tmpdir), name=None, add_to_global=False,
-                force=False
-            )
+            abs_foo, str(tmpdir.join('foo.docset')), "foo"
+        ) == main.setup_paths(
+            abs_foo, str(tmpdir), name=None, add_to_global=False,
+            force=False
         )
         assert (
-            (abs_foo, str(tmpdir.join('baz.docset')), "baz") ==
-            main.setup_paths(
-                abs_foo, str(tmpdir), name="baz", add_to_global=False,
-                force=False
-            )
+            abs_foo, str(tmpdir.join('baz.docset')), "baz"
+        ) == main.setup_paths(
+            abs_foo, str(tmpdir), name="baz", add_to_global=False,
+            force=False
         )
 
     def test_add_to_global_overrides_destination(self):

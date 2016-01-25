@@ -65,8 +65,9 @@ def test_parse():
                mock_open(read_data=example),
                create=True):
         print(list(PyDoctorParser(doc_path=u'foo').parse()))
-        assert (list(PyDoctorParser(doc_path=u'foo').parse())
-                == EXAMPLE_PARSE_RESULT)
+        assert list(
+            PyDoctorParser(doc_path=u'foo').parse()
+        ) == EXAMPLE_PARSE_RESULT
 
 
 def test_patcher():
