@@ -25,6 +25,7 @@ INV_TO_TYPE = {
     "attribute": types.ATTRIBUTE,
     "class": types.CLASS,
     "classmethod": types.METHOD,
+    "constant": types.CONSTANT,
     "data": types.VALUE,
     "envvar": types.ENV,
     "exception": types.EXCEPTION,
