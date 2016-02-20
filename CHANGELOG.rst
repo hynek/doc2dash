@@ -15,8 +15,24 @@ Changelog
   [`#43 <https://github.com/hynek/doc2dash/issues/43>`_]
 - Better support for relative paths.
   [`#37 <https://github.com/hynek/doc2dash/issues/37>`_, `#41 <https://github.com/hynek/doc2dash/issues/41>`_]
+
+
+----
+
+
+2.0.2 (2014-09-24)
+------------------
+
 - Fix detection of `pydoctor 0.5 <http://bazaar.launchpad.net/~mwhudson/pydoctor/dev/revision/605>`_.
   [`#31 <https://github.com/hynek/doc2dash/issues/31>`_, `#39 <https://github.com/hynek/doc2dash/issues/39>`_]
+
+
+----
+
+
+2.0.1 (2014-09-16)
+------------------
+
 - Better Unicode support.
   The move from ``unicode_literals`` to explicit prefixes broke some things that are fixed now.
   [`#29 <https://github.com/hynek/doc2dash/issues/29>`_, `#30 <https://github.com/hynek/doc2dash/issues/30>`_]
