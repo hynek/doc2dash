@@ -7,6 +7,8 @@ Changelog
 2.1.0 (UNRELEASED)
 ------------------
 
+- Add support for InterSphinx constants.
+  [`#49 <https://github.com/hynek/doc2dash/pull/49>`_]
 - Fix handling in-docs links with multiple anchors.
   [`#47 <https://github.com/hynek/doc2dash/issues/47>`_]
 - Add support for ``--enable-js`` and ``--online-redirect-url`` options.

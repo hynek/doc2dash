@@ -11,11 +11,11 @@ from setuptools import setup, find_packages
 
 NAME = "doc2dash"
 INSTALL_REQUIRES = [
-    "Sphinx==1.3.3",
+    "Sphinx==1.3.5",
     "attrs==15.2.0",
     "beautifulsoup4==4.4.1",
     "click==6.2",
-    "colorama==0.3.3",
+    "colorama==0.3.6",
     "lxml==3.4.4",
     "six==1.10.0",
     "zope.interface==4.1.3",
