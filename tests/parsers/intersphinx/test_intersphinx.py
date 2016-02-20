@@ -46,6 +46,8 @@ class TestInterSphinxParser(object):
                     u"index.html#document-usage#cmdoption--destination",
                     u"-"
                 )
+            }, "std:constant": {
+                u"SomeConstant": (None, None, u"some_other_module.py", u"-")
             }})
         )
         assert set([ParserEntry(
@@ -55,6 +57,11 @@ class TestInterSphinxParser(object):
                 name=u'--destination',
                 type=u'Option',
                 path=u'index.html#cmdoption--destination'
+            ),
+            ParserEntry(
+                name=u'SomeConstant',
+                type=u'Constant',
+                path=u'some_other_module.py',
             )
         ]) == set(result)
 
