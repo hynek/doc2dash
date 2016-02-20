@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-2.1.0 [UNRELEASED]
+2.1.0 (UNRELEASED)
 ------------------
 
 - Fix handling in-docs links with multiple anchors.
@@ -20,8 +20,10 @@ Changelog
   [`#29 <https://github.com/hynek/doc2dash/issues/29>`_, `#30 <https://github.com/hynek/doc2dash/issues/30>`_]
 
 
+----
 
-2.0.0 [2014-08-14]
+
+2.0.0 (2014-08-14)
 ------------------
 
 - Added a new parser for Sphinx documentation that uses `intersphinx <http://sphinx-doc.org/latest/ext/intersphinx.html>`_ files that are machine readable.
@@ -35,14 +37,20 @@ Changelog
   The fundamental working principal stayed the same though so porting your parsers is trivial.
 
 
-1.2.1 [2014-07-24]
+----
+
+
+1.2.1 (2014-07-24)
 ------------------
 
 - Fix docset name deduction if the source path ends with a ``/``.
   [`#26 <https://github.com/hynek/doc2dash/issues/26>`_]
 
 
-1.2.0 [2014-01-07]
+----
+
+
+1.2.0 (2014-01-07)
 ------------------
 
 - Runs now on Python 3.3.
@@ -50,13 +58,19 @@ Changelog
 - Add ``--index`` option.
 
 
-1.1.0 [2013-01-13]
+----
+
+
+1.1.0 (2013-01-13)
 ------------------
 
 - Use better dash types for modules and attributes.
 
 
-1.0.0 [2012-10-14]
+----
+
+
+1.0.0 (2012-10-14)
 ------------------
 
 - Make tests pass on Python 2.7 too.
@@ -64,13 +78,19 @@ Changelog
 - Please note that no code except for the tests has changed since 0.3.1.
 
 
-0.3.1 [2012-06-28]
+----
+
+
+0.3.1 (2012-06-28)
 ------------------
 
 - Pronounced beta – happy testing!
 
 
-0.3.0 [2012-06-28]
+----
+
+
+0.3.0 (2012-06-28)
 ------------------
 
 - Add table of contents links to docs to get a nice TOC in dash when inside of a module.
@@ -81,20 +101,29 @@ Changelog
 - Allow adding of an PNG icon to the docset (``--icon``).
 
 
-0.2.2 [2012-06-16]
+----
+
+
+0.2.2 (2012-06-16)
 ------------------
 
 - Don't collect () as part of method/function names.
 - Index whole names: symbols are searchable by the whole name, including the namespace.
 
 
-0.2.1 [2012-06-15]
+----
+
+
+0.2.1 (2012-06-15)
 ------------------
 
 - Fix PyPI package: add missing MANIFEST.in and add missing packages to setup.py.
 
 
-0.2.0 [2012-06-14]
+----
+
+
+0.2.0 (2012-06-14)
 ------------------
 
 - Add support for built-in constants and classes.

@@ -35,7 +35,6 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.3",
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: Implementation :: CPython",
@@ -83,16 +82,24 @@ def find_meta(meta):
     raise RuntimeError("Unable to find __{meta}__ string.".format(meta=meta))
 
 
+URI = find_meta("url")
+LONG = (
+    read("README.rst") + "\n\n" +
+    "Release Information\n" +
+    "===================\n\n" +
+    re.search("(\d+.\d.\d \(.*?\)\n.*?)\n\n\n----\n\n\n",
+              read("CHANGELOG.rst"), re.S).group(1) +
+    "\n\n`Full changelog " +
+    "<{uri}en/stable/changelog.html>`_.\n\n" + read("AUTHORS.rst")
+).format(uri=URI)
+
+
 if __name__ == "__main__":
     setup(
         name=NAME,
         version=find_meta("version"),
         description=find_meta("description"),
-        long_description=(
-            read("README.rst") + "\n\n" +
-            read("AUTHORS.rst") + "\n\n" +
-            read("CHANGELOG.rst")
-        ),
+        long_description=LONG,
         url=find_meta("url"),
         license=find_meta("license"),
         author=find_meta("author"),
