@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 log = logging.getLogger(__name__)
 
 
-class IParser(zope.interface.Interface):
+class IParser(zope.interface.Interface):  # pragma: nocover
     """
     A doc2dash documentation parser.
     """
