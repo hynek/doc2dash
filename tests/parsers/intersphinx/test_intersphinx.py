@@ -59,7 +59,9 @@ class TestInterSphinxParser(object):
                 path=u'index.html#cmdoption--destination'
             ),
             ParserEntry(
-            name=u'SomeConstant', type=u'Constant', path=u'some_other_module.py'
+                name=u'SomeConstant',
+                type=u'Constant',
+                path=u'some_other_module.py',
             )
         ]) == set(result)
 
