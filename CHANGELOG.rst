@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-2.1.0 (UNRELEASED)
+2.1.0 (2016-03-14)
 ------------------
 
 - Remove legacy Sphinx parsing.
