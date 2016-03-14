@@ -117,6 +117,14 @@ Adding to Dash.app...
 ''' == result.output
     assert ('open -a dash "./bar.docset"', ) == system.call_args[0]
 
+    # Again, just without adding and icon.
+    with patch("os.system") as system:
+        result = runner.invoke(
+            main.main, ["foo", "-n", "baz"]
+        )
+
+    assert 0 == result.exit_code
+
 
 class TestSetupPaths(object):
     def test_works(self, tmpdir):
