@@ -11,6 +11,7 @@ from doc2dash.parsers.utils import (
     IParser,
     ParserEntry,
     TOCEntry,
+    has_file_with,
     patch_anchors,
 )
 
@@ -92,3 +93,40 @@ class TestPatchTOCAnchors(object):
         with patch('doc2dash.parsers.utils.log.debug') as mock:
             toc.close()
             assert mock.call_count == 1
+
+
+class TestHasFileWith(object):
+    @pytest.mark.parametrize("content,has", [
+        (b"xxxfooxxx", True),
+        (b"xxxbarxxx", False)
+    ])
+    def test_exists(self, tmpdir, content, has):
+        """
+        If file contains content, return True, ealse False.
+        """
+        f = tmpdir.join("test")
+        f.write(content)
+
+        assert has is has_file_with("/", str(f), b"foo")
+
+    def test_eent(self):
+        """
+        If file doesn't exist, return False.
+        """
+        assert False is has_file_with("foo", "bar", b"")
+
+    def test_error(self, tmpdir):
+        """
+        If opening/reading fails with a differnt error, propate.
+        """
+        f = tmpdir.join("test")
+        f.write(b"foo")
+        f.chmod(0)
+
+        if six.PY2:
+            error = IOError
+        else:
+            error = PermissionError
+
+        with pytest.raises(error):
+            has_file_with("/", str(f), "foo")
