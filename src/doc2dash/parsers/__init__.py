@@ -1,12 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
-from . import pydoctor, sphinx, intersphinx
+from . import pydoctor, intersphinx
 
 
 DOCTYPES = [
     pydoctor.PyDoctorParser,
     intersphinx.InterSphinxParser,
-    sphinx.SphinxParser,
 ]
 
 

@@ -7,6 +7,8 @@ Changelog
 2.1.0 (UNRELEASED)
 ------------------
 
+- Remove legacy Sphinx parsing.
+  The intersphinx parser is much more robust so the old way shouldn't be needed anymore.
 - Add support for InterSphinx constants.
   `#49 <https://github.com/hynek/doc2dash/pull/49>`_
 - Fix handling in-docs links with multiple anchors.
