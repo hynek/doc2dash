@@ -11,14 +11,14 @@ from setuptools import setup, find_packages
 
 NAME = "doc2dash"
 INSTALL_REQUIRES = [
-    "Sphinx==1.3.5",
-    "attrs==15.2.0",
-    "beautifulsoup4==4.4.1",
-    "click==6.3",
+    "Sphinx==1.4.6",
+    "attrs==16.2.0",
+    "beautifulsoup4==4.5.1",
+    "click==6.6",
     "colorama==0.3.7",
-    "lxml==3.4.4",
+    "lxml==3.6.4",
     "six==1.10.0",
-    "zope.interface==4.1.3",
+    "zope.interface==4.3.2",
 ]
 ENTRY_POINTS = {
     "console_scripts": [
@@ -82,6 +82,7 @@ def find_meta(meta):
     raise RuntimeError("Unable to find __{meta}__ string.".format(meta=meta))
 
 
+VERSION = find_meta("version")
 URI = find_meta("url")
 LONG = (
     read("README.rst") + "\n\n" +
@@ -97,7 +98,7 @@ LONG = (
 if __name__ == "__main__":
     setup(
         name=NAME,
-        version=find_meta("version"),
+        version=VERSION,
         description=find_meta("description"),
         long_description=LONG,
         url=URI,

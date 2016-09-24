@@ -1,13 +1,16 @@
 doc2dash: Create docsets for Dash.app and clones
 ================================================
 
-.. image:: https://travis-ci.org/hynek/doc2dash.png?branch=master
-   :target: https://travis-ci.org/hynek/doc2dash
-   :alt: CI status
+.. image:: https://readthedocs.org/projects/doc2dash/badge/?version=stable
+   :target: https://doc2dash.readthedocs.io/en/stable/?badge=stable
+   :alt: Documentation Status
 
-.. image:: https://codecov.io/github/hynek/doc2dash/coverage.svg?branch=master
-   :target: https://codecov.io/github/hynek/doc2dash?branch=master
-   :alt: Coverage
+.. image:: https://travis-ci.org/hynek/doc2dash.svg?branch=master
+   :target: https://travis-ci.org/hynek/doc2dash
+
+.. image:: https://codecov.io/github/hynek/doc2dash/branch/master/graph/badge.svg
+  :target: https://codecov.io/github/hynek/doc2dash
+  :alt: Test Coverage
 
 .. begin
 
@@ -24,5 +27,5 @@ Both Linux and OS X are tested although certain features are only available on O
 
 .. _`Documentation Set`: https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6
 .. _`Dash.app`: https://kapeli.com/dash/
-.. _`Read the Docs`: https://doc2dash.readthedocs.org/
+.. _`Read the Docs`: https://doc2dash.readthedocs.io/
 .. _`GitHub`:  https://github.com/hynek/doc2dash

@@ -4,11 +4,11 @@ Changelog
 =========
 
 
-
 2.2.0 (UNRELEASED)
 ------------------
 
 No changes yet.
+
 
 ----
 
