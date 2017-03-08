@@ -9,7 +9,7 @@ from zope.interface.verify import verifyObject
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
     find_and_patch_entry,
-    _inv_to_entries,
+    inv_entry_to_path,
 )
 from doc2dash.parsers.utils import IParser, ParserEntry, TOCEntry
 
@@ -36,8 +36,9 @@ class TestInterSphinxParser(object):
         """
         Inventory items are correctly converted.
         """
+        p = InterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
-            _inv_to_entries({"py:method": {
+            p._inv_to_entries({"py:method": {
                 u"some_method": (None, None, u"some_module.py", u"-"),
             }, "std:option": {
                 u"--destination": (
@@ -64,6 +65,53 @@ class TestInterSphinxParser(object):
                 path=u'some_other_module.py',
             )
         ]) == set(result)
+
+    def test_convert_type_override(self):
+        """Check that convert_type can be overridden
+
+        We check that we can hide some key of choice.
+        """
+
+        class MyInterSphinxParser(InterSphinxParser):
+            def convert_type(self, inv_type):
+                if inv_type == 'py:method':
+                    # hide method entries
+                    return
+                return super(MyInterSphinxParser, self).convert_type(inv_type)
+
+        p = MyInterSphinxParser(doc_path=os.path.join(HERE))
+        result = list(
+            p._inv_to_entries({"py:method": {
+                u"some_method": (None, None, u"some_module.py", u"-"),
+            }, "std:constant": {
+                u"SomeConstant": (None, None, u"some_other_module.py", u"-")
+            }})
+        )
+        assert [ParserEntry(
+                    name=u'SomeConstant',
+                    type=u'Constant',
+                    path=u'some_other_module.py'
+                )] == result
+
+    def test_create_entry_override(self):
+        """Check the interface of create_entry and that it can be overridden
+
+        We check that the name format can be adjusted
+        """
+
+        class MyInterSphinxParser(InterSphinxParser):
+            def create_entry(self, dash_type, key, inv_entry):
+                path_str = inv_entry_to_path(inv_entry)
+                return ParserEntry(name='!%s!' % key, type=dash_type,
+                                   path=path_str)
+
+        p = MyInterSphinxParser(doc_path=os.path.join(HERE))
+        result = list(
+            p._inv_to_entries({"py:method": {
+                u"some_method": (None, None, u"some_module.py", u"-"),
+            }}))
+        assert [ParserEntry(name=u'!some_method!', type=u'Method',
+                            path=u'some_module.py')] == result
 
 
 class TestFindAndPatchEntry(object):
