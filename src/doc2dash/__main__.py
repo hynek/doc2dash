@@ -7,6 +7,7 @@ import os
 import plistlib
 import shutil
 import sqlite3
+import importlib
 
 import attr
 import click
@@ -38,6 +39,29 @@ class ClickEchoHandler(logging.Handler):
             record.getMessage(),
             fg=self._level_to_fg.get(record.levelno, "reset")
         ), err=record.levelno >= logging.WARN)
+
+
+class ImportableType(click.ParamType):
+    name = 'importable'
+
+    def convert(self, value, param, ctx):
+        path, dot, name = value.rpartition('.')
+
+        if not dot:
+            self.fail('%r is not an import path: does not contain "."' % value)
+
+        try:
+            mod = importlib.import_module(path)
+        except ImportError:
+            self.fail('Could not import module %r' % path)
+        try:
+            return getattr(mod, name)
+        except AttributeError:
+            self.fail('Failed to get attribute %r from module %r' %
+                      (name, path))
+
+
+IMPORTABLE = ImportableType()
 
 
 @click.command()
@@ -86,10 +110,16 @@ class ClickEchoHandler(logging.Handler):
     "--online-redirect-url", "-u", default=None,
     help="The base URL of the online documentation."
 )
+@click.option(
+    "--parser", default=None, type=IMPORTABLE,
+    help="The import path of a parser class (e.g. "
+         "doc2dash.parsers.intersphinx.InterSphinxParser). Default behavior "
+         "is to auto-detect documentation type."
+)
 @click.version_option(version=__version__)
 def main(source, force, name, quiet, verbose, destination, add_to_dash,
          add_to_global, icon, index_page, enable_js,
-         online_redirect_url):
+         online_redirect_url, parser):
     """
     Convert docs from SOURCE to Dash.app's docset format.
     """
@@ -114,19 +144,20 @@ def main(source, force, name, quiet, verbose, destination, add_to_dash,
         source, destination, name=name, add_to_global=add_to_global,
         force=force
     )
-    dt = parsers.get_doctype(source)
-    if dt is None:
-        log.error(
-            u'"{}" does not contain a known documentation format.'
-            .format(click.format_filename(source))
-        )
-        raise SystemExit(errno.EINVAL)
+    if parser is None:
+        parser = parsers.get_doctype(source)
+        if parser is None:
+            log.error(
+                u'"{}" does not contain a known documentation format.'
+                .format(click.format_filename(source))
+            )
+            raise SystemExit(errno.EINVAL)
     docset = prepare_docset(source, dest, name, index_page, enable_js,
                             online_redirect_url)
-    doc_parser = dt(doc_path=docset.docs)
+    doc_parser = parser(doc_path=docset.docs)
     log.info((u'Converting ' + click.style('{parser_name}', bold=True) +
               u' docs from "{src}" to "{dst}".')
-             .format(parser_name=dt.name,
+             .format(parser_name=parser.name,
                      src=click.format_filename(source, shorten=True),
                      dst=click.format_filename(dest)))
 
