@@ -61,6 +61,7 @@ def read(*parts):
     with codecs.open(os.path.join(here, *parts), "rb", "utf-8") as f:
         return f.read()
 
+
 try:
     META_PATH
 except NameError:
