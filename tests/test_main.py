@@ -142,6 +142,26 @@ Adding to Dash.app...
 
     assert 0 == result.exit_code
 
+    # some tests for --parser validation
+
+    result = runner.invoke(main.main,
+                           ['foo', '-n', 'bing', '--parser', 'no_dot'])
+    assert "'no_dot' is not an import path" in result.output
+    assert 2 == result.exit_code
+
+    with patch("os.system") as system:
+        result = runner.invoke(main.main, ['foo', '-n', 'bing', '--parser',
+                                           'nonexistent_module.Parser'])
+    assert "Could not import module 'nonexistent_module'" in result.output
+    assert 2 == result.exit_code
+
+    with patch("os.system") as system:
+        result = runner.invoke(main.main, ['foo', '-n', 'bing', '--parser',
+                                           'sys.NonexistentParser'])
+    assert ("Failed to get attribute 'NonexistentParser' from module 'sys'"
+            in result.output)
+    assert 2 == result.exit_code
+
 
 class TestSetupPaths(object):
     def test_works(self, tmpdir):
