@@ -88,7 +88,7 @@ class InterSphinxParser(object):
 
     def convert_type(self, inv_type):
         """Map an intersphinx type to a dash type
-        
+
         Returns a dash type string, or None to not construct entries
         """
         try:
