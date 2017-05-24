@@ -84,7 +84,9 @@ class InterSphinxParser(object):
             if dash_type is None:
                 continue
             for key, data in iteritems(inv_entries):
-                yield self.create_entry(dash_type, key, data)
+                entry = self.create_entry(dash_type, key, data)
+                if entry is not None:
+                    yield entry
 
     def convert_type(self, inv_type):
         """Map an intersphinx type to a dash type
@@ -98,7 +100,7 @@ class InterSphinxParser(object):
 
     def create_entry(self, dash_type, key, inv_entry):
         """
-        Create a ParserEntry given inventory details
+        Create a ParserEntry (or None) given inventory details
 
         Parameters are the dash type, intersphinx inventory key and data tuple
         """

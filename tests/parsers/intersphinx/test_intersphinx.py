@@ -113,6 +113,33 @@ class TestInterSphinxParser(object):
         assert [ParserEntry(name=u'!some_method!', type=u'Method',
                             path=u'some_module.py')] == result
 
+    def test_create_entry_none(self):
+        """Check that create_entry can return None
+        """
+        class MyInterSphinxParser(InterSphinxParser):
+            def create_entry(self, dash_type, key, inv_entry):
+                if dash_type == 'Option':
+                    return
+                return super(MyInterSphinxParser, self).create_entry(
+                    dash_type, key, inv_entry)
+
+        p = MyInterSphinxParser(doc_path=os.path.join(HERE))
+        result = list(
+            p._inv_to_entries({"py:method": {
+                u"some_method": (None, None, u"some_module.py", u"-"),
+            }, "std:option": {
+                u"--destination": (
+                    u"doc2dash",
+                    u"2.0",
+                    u"index.html#document-usage#cmdoption--destination",
+                    u"-"
+                )
+            }})
+        )
+        assert [ParserEntry(name=u'some_method', type=u'Method',
+                            path=u'some_module.py')] == result
+
+
 
 class TestFindAndPatchEntry(object):
     def test_patch_method(self):
