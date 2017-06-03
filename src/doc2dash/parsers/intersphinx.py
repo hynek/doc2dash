@@ -89,9 +89,10 @@ class InterSphinxParser(object):
                     yield entry
 
     def convert_type(self, inv_type):
-        """Map an intersphinx type to a dash type
+        """
+        Map an intersphinx type to a Dash type.
 
-        Returns a dash type string, or None to not construct entries
+        Returns a Dash type string, or None to not construct entries.
         """
         try:
             return INV_TO_TYPE[inv_type.split(":")[-1]]
