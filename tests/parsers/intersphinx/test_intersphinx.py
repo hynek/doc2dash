@@ -67,11 +67,11 @@ class TestInterSphinxParser(object):
         ]) == set(result)
 
     def test_convert_type_override(self):
-        """Check that convert_type can be overridden
+        """
+        `convert_type` can be overridden.
 
         We check that we can hide some key of choice.
         """
-
         class MyInterSphinxParser(InterSphinxParser):
             def convert_type(self, inv_type):
                 if inv_type == 'py:method':
@@ -94,11 +94,11 @@ class TestInterSphinxParser(object):
                 )] == result
 
     def test_create_entry_override(self):
-        """Check the interface of create_entry and that it can be overridden
-
-        We check that the name format can be adjusted
         """
+        `create_entry` has the expected interface and can be overridden.
 
+        We check that the name format can be adjusted.
+        """
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
                 path_str = inv_entry_to_path(inv_entry)
@@ -114,7 +114,8 @@ class TestInterSphinxParser(object):
                             path=u'some_module.py')] == result
 
     def test_create_entry_none(self):
-        """Check that create_entry can return None
+        """
+        `create_entry` can return None.
         """
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
@@ -138,7 +139,6 @@ class TestInterSphinxParser(object):
         )
         assert [ParserEntry(name=u'some_method', type=u'Method',
                             path=u'some_module.py')] == result
-
 
 
 class TestFindAndPatchEntry(object):

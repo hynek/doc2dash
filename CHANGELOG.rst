@@ -7,7 +7,8 @@ Changelog
 2.2.0 (UNRELEASED)
 ------------------
 
-No changes yet.
+- ``InterSphinxParser`` is now open to extension.
+  `#59 <https://github.com/hynek/doc2dash/pull/59>`_
 
 
 ----
