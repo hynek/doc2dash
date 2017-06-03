@@ -69,10 +69,44 @@ class InterSphinxParser(object):
         """
         with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
             inv_f.readline()  # skip version line that is verified in detection
-            for pe in _inv_to_entries(
+            for pe in self._inv_to_entries(
                     read_inventory_v2(inv_f, "", os.path.join)
             ):  # this is what Guido gave us `yield from` for :-|
                 yield pe
+
+    def _inv_to_entries(self, inv):
+        """
+        Iterate over a dictionary as returned from Sphinx's object.inv parser
+        and yield `ParserEntry`s.
+        """
+        for type_key, inv_entries in iteritems(inv):
+            dash_type = self.convert_type(type_key)
+            if dash_type is None:
+                continue
+            for key, data in iteritems(inv_entries):
+                entry = self.create_entry(dash_type, key, data)
+                if entry is not None:
+                    yield entry
+
+    def convert_type(self, inv_type):
+        """
+        Map an intersphinx type to a Dash type.
+
+        Returns a Dash type string, or None to not construct entries.
+        """
+        try:
+            return INV_TO_TYPE[inv_type.split(":")[-1]]
+        except KeyError:
+            return
+
+    def create_entry(self, dash_type, key, inv_entry):
+        """
+        Create a ParserEntry (or None) given inventory details
+
+        Parameters are the dash type, intersphinx inventory key and data tuple
+        """
+        path_str = inv_entry_to_path(inv_entry)
+        return ParserEntry(name=key, type=dash_type, path=path_str)
 
     def find_and_patch_entry(self, soup, entry):  # pragma: nocover
         return find_and_patch_entry(soup, entry)
@@ -95,24 +129,16 @@ def find_and_patch_entry(soup, entry):
         return False
 
 
-def _inv_to_entries(inv):
+def inv_entry_to_path(data):
     """
-    Iterate over a dictionary as returned from Sphinx's object.inv parser and
-    yield `ParserEntry`s.
+    Determine the path from the intersphinx inventory entry
+
+    Discard the anchors between head and tail to make it
+    compatible with situations where extra meta information is encoded.
     """
-    for type_key, val in iteritems(inv):
-        try:
-            t = INV_TO_TYPE[type_key.split(":")[-1]]
-            for el, data in iteritems(val):
-                """
-                Discard the anchors between head and tail to make it
-                compatible with situations that extra meta information encoded
-                """
-                path_tuple = data[2].split("#")
-                if len(path_tuple) > 1:
-                    path_str = "#".join((path_tuple[0], path_tuple[-1]))
-                else:
-                    path_str = data[2]
-                yield ParserEntry(name=el, type=t, path=path_str)
-        except KeyError:
-            pass
+    path_tuple = data[2].split("#")
+    if len(path_tuple) > 1:
+        path_str = "#".join((path_tuple[0], path_tuple[-1]))
+    else:
+        path_str = data[2]
+    return path_str
