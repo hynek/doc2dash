@@ -62,6 +62,14 @@ Valid ``OPTIONS`` are the following:
     To enable this, you must set this value to the base URL of your online documentation.
     e.g. ``https://doc2dash.readthedocs.org/``
 
+.. option:: --parser
+
+    Specify a the import path of a custom parser class (implementing the
+    ``doc2dash.parsers.utils.IParser`` interface) to use. For example,
+    ``--parser doc2dash.parsers.intersphinx.InterSphinxParser`` will use the
+    default ``InterSphinxParser``. Default behavior is to auto-detect
+    documentation type.
+
 .. option:: -q, --quiet
 
    Limit output to errors and warnings.

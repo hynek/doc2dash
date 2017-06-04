@@ -7,8 +7,8 @@ Changelog
 2.2.0 (UNRELEASED)
 ------------------
 
-No changes yet.
-
+- Support a ``--parser`` option to force the use of a custom parser class.
+  `#60 <https://github.com/hynek/doc2dash/pull/60>`_
 
 ----
 
