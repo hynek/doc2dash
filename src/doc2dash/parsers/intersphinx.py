@@ -45,7 +45,7 @@ INV_TO_TYPE = {
 
 
 @implementer(IParser)
-@attr.s
+@attr.s(hash=True)
 class InterSphinxParser(object):
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for

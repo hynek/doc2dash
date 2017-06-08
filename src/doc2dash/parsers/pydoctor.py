@@ -30,7 +30,7 @@ PYDOCTOR_HEADER_REALLY_OLD = b'''\
 
 
 @implementer(IParser)
-@attr.s
+@attr.s(hash=True)
 class PyDoctorParser(object):
     """
     Parser for pydoctor-based documentation: mainly Twisted.
