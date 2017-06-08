@@ -13,12 +13,12 @@ NAME = "doc2dash"
 INSTALL_REQUIRES = [
     "Sphinx==1.4.6",
     "attrs==16.2.0",
-    "beautifulsoup4==4.5.1",
-    "click==6.6",
-    "colorama==0.3.7",
-    "lxml==3.6.4",
-    "six==1.10.0",
-    "zope.interface==4.3.2",
+    "beautifulsoup4>=4.5.1",
+    "click>=6.6",
+    "colorama>=0.3.7",
+    "lxml>=3.6.4",
+    "six>=1.10.0",
+    "zope.interface>=4.3.2",
 ]
 ENTRY_POINTS = {
     "console_scripts": [
