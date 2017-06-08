@@ -68,7 +68,6 @@ class InterSphinxParser(object):
         yield `ParserEntry`s.
         """
         with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
-            inv_f.readline()  # skip version line that is verified in detection
             for pe in self._inv_to_entries(
                     read_inventory_v2(inv_f, "", os.path.join)
             ):  # this is what Guido gave us `yield from` for :-|
