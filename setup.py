@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 
 NAME = "doc2dash"
 INSTALL_REQUIRES = [
-    "Sphinx==1.4.6",
+    "Sphinx==1.6.2",
     "attrs==16.2.0",
     "beautifulsoup4==4.5.1",
     "click==6.6",

@@ -6,7 +6,7 @@ import os
 import attr
 
 from six import iteritems
-from sphinx.ext.intersphinx import read_inventory_v2
+from sphinx.ext.intersphinx import InventoryFile
 from zope.interface import implementer
 
 from . import types
@@ -68,9 +68,8 @@ class InterSphinxParser(object):
         yield `ParserEntry`s.
         """
         with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
-            inv_f.readline()  # skip version line that is verified in detection
             for pe in self._inv_to_entries(
-                    read_inventory_v2(inv_f, "", os.path.join)
+                    InventoryFile.load(inv_f, "", os.path.join)
             ):  # this is what Guido gave us `yield from` for :-|
                 yield pe
 
