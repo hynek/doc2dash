@@ -9,6 +9,8 @@ Changelog
 
 - ``InterSphinxParser`` is now open to extension.
   `#59 <https://github.com/hynek/doc2dash/pull/59>`_
+- Support a ``--parser`` option to force the use of a custom parser class.
+  `#60 <https://github.com/hynek/doc2dash/pull/60>`_
 
 
 ----

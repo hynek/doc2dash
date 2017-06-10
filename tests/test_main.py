@@ -6,6 +6,7 @@ import os
 import plistlib
 import shutil
 import sqlite3
+import sys
 
 import attr
 import pytest
@@ -101,20 +102,36 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
         def find_and_patch_entry(self, soup, entry):
             pass
 
+    class fake_module:
+        Parser = FakeParser
+
+    expected = '''\
+Converting testtype docs from "foo" to "./{name}.docset".
+Parsing documentation...
+Added 1 index entries.
+Adding table of contents meta data...
+Adding to Dash.app...
+'''
+
+    # alternative 1: use --parser
+    sys.modules['fake_module'] = fake_module
+    with patch("os.system") as system:
+        result = runner.invoke(
+            main.main, ["foo", "--parser", "fake_module.Parser", "-n", "bah",
+                        "-a", "-i", str(png_file)]
+        )
+    assert expected.format(name='bah') == result.output
+    assert 0 == result.exit_code
+    assert ('open -a dash "./bah.docset"', ) == system.call_args[0]
+
+    # alternative 2: patch doc2dash.parsers
     monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
     with patch("os.system") as system:
         result = runner.invoke(
             main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
         )
-
+    assert expected.format(name='bar') == result.output
     assert 0 == result.exit_code
-    assert '''\
-Converting testtype docs from "foo" to "./bar.docset".
-Parsing documentation...
-Added 1 index entries.
-Adding table of contents meta data...
-Adding to Dash.app...
-''' == result.output
     assert ('open -a dash "./bar.docset"', ) == system.call_args[0]
 
     # Again, just without adding and icon.
@@ -124,6 +141,26 @@ Adding to Dash.app...
         )
 
     assert 0 == result.exit_code
+
+    # some tests for --parser validation
+
+    result = runner.invoke(main.main,
+                           ['foo', '-n', 'bing', '--parser', 'no_dot'])
+    assert "'no_dot' is not an import path" in result.output
+    assert 2 == result.exit_code
+
+    with patch("os.system") as system:
+        result = runner.invoke(main.main, ['foo', '-n', 'bing', '--parser',
+                                           'nonexistent_module.Parser'])
+    assert "Could not import module 'nonexistent_module'" in result.output
+    assert 2 == result.exit_code
+
+    with patch("os.system") as system:
+        result = runner.invoke(main.main, ['foo', '-n', 'bing', '--parser',
+                                           'sys.NonexistentParser'])
+    assert ("Failed to get attribute 'NonexistentParser' from module 'sys'"
+            in result.output)
+    assert 2 == result.exit_code
 
 
 class TestSetupPaths(object):
