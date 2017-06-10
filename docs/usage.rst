@@ -64,11 +64,9 @@ Valid ``OPTIONS`` are the following:
 
 .. option:: --parser
 
-    Specify a the import path of a custom parser class (implementing the
-    ``doc2dash.parsers.utils.IParser`` interface) to use. For example,
-    ``--parser doc2dash.parsers.intersphinx.InterSphinxParser`` will use the
-    default ``InterSphinxParser``. Default behavior is to auto-detect
-    documentation type.
+    Specify a the import path of a custom parser class (implementing the ``doc2dash.parsers.utils.IParser`` interface) to use.
+    For example, ``--parser doc2dash.parsers.intersphinx.InterSphinxParser`` will use the default ``InterSphinxParser``.
+    Default behavior is to auto-detect documentation type.
 
 .. option:: -q, --quiet
 
