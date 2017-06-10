@@ -22,7 +22,7 @@ together with ``doc2dash`` it’s all your API documentation at your fingertips!
 
 ``doc2dash``\ ’s documentation lives at `Read the Docs`_, the code on GitHub_.
 It’s tested on Python 2.7, 3.4+, and PyPy.
-Both Linux and OS X are tested although certain features are only available on OS X.
+Both Linux and macOS are tested although certain features are only available on macOS.
 
 
 .. _`Documentation Set`: https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6
