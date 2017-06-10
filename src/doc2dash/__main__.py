@@ -92,7 +92,7 @@ IMPORTABLE = ImportableType()
 @click.option(
     "--add-to-global", "-A", is_flag=True,
     help="Create docset in doc2dash's default global directory [{}] "
-    "and add it to Dash.app (works only on OS X).".format(
+    "and add it to Dash.app (works only on macOS).".format(
         click.format_filename(DEFAULT_DOCSET_PATH)
     )
 )

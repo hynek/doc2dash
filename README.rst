@@ -15,7 +15,7 @@ doc2dash: Create docsets for Dash.app and clones
 .. begin
 
 
-``doc2dash`` is an MIT-licensed extensible `Documentation Set`_ generator intended to be used with the `Dash.app`_ API browser for OS X or one of its many *free* `clones <https://doc2dash.readthedocs.org/en/latest/installation.html#viewer>`_ for all relevant platforms.
+``doc2dash`` is an MIT-licensed extensible `Documentation Set`_ generator intended to be used with the `Dash.app`_ API browser for macOS or one of its many *free* `clones <https://doc2dash.readthedocs.org/en/latest/installation.html#viewer>`_ for all relevant platforms.
 
 If you’ve never heard of Dash.app, you’re missing out:
 together with ``doc2dash`` it’s all your API documentation at your fingertips!

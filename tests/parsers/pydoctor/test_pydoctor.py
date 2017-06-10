@@ -76,7 +76,8 @@ def test_patcher():
         codecs.open(
             os.path.join(HERE, 'function_example.html'),
             mode="r", encoding="utf-8"
-        )
+        ),
+        "lxml",
     )
     assert p.find_and_patch_entry(
         soup,

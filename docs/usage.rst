@@ -45,12 +45,12 @@ Valid ``OPTIONS`` are the following:
 .. option:: -a, --add-to-dash
 
    Automatically add the resulting docset to Dash.app.
-   Works only on OS X and when Dash.app is installed.
+   Works only on macOS and when Dash.app is installed.
 
 .. option:: -A, --add-to-global
 
    Create docset in doc2dash's default global directory [``~/Library/Application Support/ doc2dash/DocSets``] and add it to Dash.app
-   Works only on OS X and when Dash.app is installed.
+   Works only on macOS and when Dash.app is installed.
 
 .. option:: -j, --enable-js
 

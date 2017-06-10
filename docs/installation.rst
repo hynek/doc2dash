@@ -10,8 +10,8 @@ The latest stable version can be always found on PyPI_.
    Either use pipsi_ or create a virtualenv_ by hand.
 
 
-``doc2dash`` runs on Python 2.7, and 3.3+, and PyPy.
-Both Linux and OS X are supported although certain features are only available on OS X.
+``doc2dash`` runs on Python 2.7, and 3.4+, and PyPy.
+Both Linux and macOS are supported although certain features are only available on macOS.
 
 .. note::
 
@@ -23,7 +23,7 @@ Both Linux and OS X are supported although certain features are only available o
 Viewer
 ------
 
-To view the results, you will need a docset viewer, the most commonly known being `Dash.app`_ for OS X.
+To view the results, you will need a docset viewer, the most commonly known being `Dash.app`_ for macOS.
 
 Other alternatives have been developed in cooperation with Dash.app's developer `Kapeli <https://twitter.com/kapeli>`_:
 

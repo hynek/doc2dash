@@ -148,7 +148,8 @@ class TestFindAndPatchEntry(object):
         """
         soup = BeautifulSoup(
             codecs.open(os.path.join(HERE, 'function_example.html'),
-                        mode="r", encoding="utf-8")
+                        mode="r", encoding="utf-8"),
+            "lxml",
         )
         assert True is find_and_patch_entry(
             soup,
@@ -174,6 +175,7 @@ class TestFindAndPatchEntry(object):
         """
         soup = BeautifulSoup(
             u"<h1>Some Module</h1>",
+            "lxml",
         )
         assert True is find_and_patch_entry(
             soup,
@@ -191,7 +193,8 @@ class TestFindAndPatchEntry(object):
         """
         soup = BeautifulSoup(
             codecs.open(os.path.join(HERE, 'function_example.html'),
-                        mode="r", encoding="utf-8")
+                        mode="r", encoding="utf-8"),
+            "lxml",
         )
         assert False is find_and_patch_entry(
             soup,
