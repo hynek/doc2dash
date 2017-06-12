@@ -28,7 +28,6 @@ To view the results, you will need a docset viewer, the most commonly known bein
 Other alternatives have been developed in cooperation with Dash.app's developer `Kapeli <https://twitter.com/kapeli>`_:
 
 - `helm-dash <https://github.com/areina/helm-dash>`_ for Emacs,
-- `lovelydocs <http://lovelydocs.io/>`_ for Android,
 - `velocity <http://velocity.silverlakesoftware.com/>`_ for Windows,
 - and `zeal <https://zealdocs.org/>`_ for Linux and Windows.
 
