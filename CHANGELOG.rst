@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-2.2.0 (UNRELEASED)
+2.2.0 (2017-06-12)
 ------------------
 
 - ``InterSphinxParser`` is now open to extension.
