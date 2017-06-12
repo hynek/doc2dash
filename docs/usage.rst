@@ -60,7 +60,7 @@ Valid ``OPTIONS`` are the following:
 
     As of Dash 3.0 users can open the online version of pages from within docsets.
     To enable this, you must set this value to the base URL of your online documentation.
-    e.g. ``https://doc2dash.readthedocs.org/``
+    e.g. ``https://doc2dash.readthedocs.io/``
 
 .. option:: --parser
 

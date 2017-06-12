@@ -9,7 +9,7 @@ __version__ = "2.2.0.dev0"
 
 __title__ = "doc2dash"
 __description__ = "Convert docs to Dash.app's docset format."
-__url__ = "https://doc2dash.readthedocs.org/"
+__url__ = "https://doc2dash.readthedocs.io/"
 
 __author__ = "Hynek Schlawack"
 __email__ = "hs@ox.cx"

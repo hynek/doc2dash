@@ -36,4 +36,4 @@ Thank you for considering to contribute to ``doc2dash``!
 .. _changelog: https://github.com/hynek/doc2dash/blob/master/CHANGELOG.rst
 .. _`tox`: https://testrun.org/tox/
 .. _`Travis CI`: https://travis-ci.org/
-.. _pyenv: https://github.com/yyuu/pyenv
+.. _pyenv: https://github.com/pyenv/pyenv

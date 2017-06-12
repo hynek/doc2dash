@@ -35,8 +35,8 @@ Other alternatives have been developed in cooperation with Dash.app's developer 
 
 
 .. _pip: https://pip.pypa.io/en/latest/installing.html
-.. _PyPI: https://warehouse.python.org/project/doc2dash/
+.. _PyPI: https://pypi.org/project/doc2dash/
 .. _`Dash.app`: https://kapeli.com/dash/
 .. _pipsi: https://github.com/mitsuhiko/pipsi
-.. _virtualenv: https://virtualenv.readthedocs.org/
+.. _virtualenv: https://virtualenv.readthedocs.io/
 .. _conflicts: https://hynek.me/articles/virtualenv-lives/
