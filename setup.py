@@ -18,7 +18,7 @@ INSTALL_REQUIRES = [
     "colorama==0.3.9",
     "lxml==3.8.0",
     "six==1.10.0",
-    "zope.interface==4.4.1",
+    "zope.interface==4.4.2",
 ]
 ENTRY_POINTS = {
     "console_scripts": [
