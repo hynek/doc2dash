@@ -17,7 +17,7 @@ INSTALL_REQUIRES = [
     "click==6.7",
     "colorama==0.3.9",
     "lxml==4.0.0",
-    "six==1.10.0",
+    "six==1.11.0",
     "zope.interface==4.4.2",
 ]
 ENTRY_POINTS = {
