@@ -306,3 +306,7 @@ def add_icon(icon_data, dest):
     """
     with open(os.path.join(dest, 'icon.png'), "wb") as f:
         f.write(icon_data)
+
+
+if __name__ == "__main__":
+    main()
