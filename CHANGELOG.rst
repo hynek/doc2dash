@@ -6,6 +6,8 @@ Changelog
 2.3.0 (UNRELEASED)
 ------------------
 
+This is the **final minor release** that works on Python versions older than 3.6.
+
 *none*
 
 
