@@ -20,6 +20,12 @@ INSTALL_REQUIRES = [
     "six==1.11.0",
     "zope.interface==4.5.0",
 ]
+PROJECT_URLS = {
+    "Documentation": "https://doc2dash.readthedocs.io/",
+    "Bug Tracker": "https://github.com/hynek/doc2dash/issues",
+    "Source Code": "https://github.com/hynek/doc2dash",
+}
+
 ENTRY_POINTS = {
     "console_scripts": [
         "doc2dash = doc2dash.__main__:main",
@@ -37,6 +43,8 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python",
@@ -84,7 +92,7 @@ def find_meta(meta):
 
 
 VERSION = find_meta("version")
-URI = find_meta("url")
+URL = find_meta("url")
 LONG = (
     read("README.rst") + "\n\n" +
     "Release Information\n" +
@@ -92,8 +100,8 @@ LONG = (
     re.search("(\d+.\d.\d \(.*?\)\n.*?)\n\n\n----\n\n\n",
               read("CHANGELOG.rst"), re.S).group(1) +
     "\n\n`Full changelog " +
-    "<{uri}en/stable/changelog.html>`_.\n\n" + read("AUTHORS.rst")
-).format(uri=URI)
+    "<{url}en/stable/changelog.html>`_.\n\n" + read("AUTHORS.rst")
+).format(url=URL)
 
 
 if __name__ == "__main__":
@@ -102,7 +110,8 @@ if __name__ == "__main__":
         version=VERSION,
         description=find_meta("description"),
         long_description=LONG,
-        url=URI,
+        url=URL,
+        project_urls=PROJECT_URLS,
         license=find_meta("license"),
         author=find_meta("author"),
         author_email=find_meta("email"),
