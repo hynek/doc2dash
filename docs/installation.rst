@@ -5,9 +5,13 @@ The latest stable version can be always found on PyPI_.
 
 .. warning::
 
-   Since ``doc2dash`` is an application, it has hard-coded dependency versions.
-   I strongly discourage from installing it into your global ``site-packages`` because it will inevitably lead to conflicts_.
-   Either use pipsi_ or create a virtualenv_ by hand.
+   Since ``doc2dash`` is an application, I strongly encourage you:
+
+   - …to take advantage of the ``pinned`` extra that will provide you with the dependency versions that ``doc2dash`` has been tested against: ``pip install doc2dash[pinned]``
+   - …and to **not** install it into your global ``site-packages`` (and neither ) because it will inevitably lead to conflicts_.
+     ``pip install --user`` is slightly better but still bad all things considered.
+
+     Either use pipsi_ or create a virtualenv_ by hand: ``pipsi install --python python3.6 doc2dash[pinned]``
 
 
 ``doc2dash`` runs on Python 2.7, and 3.4+, and PyPy.
