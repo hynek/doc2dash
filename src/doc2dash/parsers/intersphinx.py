@@ -10,12 +10,7 @@ from sphinx.ext.intersphinx import InventoryFile
 from zope.interface import implementer
 
 from . import types
-from .utils import (
-    APPLE_REF_TEMPLATE,
-    IParser,
-    ParserEntry,
-    has_file_with,
-)
+from .utils import APPLE_REF_TEMPLATE, IParser, ParserEntry, has_file_with
 
 
 log = logging.getLogger(__name__)
@@ -51,6 +46,7 @@ class InterSphinxParser(object):
     Parser for Sphinx-base documentation that generates an objects.inv file for
     the intersphinx extension.
     """
+
     doc_path = attr.ib()
 
     name = "intersphinx"
@@ -69,7 +65,7 @@ class InterSphinxParser(object):
         """
         with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
             for pe in self._inv_to_entries(
-                    InventoryFile.load(inv_f, "", os.path.join)
+                InventoryFile.load(inv_f, "", os.path.join)
             ):  # this is what Guido gave us `yield from` for :-|
                 yield pe
 
@@ -115,13 +111,13 @@ def find_and_patch_entry(soup, entry):
     """
     Modify soup so Dash.app can generate TOCs on the fly.
     """
-    link = soup.find('a', {'class': 'headerlink'}, href='#' + entry.anchor)
-    tag = soup.new_tag('a')
-    tag['name'] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
+    link = soup.find("a", {"class": "headerlink"}, href="#" + entry.anchor)
+    tag = soup.new_tag("a")
+    tag["name"] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
     if link:
         link.parent.insert(0, tag)
         return True
-    elif entry.anchor.startswith('module-'):
+    elif entry.anchor.startswith("module-"):
         soup.h1.parent.insert(0, tag)
         return True
     else:

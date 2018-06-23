@@ -38,33 +38,48 @@ class TestInterSphinxParser(object):
         """
         p = InterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
-            p._inv_to_entries({"py:method": {
-                u"some_method": (None, None, u"some_module.py", u"-"),
-            }, "std:option": {
-                u"--destination": (
-                    u"doc2dash",
-                    u"2.0",
-                    u"index.html#document-usage#cmdoption--destination",
-                    u"-"
-                )
-            }, "std:constant": {
-                u"SomeConstant": (None, None, u"some_other_module.py", u"-")
-            }})
-        )
-        assert set([ParserEntry(
-            name=u'some_method', type=u'Method', path=u'some_module.py'
-            ),
-            ParserEntry(
-                name=u'--destination',
-                type=u'Option',
-                path=u'index.html#cmdoption--destination'
-            ),
-            ParserEntry(
-                name=u'SomeConstant',
-                type=u'Constant',
-                path=u'some_other_module.py',
+            p._inv_to_entries(
+                {
+                    "py:method": {
+                        u"some_method": (None, None, u"some_module.py", u"-")
+                    },
+                    "std:option": {
+                        u"--destination": (
+                            u"doc2dash",
+                            u"2.0",
+                            u"index.html#document-usage#cmdoption--"
+                            u"destination",
+                            u"-",
+                        )
+                    },
+                    "std:constant": {
+                        u"SomeConstant": (
+                            None,
+                            None,
+                            u"some_other_module.py",
+                            u"-",
+                        )
+                    },
+                }
             )
-        ]) == set(result)
+        )
+        assert set(
+            [
+                ParserEntry(
+                    name=u"some_method", type=u"Method", path=u"some_module.py"
+                ),
+                ParserEntry(
+                    name=u"--destination",
+                    type=u"Option",
+                    path=u"index.html#cmdoption--destination",
+                ),
+                ParserEntry(
+                    name=u"SomeConstant",
+                    type=u"Constant",
+                    path=u"some_other_module.py",
+                ),
+            ]
+        ) == set(result)
 
     def test_convert_type_override(self):
         """
@@ -72,26 +87,39 @@ class TestInterSphinxParser(object):
 
         We check that we can hide some key of choice.
         """
+
         class MyInterSphinxParser(InterSphinxParser):
             def convert_type(self, inv_type):
-                if inv_type == 'py:method':
+                if inv_type == "py:method":
                     # hide method entries
                     return
                 return super(MyInterSphinxParser, self).convert_type(inv_type)
 
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
-            p._inv_to_entries({"py:method": {
-                u"some_method": (None, None, u"some_module.py", u"-"),
-            }, "std:constant": {
-                u"SomeConstant": (None, None, u"some_other_module.py", u"-")
-            }})
+            p._inv_to_entries(
+                {
+                    "py:method": {
+                        u"some_method": (None, None, u"some_module.py", u"-")
+                    },
+                    "std:constant": {
+                        u"SomeConstant": (
+                            None,
+                            None,
+                            u"some_other_module.py",
+                            u"-",
+                        )
+                    },
+                }
+            )
         )
-        assert [ParserEntry(
-                    name=u'SomeConstant',
-                    type=u'Constant',
-                    path=u'some_other_module.py'
-                )] == result
+        assert [
+            ParserEntry(
+                name=u"SomeConstant",
+                type=u"Constant",
+                path=u"some_other_module.py",
+            )
+        ] == result
 
     def test_create_entry_override(self):
         """
@@ -99,46 +127,67 @@ class TestInterSphinxParser(object):
 
         We check that the name format can be adjusted.
         """
+
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
                 path_str = inv_entry_to_path(inv_entry)
-                return ParserEntry(name='!%s!' % key, type=dash_type,
-                                   path=path_str)
+                return ParserEntry(
+                    name="!%s!" % key, type=dash_type, path=path_str
+                )
 
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
-            p._inv_to_entries({"py:method": {
-                u"some_method": (None, None, u"some_module.py", u"-"),
-            }}))
-        assert [ParserEntry(name=u'!some_method!', type=u'Method',
-                            path=u'some_module.py')] == result
+            p._inv_to_entries(
+                {
+                    "py:method": {
+                        u"some_method": (None, None, u"some_module.py", u"-")
+                    }
+                }
+            )
+        )
+        assert [
+            ParserEntry(
+                name=u"!some_method!", type=u"Method", path=u"some_module.py"
+            )
+        ] == result
 
     def test_create_entry_none(self):
         """
         `create_entry` can return None.
         """
+
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
-                if dash_type == 'Option':
+                if dash_type == "Option":
                     return
                 return super(MyInterSphinxParser, self).create_entry(
-                    dash_type, key, inv_entry)
+                    dash_type, key, inv_entry
+                )
 
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
-            p._inv_to_entries({"py:method": {
-                u"some_method": (None, None, u"some_module.py", u"-"),
-            }, "std:option": {
-                u"--destination": (
-                    u"doc2dash",
-                    u"2.0",
-                    u"index.html#document-usage#cmdoption--destination",
-                    u"-"
-                )
-            }})
+            p._inv_to_entries(
+                {
+                    "py:method": {
+                        u"some_method": (None, None, u"some_module.py", u"-")
+                    },
+                    "std:option": {
+                        u"--destination": (
+                            u"doc2dash",
+                            u"2.0",
+                            u"index.html#document-usage#cmdoption--"
+                            u"destination",
+                            u"-",
+                        )
+                    },
+                }
+            )
         )
-        assert [ParserEntry(name=u'some_method', type=u'Method',
-                            path=u'some_module.py')] == result
+        assert [
+            ParserEntry(
+                name=u"some_method", type=u"Method", path=u"some_module.py"
+            )
+        ] == result
 
 
 class TestFindAndPatchEntry(object):
@@ -147,24 +196,27 @@ class TestFindAndPatchEntry(object):
         Patching a method adds a TOC entry.
         """
         soup = BeautifulSoup(
-            codecs.open(os.path.join(HERE, 'function_example.html'),
-                        mode="r", encoding="utf-8"),
+            codecs.open(
+                os.path.join(HERE, "function_example.html"),
+                mode="r",
+                encoding="utf-8",
+            ),
             "lxml",
         )
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
-                name=u'pyramid.config.Configurator.add_route',
-                type=u'Method',
-                anchor=u'pyramid.config.Configurator.add_route',
-            )
+                name=u"pyramid.config.Configurator.add_route",
+                type=u"Method",
+                anchor=u"pyramid.config.Configurator.add_route",
+            ),
         )
         toc_link = soup(
-            u'a',
+            u"a",
             attrs={
-                u'name': u'//apple_ref/cpp/Method/pyramid.config.Configurator.'
-                         u'add_route'
-            }
+                u"name": u"//apple_ref/cpp/Method/pyramid.config.Configurator."
+                u"add_route"
+            },
         )
         assert toc_link
 
@@ -173,17 +225,14 @@ class TestFindAndPatchEntry(object):
         Patching a module adds the TOC entry into the next <h1>.  Non-ASCII
         works.
         """
-        soup = BeautifulSoup(
-            u"<h1>Some Module</h1>",
-            "lxml",
-        )
+        soup = BeautifulSoup(u"<h1>Some Module</h1>", "lxml")
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
                 name=u"some_module",
                 type=u"M\xc3\xb6dule",
                 anchor=u"module-some_module",
-            )
+            ),
         )
         assert '<a name="//apple_ref' in str(soup)
 
@@ -192,15 +241,14 @@ class TestFindAndPatchEntry(object):
         Return `False` if anchor can't be found
         """
         soup = BeautifulSoup(
-            codecs.open(os.path.join(HERE, 'function_example.html'),
-                        mode="r", encoding="utf-8"),
+            codecs.open(
+                os.path.join(HERE, "function_example.html"),
+                mode="r",
+                encoding="utf-8",
+            ),
             "lxml",
         )
         assert False is find_and_patch_entry(
             soup,
-            TOCEntry(
-                name=u"foo",
-                type=u"Nothing",
-                anchor=u"does-not-exist",
-            )
+            TOCEntry(name=u"foo", type=u"Nothing", anchor=u"does-not-exist"),
         )

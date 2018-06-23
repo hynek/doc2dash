@@ -1,12 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
-from . import pydoctor, intersphinx
+from . import intersphinx, pydoctor
 
 
-DOCTYPES = [
-    pydoctor.PyDoctorParser,
-    intersphinx.InterSphinxParser,
-]
+DOCTYPES = [pydoctor.PyDoctorParser, intersphinx.InterSphinxParser]
 
 
 def get_doctype(path):

@@ -1,4 +1,4 @@
-include *.rst *.txt LICENSE tox.ini .travis.yml .coveragerc codecov.yml
+include LICENSE *.rst *.txt tox.ini *.yml .coveragerc *.yaml *.toml
 graft docs
 graft tests
 recursive-exclude tests *.pyc

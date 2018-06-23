@@ -4,7 +4,7 @@ import codecs
 import os
 import re
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 ###############################################################################
@@ -20,17 +20,16 @@ INSTALL_REQUIRES = [
     "six==1.11.0",
     "zope.interface==4.5.0",
 ]
+EXTRAS_REQUIRE = {"tests": ["coverage", "mock", "pytest"]}
+EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
+
 PROJECT_URLS = {
     "Documentation": "https://doc2dash.readthedocs.io/",
     "Bug Tracker": "https://github.com/hynek/doc2dash/issues",
     "Source Code": "https://github.com/hynek/doc2dash",
 }
 
-ENTRY_POINTS = {
-    "console_scripts": [
-        "doc2dash = doc2dash.__main__:main",
-    ],
-}
+ENTRY_POINTS = {"console_scripts": ["doc2dash = doc2dash.__main__:main"]}
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -83,8 +82,7 @@ def find_meta(meta):
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta),
-        META_FILE, re.M
+        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta), META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)
@@ -94,13 +92,16 @@ def find_meta(meta):
 VERSION = find_meta("version")
 URL = find_meta("url")
 LONG = (
-    read("README.rst") + "\n\n" +
-    "Release Information\n" +
-    "===================\n\n" +
-    re.search("(\d+.\d.\d \(.*?\)\n.*?)\n\n\n----\n\n\n",
-              read("CHANGELOG.rst"), re.S).group(1) +
-    "\n\n`Full changelog " +
-    "<{url}en/stable/changelog.html>`_.\n\n" + read("AUTHORS.rst")
+    read("README.rst")
+    + "\n\n"
+    + "Release Information\n"
+    + "===================\n\n"
+    + re.search(
+        "(\d+.\d.\d \(.*?\)\n.*?)\n\n\n----\n\n\n", read("CHANGELOG.rst"), re.S
+    ).group(1)
+    + "\n\n`Full changelog "
+    + "<{url}en/stable/changelog.html>`_.\n\n"
+    + read("AUTHORS.rst")
 ).format(url=URL)
 
 
@@ -119,5 +120,6 @@ if __name__ == "__main__":
         package_dir={"": "src"},
         entry_points=ENTRY_POINTS,
         install_requires=INSTALL_REQUIRES,
+        extras_require=EXTRAS_REQUIRE,
         classifiers=CLASSIFIERS,
     )

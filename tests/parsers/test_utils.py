@@ -45,16 +45,13 @@ def entries():
     Test `ParserEntry`s
     """
     return [
-        ParserEntry(name=u'foo', type=u'Method', path=u'bar.html#foo'),
-        ParserEntry(name=u'qux', type=u'Class', path=u'bar.html'),
+        ParserEntry(name=u"foo", type=u"Method", path=u"bar.html#foo"),
+        ParserEntry(name=u"qux", type=u"Class", path=u"bar.html"),
     ]
 
 
 class TestPatchTOCAnchors(object):
-    @pytest.mark.parametrize(
-        "progressbar",
-        [True, False]
-    )
+    @pytest.mark.parametrize("progressbar", [True, False])
     def test_with_empty_db(self, progressbar):
         """
         Adding no entries does not cause an error.
@@ -67,7 +64,7 @@ class TestPatchTOCAnchors(object):
         """
         Only entries with URL anchors get patched.
         """
-        foo = tmpdir.mkdir('foo')
+        foo = tmpdir.mkdir("foo")
         foo.join("bar.html").write("docs!")
         parser = FakeParser(doc_path=six.text_type(foo))
         toc = patch_anchors(parser, show_progressbar=False)
@@ -76,30 +73,30 @@ class TestPatchTOCAnchors(object):
             toc.send(e)
         toc.close()
         assert [
-            TOCEntry(name=u'foo', type=u'Method', anchor=u'foo'),
+            TOCEntry(name=u"foo", type=u"Method", anchor=u"foo")
         ] == parser._patched_entries
 
     def test_complains(self, entries, tmpdir):
         """
         If patching fails, a debug message is logged.
         """
-        foo = tmpdir.mkdir('foo')
+        foo = tmpdir.mkdir("foo")
         foo.join("bar.html").write("docs!")
-        parser = FakeParser(doc_path=six.text_type(foo),
-                            succeed_patching=False)
+        parser = FakeParser(
+            doc_path=six.text_type(foo), succeed_patching=False
+        )
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             toc.send(e)
-        with patch('doc2dash.parsers.utils.log.debug') as mock:
+        with patch("doc2dash.parsers.utils.log.debug") as mock:
             toc.close()
             assert mock.call_count == 1
 
 
 class TestHasFileWith(object):
-    @pytest.mark.parametrize("content,has", [
-        (b"xxxfooxxx", True),
-        (b"xxxbarxxx", False)
-    ])
+    @pytest.mark.parametrize(
+        "content,has", [(b"xxxfooxxx", True), (b"xxxbarxxx", False)]
+    )
     def test_exists(self, tmpdir, content, has):
         """
         If file contains content, return True, ealse False.
