@@ -18,12 +18,6 @@ import os
 import re
 
 
-try:
-    import sphinx_rtd_theme
-except ImportError:
-    sphinx_rtd_theme = None
-
-
 def read(*parts):
     """
     Build an absolute path from *parts* and and return the contents of the
@@ -132,13 +126,16 @@ pygments_style = "sphinx"
 
 # -- Options for HTML output ----------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-if sphinx_rtd_theme:
-    html_theme = "sphinx_rtd_theme"
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-else:
-    html_theme = "default"
+
+html_theme = "alabaster"
+html_theme_options = {
+    "font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
+    "head_font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
+    "font_size": "18px",
+    "page_width": "980px",
+    "show_relbars": True,
+}
+
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
