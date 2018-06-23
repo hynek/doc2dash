@@ -9,16 +9,20 @@ doc2dash: Create docsets for Dash.app and clones
    :target: https://travis-ci.org/hynek/doc2dash
 
 .. image:: https://codecov.io/github/hynek/doc2dash/branch/master/graph/badge.svg
-  :target: https://codecov.io/github/hynek/doc2dash
-  :alt: Test Coverage
+   :target: https://codecov.io/github/hynek/doc2dash
+   :alt: Test Coverage
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/ambv/black
+   :alt: Code style: black
 
 .. begin
 
 
 ``doc2dash`` is an MIT-licensed extensible `Documentation Set`_ generator intended to be used with the `Dash.app`_ API browser for macOS or one of its many *free* `clones <https://doc2dash.readthedocs.io/en/latest/installation.html#viewer>`_ for all relevant platforms.
 
-If you’ve never heard of Dash.app, you’re missing out:
-together with ``doc2dash`` it’s all your API documentation at your fingertips!
+If you’ve never heard of Dash.app and its likes, you’re missing out:
+together with ``doc2dash`` it’s all your API documentation at your fingertips – even when you're offline!
 
 ``doc2dash``\ ’s documentation lives at `Read the Docs`_, the code on GitHub_.
 It’s tested on Python 2.7, 3.4+, and PyPy.
