@@ -8,7 +8,8 @@ Changelog
 
 This is the **final minor release** that works on Python versions older than 3.6.
 
-*none*
+- The dependencies aren't pinnned by default anymore.
+  Instead, an extra with pinned dependencies is provided -- please refer to the `installation instructions <https://doc2dash.readthedocs.io/en/stable/installation.html>`_ for details.
 
 
 2.2.0 (2017-06-12)

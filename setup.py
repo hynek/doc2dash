@@ -10,7 +10,7 @@ from setuptools import find_packages, setup
 ###############################################################################
 
 NAME = "doc2dash"
-INSTALL_REQUIRES = [
+_pinned = [
     "Sphinx==1.7.5",
     "attrs==18.1.0",
     "beautifulsoup4==4.6.0",
@@ -20,7 +20,8 @@ INSTALL_REQUIRES = [
     "six==1.11.0",
     "zope.interface==4.5.0",
 ]
-EXTRAS_REQUIRE = {"tests": ["coverage", "mock", "pytest"]}
+INSTALL_REQUIRES = [dep.split("=", 1)[0] for dep in _pinned]
+EXTRAS_REQUIRE = {"tests": ["coverage", "mock", "pytest"], "pinned": _pinned}
 EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
 
 PROJECT_URLS = {
