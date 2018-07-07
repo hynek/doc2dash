@@ -16,7 +16,6 @@ INSTALL_REQUIRES = [
     "beautifulsoup4",
     "click",
     "colorama",
-    "lxml",
     "six",
     "zope.interface",
 ]

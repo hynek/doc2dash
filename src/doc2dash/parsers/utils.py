@@ -129,7 +129,7 @@ def patch_anchors(parser, show_progressbar):
         for fname, entries in files:
             full_path = os.path.join(parser.doc_path, fname)
             with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
-                soup = BeautifulSoup(fp, "lxml")
+                soup = BeautifulSoup(fp, "html.parser")
                 for entry in entries:
                     if not parser.find_and_patch_entry(soup, entry):
                         log.debug(

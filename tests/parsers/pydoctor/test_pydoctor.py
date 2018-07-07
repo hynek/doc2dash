@@ -114,7 +114,7 @@ def test_patcher():
             mode="r",
             encoding="utf-8",
         ),
-        "lxml",
+        "html.parser",
     )
     assert p.find_and_patch_entry(
         soup,

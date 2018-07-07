@@ -9,6 +9,7 @@ Changelog
 This is the **final minor release** that works on Python versions older than 3.6.
 
 - The dependencies aren't pinned anymore.
+- ``lxml`` is not a dependency anymore.
 
 
 ----

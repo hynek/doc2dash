@@ -201,7 +201,7 @@ class TestFindAndPatchEntry(object):
                 mode="r",
                 encoding="utf-8",
             ),
-            "lxml",
+            "html.parser",
         )
         assert True is find_and_patch_entry(
             soup,
@@ -225,7 +225,7 @@ class TestFindAndPatchEntry(object):
         Patching a module adds the TOC entry into the next <h1>.  Non-ASCII
         works.
         """
-        soup = BeautifulSoup(u"<h1>Some Module</h1>", "lxml")
+        soup = BeautifulSoup(u"<h1>Some Module</h1>", "html.parser")
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
@@ -246,7 +246,7 @@ class TestFindAndPatchEntry(object):
                 mode="r",
                 encoding="utf-8",
             ),
-            "lxml",
+            "html.parser",
         )
         assert False is find_and_patch_entry(
             soup,

@@ -60,7 +60,7 @@ class PyDoctorParser(object):
                 mode="r",
                 encoding="utf-8",
             ),
-            "lxml",
+            "html.parser",
         )
         for tag in soup.body.find_all(u"a"):
             path = tag.get(u"href")
