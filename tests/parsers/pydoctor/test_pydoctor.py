@@ -91,9 +91,11 @@ def test_parse():
     """
     The shipped example results in the expected parsing result.
     """
-    example = codecs.open(
+    with codecs.open(
         os.path.join(HERE, "pydoctor_example.html"), mode="r", encoding="utf-8"
-    ).read()
+    ) as fp:
+        example = fp.read()
+
     with patch(
         "doc2dash.parsers.pydoctor.codecs.open",
         mock_open(read_data=example),
@@ -108,14 +110,11 @@ def test_parse():
 
 def test_patcher():
     p = PyDoctorParser(doc_path=u"foo")
-    soup = BeautifulSoup(
-        codecs.open(
-            os.path.join(HERE, "function_example.html"),
-            mode="r",
-            encoding="utf-8",
-        ),
-        "html.parser",
-    )
+    with codecs.open(
+        os.path.join(HERE, "function_example.html"), mode="r", encoding="utf-8"
+    ) as fp:
+        soup = BeautifulSoup(fp, "html.parser")
+
     assert p.find_and_patch_entry(
         soup,
         TOCEntry(

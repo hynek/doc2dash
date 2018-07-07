@@ -11,6 +11,7 @@ import sqlite3
 
 import attr
 import click
+import six
 
 from . import __version__, parsers
 from .parsers.utils import patch_anchors
@@ -340,9 +341,10 @@ def prepare_docset(
     if online_redirect_url is not None:
         plist_cfg["DashDocSetFallbackURL"] = online_redirect_url
 
-    plistlib.writePlist(plist_cfg, plist_path)
+    write_plist(plist_cfg, plist_path)
 
     shutil.copytree(source, docs)
+
     return DocSet(path=dest, docs=docs, plist=plist_path, db_conn=db_conn)
 
 
@@ -352,6 +354,26 @@ def add_icon(icon_data, dest):
     """
     with open(os.path.join(dest, "icon.png"), "wb") as f:
         f.write(icon_data)
+
+
+if six.PY2:
+
+    def read_plist(full_path):
+        return plistlib.readPlist(full_path)
+
+    def write_plist(plist, full_path):
+        plistlib.writePlist(plist, full_path)
+
+
+else:
+
+    def read_plist(full_path):
+        with open(full_path, "rb") as fp:
+            return plistlib.load(fp)
+
+    def write_plist(plist, full_path):
+        with open(full_path, "wb") as fp:
+            plistlib.dump(plist, fp)
 
 
 if __name__ == "__main__":

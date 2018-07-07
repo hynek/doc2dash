@@ -195,14 +195,13 @@ class TestFindAndPatchEntry(object):
         """
         Patching a method adds a TOC entry.
         """
-        soup = BeautifulSoup(
-            codecs.open(
-                os.path.join(HERE, "function_example.html"),
-                mode="r",
-                encoding="utf-8",
-            ),
-            "html.parser",
-        )
+        with codecs.open(
+            os.path.join(HERE, "function_example.html"),
+            mode="r",
+            encoding="utf-8",
+        ) as fp:
+            soup = BeautifulSoup(fp, "html.parser")
+
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
@@ -211,6 +210,7 @@ class TestFindAndPatchEntry(object):
                 anchor=u"pyramid.config.Configurator.add_route",
             ),
         )
+
         toc_link = soup(
             u"a",
             attrs={
@@ -218,6 +218,7 @@ class TestFindAndPatchEntry(object):
                 u"add_route"
             },
         )
+
         assert toc_link
 
     def test_patch_modules(self):
@@ -240,14 +241,13 @@ class TestFindAndPatchEntry(object):
         """
         Return `False` if anchor can't be found
         """
-        soup = BeautifulSoup(
-            codecs.open(
-                os.path.join(HERE, "function_example.html"),
-                mode="r",
-                encoding="utf-8",
-            ),
-            "html.parser",
-        )
+        with codecs.open(
+            os.path.join(HERE, "function_example.html"),
+            mode="r",
+            encoding="utf-8",
+        ) as fp:
+            soup = BeautifulSoup(fp, "html.parser")
+
         assert False is find_and_patch_entry(
             soup,
             TOCEntry(name=u"foo", type=u"Nothing", anchor=u"does-not-exist"),

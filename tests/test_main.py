@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function
 import errno
 import logging
 import os
-import plistlib
 import shutil
 import sqlite3
 import sys
@@ -197,6 +196,7 @@ class TestSetupPaths(object):
             foo_path, str(tmpdir), name=None, add_to_global=False, force=False
         )
         abs_foo = os.path.abspath(foo_path)
+
         assert (
             abs_foo,
             str(tmpdir.join("foo.docset")),
@@ -309,8 +309,11 @@ class TestPrepareDocset(object):
         m_ct.assert_called_once_with(
             "some/path/foo", "bar/Contents/Resources/Documents"
         )
+
         assert os.path.isfile("bar/Contents/Resources/docSet.dsidx")
-        p = plistlib.readPlist(docset.plist)
+
+        p = main.read_plist(docset.plist)
+
         assert p == {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",
@@ -319,10 +322,12 @@ class TestPrepareDocset(object):
             "isDashDocset": True,
             "isJavaScriptEnabled": False,
         }
+
         with sqlite3.connect("bar/Contents/Resources/docSet.dsidx") as db_conn:
             cur = db_conn.cursor()
             # ensure table exists and is empty
             cur.execute("select count(1) from searchIndex")
+
             assert cur.fetchone()[0] == 0
 
     def test_with_index_page(self, monkeypatch, tmpdir):
@@ -341,7 +346,9 @@ class TestPrepareDocset(object):
             enable_js=False,
             online_redirect_url=None,
         )
-        p = plistlib.readPlist(docset.plist)
+
+        p = main.read_plist(docset.plist)
+
         assert p == {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",
@@ -368,7 +375,9 @@ class TestPrepareDocset(object):
             enable_js=True,
             online_redirect_url=None,
         )
-        p = plistlib.readPlist(docset.plist)
+
+        p = main.read_plist(docset.plist)
+
         assert p == {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",
@@ -395,7 +404,9 @@ class TestPrepareDocset(object):
             enable_js=False,
             online_redirect_url="https://domain.com",
         )
-        p = plistlib.readPlist(docset.plist)
+
+        p = main.read_plist(docset.plist)
+
         assert p == {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",

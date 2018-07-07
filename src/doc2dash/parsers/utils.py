@@ -4,7 +4,6 @@ import codecs
 import errno
 import logging
 import os
-import sys
 
 from collections import defaultdict
 
@@ -79,7 +78,7 @@ class ParserEntry(object):
         return self.name, self.type, self.path
 
 
-if sys.version_info.major > 2:  # pragma: nocover
+if not six.PY2:
 
     def coroutine(func):
         def start(*args, **kwargs):
