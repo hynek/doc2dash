@@ -6,10 +6,12 @@ Changelog
 2.3.0 (UNRELEASED)
 ------------------
 
-This is the **final minor release** that works on Python versions older than 3.6.
+This is the **final minor release** that works on Python versions older than 3.7.
+If necessary, they *may* be more 2.3.x bugfix releases -- the next feature release 3.0 will **require Python 3.7** or later though.
 
 - The dependencies aren't pinned anymore.
 - ``lxml`` is not a dependency anymore.
+- ``python -m doc2dash`` works now as expected.
 
 
 ----
