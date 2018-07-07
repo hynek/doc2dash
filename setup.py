@@ -11,14 +11,14 @@ from setuptools import find_packages, setup
 
 NAME = "doc2dash"
 INSTALL_REQUIRES = [
-    "Sphinx==1.7.5",
-    "attrs==18.1.0",
-    "beautifulsoup4==4.6.0",
-    "click==6.7",
-    "colorama==0.3.9",
-    "lxml==4.2.3",
-    "six==1.11.0",
-    "zope.interface==4.5.0",
+    "Sphinx",
+    "attrs",
+    "beautifulsoup4",
+    "click",
+    "colorama",
+    "lxml",
+    "six",
+    "zope.interface",
 ]
 EXTRAS_REQUIRE = {"tests": ["coverage", "mock", "pytest"]}
 EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]

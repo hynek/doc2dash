@@ -8,7 +8,10 @@ Changelog
 
 This is the **final minor release** that works on Python versions older than 3.6.
 
-*none*
+- The dependencies aren't pinned anymore.
+
+
+----
 
 
 2.2.0 (2017-06-12)
