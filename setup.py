@@ -16,7 +16,7 @@ _pinned = [
     "beautifulsoup4==4.6.0",
     "click==6.7",
     "colorama==0.3.9",
-    "lxml==4.2.2",
+    "lxml==4.2.3",
     "six==1.11.0",
     "zope.interface==4.5.0",
 ]
