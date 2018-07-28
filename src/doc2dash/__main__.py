@@ -253,6 +253,9 @@ def create_log_config(verbose, quiet):
         level = logging.ERROR
     else:
         level = logging.INFO
+
+    logger_cfg = {"handlers": ["click_handler"], "level": level}
+
     return {
         "version": 1,
         "formatters": {"click_formatter": {"format": "%(message)s"}},
@@ -263,9 +266,7 @@ def create_log_config(verbose, quiet):
                 "formatter": "click_formatter",
             }
         },
-        "loggers": {
-            "doc2dash": {"handlers": ["click_handler"], "level": level}
-        },
+        "loggers": {"doc2dash": logger_cfg, "__main__": logger_cfg},
     }
 
 
