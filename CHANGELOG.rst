@@ -3,7 +3,7 @@
 Changelog
 =========
 
-2.3.0 (UNRELEASED)
+2.3.0 (2018-11-24)
 ------------------
 
 This is the **final minor release** that works on Python versions older than 3.7.
