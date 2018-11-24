@@ -30,13 +30,13 @@ matrix:
       env: TOXENV=py37
 
     # Meta
-    - python: "3.6"
-      env: TOXENV=flake8
-    - python: "3.6"
+    - python: "3.7"
+      env: TOXENV=lint
+    - python: "3.7"
       env: TOXENV=manifest
-    - python: "3.6"
+    - python: "3.7"
       env: TOXENV=docs
-    - python: "3.6"
+    - python: "3.7"
       env: TOXENV=readme
 
   allow_failures:
