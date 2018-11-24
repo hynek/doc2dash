@@ -5,7 +5,7 @@ Convert docs to Dash.app's docset format.
 from __future__ import absolute_import, division, print_function
 
 
-__version__ = "2.3.0"
+__version__ = "2.4.0.dev0"
 
 
 __title__ = "doc2dash"
