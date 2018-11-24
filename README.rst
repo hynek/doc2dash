@@ -29,7 +29,7 @@ It’s tested on Python 2.7, 3.4+, and PyPy.
 Both Linux and macOS are tested although certain features are only available on macOS.
 
 
-.. _`Documentation Set`: https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6
+.. _`Documentation Set`: https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6
 .. _`Dash.app`: https://kapeli.com/dash/
 .. _`Read the Docs`: https://doc2dash.readthedocs.io/
 .. _`GitHub`:  https://github.com/hynek/doc2dash
