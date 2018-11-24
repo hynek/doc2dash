@@ -22,6 +22,7 @@ matrix:
       env: TOXENV=py37
     - python: "pypy"
       env: TOXENV=pypy
+      dist: trusty
 
     # Prevent breakage by a new releases
     - python: "3.6-dev"
