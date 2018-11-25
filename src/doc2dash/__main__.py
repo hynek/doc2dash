@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import errno
 import importlib
 import logging
@@ -11,7 +9,6 @@ import sqlite3
 
 import attr
 import click
-import six
 
 from . import __version__, parsers
 from .parsers.utils import patch_anchors
@@ -170,7 +167,7 @@ def main(
         icon_data = icon.read()
         if not icon_data.startswith(PNG_HEADER):
             log.error(
-                u'"{}" is not a valid PNG image.'.format(
+                '"{}" is not a valid PNG image.'.format(
                     click.format_filename(icon.name)
                 )
             )
@@ -189,7 +186,7 @@ def main(
         parser = parsers.get_doctype(source)
         if parser is None:
             log.error(
-                u'"{}" does not contain a known documentation format.'.format(
+                '"{}" does not contain a known documentation format.'.format(
                     click.format_filename(source)
                 )
             )
@@ -200,9 +197,9 @@ def main(
     doc_parser = parser(doc_path=docset.docs)
     log.info(
         (
-            u"Converting "
+            "Converting "
             + click.style("{parser_name}", bold=True)
-            + u' docs from "{src}" to "{dst}".'
+            + ' docs from "{src}" to "{dst}".'
         ).format(
             parser_name=parser.name,
             src=click.format_filename(source, shorten=True),
@@ -211,7 +208,7 @@ def main(
     )
 
     with docset.db_conn:
-        log.info(u"Parsing documentation...")
+        log.info("Parsing documentation...")
         toc = patch_anchors(doc_parser, show_progressbar=not quiet)
         for entry in doc_parser.parse():
             docset.db_conn.execute(
@@ -224,9 +221,9 @@ def main(
         ).fetchone()[0]
         log.info(
             (
-                u"Added "
+                "Added "
                 + click.style("{count:,}", fg="green" if count > 0 else "red")
-                + u" index entries."
+                + " index entries."
             ).format(count=count)
         )
         toc.close()
@@ -235,8 +232,8 @@ def main(
         add_icon(icon_data, dest)
 
     if add_to_dash or add_to_global:
-        log.info(u"Adding to Dash.app...")
-        os.system(u'open -a dash "{}"'.format(dest))
+        log.info("Adding to Dash.app...")
+        os.system('open -a dash "{}"'.format(dest))
 
 
 def create_log_config(verbose, quiet):
@@ -288,7 +285,7 @@ def setup_paths(source, destination, name, add_to_global, force):
         shutil.rmtree(dest)
     elif dst_exists:
         log.error(
-            u'Destination path "{}" already exists.'.format(
+            'Destination path "{}" already exists.'.format(
                 click.format_filename(dest)
             )
         )
@@ -357,24 +354,14 @@ def add_icon(icon_data, dest):
         f.write(icon_data)
 
 
-if six.PY2:
-
-    def read_plist(full_path):
-        return plistlib.readPlist(full_path)
-
-    def write_plist(plist, full_path):
-        plistlib.writePlist(plist, full_path)
+def read_plist(full_path):
+    with open(full_path, "rb") as fp:
+        return plistlib.load(fp)
 
 
-else:
-
-    def read_plist(full_path):
-        with open(full_path, "rb") as fp:
-            return plistlib.load(fp)
-
-    def write_plist(plist, full_path):
-        with open(full_path, "wb") as fp:
-            plistlib.dump(plist, fp)
+def write_plist(plist, full_path):
+    with open(full_path, "wb") as fp:
+        plistlib.dump(plist, fp)
 
 
 if __name__ == "__main__":

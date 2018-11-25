@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import codecs
 import os
 
@@ -41,23 +39,23 @@ class TestInterSphinxParser(object):
             p._inv_to_entries(
                 {
                     "py:method": {
-                        u"some_method": (None, None, u"some_module.py", u"-")
+                        "some_method": (None, None, "some_module.py", "-")
                     },
                     "std:option": {
-                        u"--destination": (
-                            u"doc2dash",
-                            u"2.0",
-                            u"index.html#document-usage#cmdoption--"
-                            u"destination",
-                            u"-",
+                        "--destination": (
+                            "doc2dash",
+                            "2.0",
+                            "index.html#document-usage#cmdoption--"
+                            "destination",
+                            "-",
                         )
                     },
                     "std:constant": {
-                        u"SomeConstant": (
+                        "SomeConstant": (
                             None,
                             None,
-                            u"some_other_module.py",
-                            u"-",
+                            "some_other_module.py",
+                            "-",
                         )
                     },
                 }
@@ -66,17 +64,17 @@ class TestInterSphinxParser(object):
         assert set(
             [
                 ParserEntry(
-                    name=u"some_method", type=u"Method", path=u"some_module.py"
+                    name="some_method", type="Method", path="some_module.py"
                 ),
                 ParserEntry(
-                    name=u"--destination",
-                    type=u"Option",
-                    path=u"index.html#cmdoption--destination",
+                    name="--destination",
+                    type="Option",
+                    path="index.html#cmdoption--destination",
                 ),
                 ParserEntry(
-                    name=u"SomeConstant",
-                    type=u"Constant",
-                    path=u"some_other_module.py",
+                    name="SomeConstant",
+                    type="Constant",
+                    path="some_other_module.py",
                 ),
             ]
         ) == set(result)
@@ -100,14 +98,14 @@ class TestInterSphinxParser(object):
             p._inv_to_entries(
                 {
                     "py:method": {
-                        u"some_method": (None, None, u"some_module.py", u"-")
+                        "some_method": (None, None, "some_module.py", "-")
                     },
                     "std:constant": {
-                        u"SomeConstant": (
+                        "SomeConstant": (
                             None,
                             None,
-                            u"some_other_module.py",
-                            u"-",
+                            "some_other_module.py",
+                            "-",
                         )
                     },
                 }
@@ -115,9 +113,9 @@ class TestInterSphinxParser(object):
         )
         assert [
             ParserEntry(
-                name=u"SomeConstant",
-                type=u"Constant",
-                path=u"some_other_module.py",
+                name="SomeConstant",
+                type="Constant",
+                path="some_other_module.py",
             )
         ] == result
 
@@ -140,14 +138,14 @@ class TestInterSphinxParser(object):
             p._inv_to_entries(
                 {
                     "py:method": {
-                        u"some_method": (None, None, u"some_module.py", u"-")
+                        "some_method": (None, None, "some_module.py", "-")
                     }
                 }
             )
         )
         assert [
             ParserEntry(
-                name=u"!some_method!", type=u"Method", path=u"some_module.py"
+                name="!some_method!", type="Method", path="some_module.py"
             )
         ] == result
 
@@ -169,15 +167,15 @@ class TestInterSphinxParser(object):
             p._inv_to_entries(
                 {
                     "py:method": {
-                        u"some_method": (None, None, u"some_module.py", u"-")
+                        "some_method": (None, None, "some_module.py", "-")
                     },
                     "std:option": {
-                        u"--destination": (
-                            u"doc2dash",
-                            u"2.0",
-                            u"index.html#document-usage#cmdoption--"
-                            u"destination",
-                            u"-",
+                        "--destination": (
+                            "doc2dash",
+                            "2.0",
+                            "index.html#document-usage#cmdoption--"
+                            "destination",
+                            "-",
                         )
                     },
                 }
@@ -185,7 +183,7 @@ class TestInterSphinxParser(object):
         )
         assert [
             ParserEntry(
-                name=u"some_method", type=u"Method", path=u"some_module.py"
+                name="some_method", type="Method", path="some_module.py"
             )
         ] == result
 
@@ -205,17 +203,17 @@ class TestFindAndPatchEntry(object):
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
-                name=u"pyramid.config.Configurator.add_route",
-                type=u"Method",
-                anchor=u"pyramid.config.Configurator.add_route",
+                name="pyramid.config.Configurator.add_route",
+                type="Method",
+                anchor="pyramid.config.Configurator.add_route",
             ),
         )
 
         toc_link = soup(
-            u"a",
+            "a",
             attrs={
-                u"name": u"//apple_ref/cpp/Method/pyramid.config.Configurator."
-                u"add_route"
+                "name": "//apple_ref/cpp/Method/pyramid.config.Configurator."
+                "add_route"
             },
         )
 
@@ -226,13 +224,13 @@ class TestFindAndPatchEntry(object):
         Patching a module adds the TOC entry into the next <h1>.  Non-ASCII
         works.
         """
-        soup = BeautifulSoup(u"<h1>Some Module</h1>", "html.parser")
+        soup = BeautifulSoup("<h1>Some Module</h1>", "html.parser")
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
-                name=u"some_module",
-                type=u"M\xc3\xb6dule",
-                anchor=u"module-some_module",
+                name="some_module",
+                type="M\xc3\xb6dule",
+                anchor="module-some_module",
             ),
         )
         assert '<a name="//apple_ref' in str(soup)
@@ -249,6 +247,5 @@ class TestFindAndPatchEntry(object):
             soup = BeautifulSoup(fp, "html.parser")
 
         assert False is find_and_patch_entry(
-            soup,
-            TOCEntry(name=u"foo", type=u"Nothing", anchor=u"does-not-exist"),
+            soup, TOCEntry(name="foo", type="Nothing", anchor="does-not-exist")
         )

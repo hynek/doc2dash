@@ -1,11 +1,8 @@
-from __future__ import absolute_import, division, print_function
-
 import logging
 import os
 
 import attr
 
-from six import iteritems
 from sphinx.ext.intersphinx import InventoryFile
 from zope.interface import implementer
 
@@ -64,21 +61,20 @@ class InterSphinxParser(object):
         yield `ParserEntry`s.
         """
         with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
-            for pe in self._inv_to_entries(
+            yield from self._inv_to_entries(
                 InventoryFile.load(inv_f, "", os.path.join)
-            ):  # this is what Guido gave us `yield from` for :-|
-                yield pe
+            )
 
     def _inv_to_entries(self, inv):
         """
         Iterate over a dictionary as returned from Sphinx's object.inv parser
         and yield `ParserEntry`s.
         """
-        for type_key, inv_entries in iteritems(inv):
+        for type_key, inv_entries in inv.items():
             dash_type = self.convert_type(type_key)
             if dash_type is None:
                 continue
-            for key, data in iteritems(inv_entries):
+            for key, data in inv_entries.items():
                 entry = self.create_entry(dash_type, key, data)
                 if entry is not None:
                     yield entry

@@ -4,3 +4,4 @@ requires = ["setuptools", "wheel"]
 
 [tool.black]
 line-length = 79
+py36 = true

@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function
-
-import codecs
-import os
 import re
+
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
@@ -16,10 +14,9 @@ INSTALL_REQUIRES = [
     "beautifulsoup4",
     "click",
     "colorama",
-    "six",
     "zope.interface",
 ]
-EXTRAS_REQUIRE = {"tests": ["coverage", "mock", "pytest"]}
+EXTRAS_REQUIRE = {"tests": ["coverage", "pytest"]}
 EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
 
 PROJECT_URLS = {
@@ -37,15 +34,9 @@ CLASSIFIERS = [
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.4",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python",
     "Topic :: Documentation",
     "Topic :: Software Development :: Documentation",
@@ -56,37 +47,27 @@ CLASSIFIERS = [
 ###############################################################################
 
 
-here = os.path.abspath(os.path.dirname(__file__))
+here = Path(__file__).resolve().parent
+
+META_PATH = here / "src" / NAME / "__init__.py"
+META_FILE = META_PATH.read_text()
 
 
-def read(*parts):
-    """
-    Build an absolute path from *parts* and and return the contents of the
-    resulting file.  Assume UTF-8 encoding.
-    """
-    here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, *parts), "rb", "utf-8") as f:
-        return f.read()
+def read(path: Path) -> str:
+    return (here / path).read_text()
 
 
-try:
-    META_PATH
-except NameError:
-    META_PATH = os.path.join(here, "src", NAME, "__init__.py")
-
-META_FILE = read(META_PATH)
-
-
-def find_meta(meta):
+def find_meta(meta: str) -> str:
     """
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta), META_FILE, re.M
+        fr"^__{meta}__ = ['\"]([^'\"]*)['\"]", META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)
-    raise RuntimeError("Unable to find __{meta}__ string.".format(meta=meta))
+
+    raise RuntimeError(f"Unable to find __{meta}__ string.")
 
 
 VERSION = find_meta("version")
@@ -102,9 +83,9 @@ LONG = (
         re.S,
     ).group(1)
     + "\n\n`Full changelog "
-    + "<{url}en/stable/changelog.html>`_.\n\n"
+    + f"<{URL}en/stable/changelog.html>`_.\n\n"
     + read("AUTHORS.rst")
-).format(url=URL)
+)
 
 
 if __name__ == "__main__":

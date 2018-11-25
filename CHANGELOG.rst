@@ -3,6 +3,16 @@
 Changelog
 =========
 
+3.0.0 (UNRELEASED)
+------------------
+
+This version dropped every Python version older than 3.7.
+Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
+
+
+----
+
+
 2.3.0 (2018-11-24)
 ------------------
 

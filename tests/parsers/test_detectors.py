@@ -1,10 +1,8 @@
-from __future__ import absolute_import, division, print_function
-
 import os
 
-import pytest
+from unittest.mock import MagicMock
 
-from mock import MagicMock
+import pytest
 
 import doc2dash
 

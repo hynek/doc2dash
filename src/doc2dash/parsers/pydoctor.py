@@ -1,11 +1,8 @@
-from __future__ import absolute_import, division, print_function
-
 import codecs
 import logging
 import os
 
 import attr
-import six
 
 from bs4 import BeautifulSoup
 from zope.interface import implementer
@@ -62,21 +59,21 @@ class PyDoctorParser(object):
             ),
             "html.parser",
         )
-        for tag in soup.body.find_all(u"a"):
-            path = tag.get(u"href")
-            data_type = tag.get(u"data-type")
-            if path and data_type and not path.startswith(u"#"):
+        for tag in soup.body.find_all("a"):
+            path = tag.get("href")
+            data_type = tag.get("data-type")
+            if path and data_type and not path.startswith("#"):
                 name = tag.string
                 yield ParserEntry(
                     name=name,
-                    type=data_type.replace(u"Instance ", u""),
-                    path=six.text_type(path),
+                    type=data_type.replace("Instance ", ""),
+                    path=str(path),
                 )
 
     def find_and_patch_entry(self, soup, entry):
-        link = soup.find(u"a", attrs={"name": entry.anchor})
+        link = soup.find("a", attrs={"name": entry.anchor})
         if link:
-            tag = soup.new_tag(u"a")
+            tag = soup.new_tag("a")
             tag["name"] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
             link.insert_before(tag)
             return True

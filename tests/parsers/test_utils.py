@@ -1,10 +1,8 @@
-from __future__ import absolute_import, division, print_function
+from unittest.mock import patch
 
 import attr
 import pytest
-import six
 
-from mock import patch
 from zope.interface import implementer
 
 from doc2dash.parsers.utils import (
@@ -19,7 +17,7 @@ from doc2dash.parsers.utils import (
 @implementer(IParser)
 @attr.s
 class FakeParser(object):
-    doc_path = attr.ib(validator=attr.validators.instance_of(six.text_type))
+    doc_path = attr.ib(validator=attr.validators.instance_of(str))
     _succeed_patching = attr.ib(default=True)
     _patched_entries = attr.ib(default=attr.Factory(list))
 
@@ -45,8 +43,8 @@ def entries():
     Test `ParserEntry`s
     """
     return [
-        ParserEntry(name=u"foo", type=u"Method", path=u"bar.html#foo"),
-        ParserEntry(name=u"qux", type=u"Class", path=u"bar.html"),
+        ParserEntry(name="foo", type="Method", path="bar.html#foo"),
+        ParserEntry(name="qux", type="Class", path="bar.html"),
     ]
 
 
@@ -56,7 +54,7 @@ class TestPatchTOCAnchors(object):
         """
         Adding no entries does not cause an error.
         """
-        parser = FakeParser(doc_path=u"foo")
+        parser = FakeParser(doc_path="foo")
         toc = patch_anchors(parser, show_progressbar=progressbar)
         toc.close()
 
@@ -66,14 +64,14 @@ class TestPatchTOCAnchors(object):
         """
         foo = tmpdir.mkdir("foo")
         foo.join("bar.html").write("docs!")
-        parser = FakeParser(doc_path=six.text_type(foo))
+        parser = FakeParser(doc_path=str(foo))
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             print(e)
             toc.send(e)
         toc.close()
         assert [
-            TOCEntry(name=u"foo", type=u"Method", anchor=u"foo")
+            TOCEntry(name="foo", type="Method", anchor="foo")
         ] == parser._patched_entries
 
     def test_complains(self, entries, tmpdir):
@@ -82,9 +80,7 @@ class TestPatchTOCAnchors(object):
         """
         foo = tmpdir.mkdir("foo")
         foo.join("bar.html").write("docs!")
-        parser = FakeParser(
-            doc_path=six.text_type(foo), succeed_patching=False
-        )
+        parser = FakeParser(doc_path=str(foo), succeed_patching=False)
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             toc.send(e)
@@ -120,10 +116,5 @@ class TestHasFileWith(object):
         f.write(b"foo")
         f.chmod(0)
 
-        if six.PY2:
-            error = IOError
-        else:
-            error = PermissionError
-
-        with pytest.raises(error):
+        with pytest.raises(PermissionError):
             has_file_with("/", str(f), "foo")

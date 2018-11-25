@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import errno
 import logging
 import os
@@ -7,12 +5,12 @@ import shutil
 import sqlite3
 import sys
 
+from unittest.mock import MagicMock, patch
+
 import attr
 import pytest
-import six
 
 from click.testing import CliRunner
-from mock import MagicMock, patch
 from zope.interface import implementer
 
 import doc2dash
@@ -78,7 +76,7 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
             "type TEXT, path TEXT)"
         )
         return main.DocSet(
-            path=str(tmpdir), docs=u"data", plist=None, db_conn=db_conn
+            path=str(tmpdir), docs="data", plist=None, db_conn=db_conn
         )
 
     monkeypatch.chdir(tmpdir)
@@ -90,18 +88,16 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     @implementer(IParser)
     @attr.s
     class FakeParser(object):
-        doc_path = attr.ib(
-            validator=attr.validators.instance_of(six.text_type)
-        )
+        doc_path = attr.ib(validator=attr.validators.instance_of(str))
 
-        name = u"testtype"
+        name = "testtype"
 
         @staticmethod
         def detect(path):
             return True
 
         def parse(self):
-            yield ParserEntry(name=u"testmethod", type=u"cm", path=u"testpath")
+            yield ParserEntry(name="testmethod", type="cm", path="testpath")
 
         def find_and_patch_entry(self, soup, entry):
             pass
