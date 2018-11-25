@@ -1,5 +1,5 @@
 ================================================
-doc2dash: Create docsets for Dash.app and Clones
+doc2dash: Create Docsets for Dash.app and Clones
 ================================================
 
 Release v\ |release| (:doc:`What's new? <changelog>`).

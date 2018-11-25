@@ -5,17 +5,13 @@ The latest stable version can be always found on PyPI_.
 
 .. warning::
 
-   Since ``doc2dash`` is an application, it has hard-coded dependency versions.
-   I strongly discourage from installing it into your global ``site-packages`` because it will inevitably lead to conflicts_.
+   I strongly discourage from installing ``doc2dash`` into your global ``site-packages`` because it will inevitably lead to conflicts_.
    Either use pipsi_ or create a virtualenv_ by hand.
 
 
-``doc2dash`` runs on Python 2.7, and 3.4+, and PyPy.
-Both Linux and macOS are supported although certain features are only available on macOS.
-
-.. note::
-
-   For best performance when converting large pieces documentation, I *strongly* recommend using PyPy as the interpreter of choice.
+As of version 3.0, ``doc2dash`` only runs on Python 3.7.
+If you need to run it on an older Python version, use one of the 2.x releases that are available on PyPI_.
+All platforms that run Python are supported although certain features are only available on macOS.
 
 
 .. _clones:
@@ -29,7 +25,7 @@ Other alternatives have been developed in cooperation with Dash.app's developer 
 
 - `helm-dash <https://github.com/areina/helm-dash>`_ for Emacs,
 - `velocity <http://velocity.silverlakesoftware.com/>`_ for Windows,
-- and `zeal <https://zealdocs.org/>`_ for Linux and Windows.
+- and `zeal <https://zealdocs.org/>`_ for Linux, macOS, and Windows.
 
 ``doc2dash`` is only tested against the original Dash.app though.
 

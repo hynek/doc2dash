@@ -1,4 +1,4 @@
-doc2dash: Create docsets for Dash.app and clones
+doc2dash: Create Docsets for Dash.app and Clones
 ================================================
 
 .. image:: https://readthedocs.org/projects/doc2dash/badge/?version=stable
