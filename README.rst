@@ -25,7 +25,7 @@ If you’ve never heard of Dash.app and its likes, you’re missing out:
 together with ``doc2dash`` it’s all your API documentation at your fingertips – even when you're offline!
 
 ``doc2dash``\ ’s documentation lives at `Read the Docs`_, the code on GitHub_.
-It’s tested on Python 3.7 (the fully functional 2.x release line on PyPI also supports Python 2.7, 3.4–3.6, and PyPy).
+It’s tested on Python 3.7 (the fully functional 2.x release line `on PyPI`_ also supports Python 2.7, 3.4–3.6, and PyPy).
 Both Linux and macOS are tested although certain features are only available on macOS.
 
 
@@ -33,3 +33,4 @@ Both Linux and macOS are tested although certain features are only available on 
 .. _`Dash.app`: https://kapeli.com/dash/
 .. _`Read the Docs`: https://doc2dash.readthedocs.io/
 .. _`GitHub`:  https://github.com/hynek/doc2dash
+.. _`on PyPI`: https://pypi.org/project/doc2dash/#history
