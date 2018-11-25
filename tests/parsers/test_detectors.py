@@ -17,7 +17,7 @@ def test_get_doctype(monkeypatch):
     assert doc2dash.parsers.get_doctype("foo") is dt
 
 
-class TestDetectors(object):
+class TestDetectors:
     @pytest.mark.skipif(
         not os.path.exists("test_data"), reason="No test_data present."
     )

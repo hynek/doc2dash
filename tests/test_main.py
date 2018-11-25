@@ -11,7 +11,6 @@ import attr
 import pytest
 
 from click.testing import CliRunner
-from zope.interface import implementer
 
 import doc2dash
 
@@ -30,7 +29,7 @@ def runner():
     return CliRunner()
 
 
-class TestArguments(object):
+class TestArguments:
     def test_fails_with_unknown_icon(self, runner, tmpdir, monkeypatch):
         """
         Fail if icon is not PNG.
@@ -85,9 +84,8 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     os.mkdir("foo")
     monkeypatch.setattr(main, "prepare_docset", fake_prepare)
 
-    @implementer(IParser)
     @attr.s
-    class FakeParser(object):
+    class FakeParser(IParser):
         doc_path = attr.ib(validator=attr.validators.instance_of(str))
 
         name = "testtype"
@@ -176,7 +174,7 @@ Adding to Dash.app...
     assert 2 == result.exit_code
 
 
-class TestSetupPaths(object):
+class TestSetupPaths:
     def test_works(self, tmpdir):
         """
         Integration tests with fake paths.
@@ -284,7 +282,7 @@ class TestSetupPaths(object):
         )
 
 
-class TestPrepareDocset(object):
+class TestPrepareDocset:
     def test_plist_creation(self, monkeypatch, tmpdir):
         """
         All arguments should be reflected in the plist.
@@ -414,7 +412,7 @@ class TestPrepareDocset(object):
         }
 
 
-class TestSetupLogging(object):
+class TestSetupLogging:
     @pytest.mark.parametrize(
         "verbose, quiet, expected",
         [

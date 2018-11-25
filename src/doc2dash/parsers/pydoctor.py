@@ -5,7 +5,6 @@ import os
 import attr
 
 from bs4 import BeautifulSoup
-from zope.interface import implementer
 
 from .utils import APPLE_REF_TEMPLATE, IParser, ParserEntry, has_file_with
 
@@ -26,9 +25,8 @@ PYDOCTOR_HEADER_REALLY_OLD = b"""\
       <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a>"""
 
 
-@implementer(IParser)
 @attr.s(hash=True)
-class PyDoctorParser(object):
+class PyDoctorParser(IParser):
     """
     Parser for pydoctor-based documentation: mainly Twisted.
     """

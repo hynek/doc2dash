@@ -3,8 +3,6 @@ from unittest.mock import patch
 import attr
 import pytest
 
-from zope.interface import implementer
-
 from doc2dash.parsers.utils import (
     IParser,
     ParserEntry,
@@ -14,9 +12,8 @@ from doc2dash.parsers.utils import (
 )
 
 
-@implementer(IParser)
 @attr.s
-class FakeParser(object):
+class FakeParser(IParser):
     doc_path = attr.ib(validator=attr.validators.instance_of(str))
     _succeed_patching = attr.ib(default=True)
     _patched_entries = attr.ib(default=attr.Factory(list))
@@ -48,7 +45,7 @@ def entries():
     ]
 
 
-class TestPatchTOCAnchors(object):
+class TestPatchTOCAnchors:
     @pytest.mark.parametrize("progressbar", [True, False])
     def test_with_empty_db(self, progressbar):
         """
@@ -89,7 +86,7 @@ class TestPatchTOCAnchors(object):
             assert mock.call_count == 1
 
 
-class TestHasFileWith(object):
+class TestHasFileWith:
     @pytest.mark.parametrize(
         "content,has", [(b"xxxfooxxx", True), (b"xxxbarxxx", False)]
     )

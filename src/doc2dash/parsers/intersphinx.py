@@ -4,7 +4,6 @@ import os
 import attr
 
 from sphinx.ext.intersphinx import InventoryFile
-from zope.interface import implementer
 
 from . import types
 from .utils import APPLE_REF_TEMPLATE, IParser, ParserEntry, has_file_with
@@ -36,9 +35,8 @@ INV_TO_TYPE = {
 }
 
 
-@implementer(IParser)
 @attr.s(hash=True)
-class InterSphinxParser(object):
+class InterSphinxParser(IParser):
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for
     the intersphinx extension.

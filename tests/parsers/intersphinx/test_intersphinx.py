@@ -2,26 +2,19 @@ import codecs
 import os
 
 from bs4 import BeautifulSoup
-from zope.interface.verify import verifyObject
 
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
     find_and_patch_entry,
     inv_entry_to_path,
 )
-from doc2dash.parsers.utils import IParser, ParserEntry, TOCEntry
+from doc2dash.parsers.utils import ParserEntry, TOCEntry
 
 
 HERE = os.path.dirname(__file__)
 
 
-class TestInterSphinxParser(object):
-    def test_interface(self):
-        """
-        InterSphinxParser fully implements IParser.
-        """
-        verifyObject(IParser, InterSphinxParser(doc_path="foo"))
-
+class TestInterSphinxParser:
     def test_parses(self):
         """
         Parsing of the example objects.inv in the current directory does not
@@ -188,7 +181,7 @@ class TestInterSphinxParser(object):
         ] == result
 
 
-class TestFindAndPatchEntry(object):
+class TestFindAndPatchEntry:
     def test_patch_method(self):
         """
         Patching a method adds a TOC entry.

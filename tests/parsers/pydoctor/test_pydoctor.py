@@ -4,23 +4,13 @@ import os
 from unittest.mock import mock_open, patch
 
 from bs4 import BeautifulSoup
-from zope.interface.verify import verifyObject
 
 from doc2dash.parsers import types
 from doc2dash.parsers.pydoctor import PyDoctorParser
-from doc2dash.parsers.utils import IParser, ParserEntry, TOCEntry
+from doc2dash.parsers.utils import ParserEntry, TOCEntry
 
 
 HERE = os.path.dirname(__file__)
-
-
-class TestPyDoctorParser(object):
-    def test_interface(self):
-        """
-        PyDoctorParser fully implements IParser.
-        """
-        verifyObject(IParser, PyDoctorParser(doc_path="foo"))
-
 
 EXAMPLE_PARSE_RESULT = [
     ParserEntry(name=t[0], type=t[1], path=t[2])

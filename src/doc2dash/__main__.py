@@ -294,7 +294,7 @@ def setup_paths(source, destination, name, add_to_global, force):
 
 
 @attr.s(hash=True)
-class DocSet(object):
+class DocSet:
     """
     Summary of docset path and parameters.
     """
