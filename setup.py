@@ -55,12 +55,12 @@ def find_meta(meta: str) -> str:
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        fr"^__{meta}__ = ['\"]([^'\"]*)['\"]", META_FILE, re.M
+        r"^__%s__ = ['\"]([^'\"]*)['\"]" % (meta,), META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)
 
-    raise RuntimeError(f"Unable to find __{meta}__ string.")
+    raise RuntimeError("Unable to find __%s__ string." % (meta,))
 
 
 VERSION = find_meta("version")
