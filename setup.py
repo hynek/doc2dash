@@ -76,7 +76,7 @@ LONG = (
         re.S,
     ).group(1)
     + "\n\n`Full changelog "
-    + f"<{URL}en/stable/changelog.html>`_.\n\n"
+    + "<%sen/stable/changelog.html>`_.\n\n" % (URL,)
     + read("AUTHORS.rst")
 )
 
