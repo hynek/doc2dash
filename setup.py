@@ -87,6 +87,7 @@ if __name__ == "__main__":
         version=VERSION,
         description=find_meta("description"),
         long_description=LONG,
+        long_description_content_type="text/x-rst",
         url=URL,
         project_urls=PROJECT_URLS,
         license=find_meta("license"),

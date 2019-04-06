@@ -54,7 +54,8 @@ Valid ``OPTIONS`` are the following:
 
 .. option:: -j, --enable-js
 
-    Enable bundled and external javascript.
+    Enable bundled and external JavaScript.
+    This is for example necessary for `MathJax <https://www.mathjax.org>`_ to render.
 
 .. option:: -u, --online-redirect-url
 
