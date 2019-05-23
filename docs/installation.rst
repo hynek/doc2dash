@@ -6,7 +6,7 @@ The latest stable version can be always found on PyPI_.
 .. warning::
 
    I strongly discourage from installing ``doc2dash`` into your global ``site-packages`` because it will inevitably lead to conflicts_.
-   Either use pipsi_ or create a virtualenv_ by hand.
+   Either use pipx_ or create a virtualenv_ by hand.
 
 
 As of version 3.0, ``doc2dash`` only runs on Python 3.7.
@@ -33,6 +33,6 @@ Other alternatives have been developed in cooperation with Dash.app's developer 
 .. _pip: https://pip.pypa.io/en/latest/installing.html
 .. _PyPI: https://pypi.org/project/doc2dash/
 .. _`Dash.app`: https://kapeli.com/dash/
-.. _pipsi: https://github.com/mitsuhiko/pipsi
+.. _pipx: https://pipxproject.github.io/pipx/
 .. _virtualenv: https://virtualenv.readthedocs.io/
 .. _conflicts: https://hynek.me/articles/virtualenv-lives/
