@@ -123,7 +123,7 @@ class TestInterSphinxParser:
             def create_entry(self, dash_type, key, inv_entry):
                 path_str = inv_entry_to_path(inv_entry)
                 return ParserEntry(
-                    name="!%s!" % key, type=dash_type, path=path_str
+                    name=f"!{key}!", type=dash_type, path=path_str
                 )
 
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))

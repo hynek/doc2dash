@@ -47,18 +47,16 @@ class ImportableType(click.ParamType):
         path, dot, name = value.rpartition(".")
 
         if not dot:
-            self.fail('%r is not an import path: does not contain "."' % value)
+            self.fail(f'{value!r} is not an import path: does not contain "."')
 
         try:
             mod = importlib.import_module(path)
         except ImportError:
-            self.fail("Could not import module %r" % path)
+            self.fail(f"Could not import module {path!r}")
         try:
             return getattr(mod, name)
         except AttributeError:
-            self.fail(
-                "Failed to get attribute %r from module %r" % (name, path)
-            )
+            self.fail(f"Failed to get attribute {name!r} from module {path!r}")
 
 
 IMPORTABLE = ImportableType()
@@ -233,7 +231,7 @@ def main(
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash.app...")
-        os.system('open -a dash "{}"'.format(dest))
+        os.system(f'open -a dash "{dest}"')
 
 
 def create_log_config(verbose, quiet):
@@ -285,9 +283,7 @@ def setup_paths(source, destination, name, add_to_global, force):
         shutil.rmtree(dest)
     elif dst_exists:
         log.error(
-            'Destination path "{}" already exists.'.format(
-                click.format_filename(dest)
-            )
+            f'Destination path "{click.format_filename(dest)}" already exists.'
         )
         raise SystemExit(errno.EEXIST)
     return source, dest, name
