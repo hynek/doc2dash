@@ -1,3 +1,5 @@
+# Pick from https://kapeli.com/docsets#supportedentrytypes
+
 ATTRIBUTE = "Attribute"
 CLASS = "Class"
 CONSTANT = "Constant"
