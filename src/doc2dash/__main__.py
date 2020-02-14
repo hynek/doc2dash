@@ -3,6 +3,8 @@ import importlib
 import logging
 import logging.config
 import os
+import pathlib
+import platform
 import plistlib
 import shutil
 import sqlite3
@@ -16,9 +18,18 @@ from .parsers.utils import patch_anchors
 
 log = logging.getLogger(__name__)
 
-DEFAULT_DOCSET_PATH = os.path.expanduser(
-    "~/Library/Application Support/doc2dash/DocSets"
-)
+
+if platform.system() == "Linux":
+    _DOCSETS = ".local/share/Zeal/Zeal/docsets"
+
+elif platform.system() == "Windows":
+    _DOCSETS = "AppData/Local/Zeal/Zeal/docsets"
+
+else:
+    _DOCSETS = "Library/Application Support/doc2dash/DocSets"
+
+DEFAULT_DOCSET_PATH = os.path.expanduser(pathlib.Path().home() / _DOCSETS)
+
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 
 
@@ -231,7 +242,9 @@ def main(
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash.app...")
-        os.system(f'open -a dash "{dest}"')
+
+        if platform.system() == "Darwin":
+            os.system(f'open -a dash "{dest}"')
 
 
 def create_log_config(verbose, quiet):

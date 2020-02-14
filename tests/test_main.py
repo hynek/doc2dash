@@ -1,6 +1,7 @@
 import errno
 import logging
 import os
+import platform
 import shutil
 import sqlite3
 import sys
@@ -128,7 +129,10 @@ Adding to Dash.app...
         )
     assert expected.format(name="bah") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "./bah.docset"',) == system.call_args[0]
+    if platform.system() == "Darwin":
+        assert ('open -a dash "./bah.docset"',) == system.call_args[0]
+    else:
+        assert None is system.call_args
 
     # alternative 2: patch doc2dash.parsers
     monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
@@ -138,7 +142,11 @@ Adding to Dash.app...
         )
     assert expected.format(name="bar") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "./bar.docset"',) == system.call_args[0]
+
+    if platform.system() == "Darwin":
+        assert ('open -a dash "./bar.docset"',) == system.call_args[0]
+    else:
+        assert None is system.call_args
 
     # Again, just without adding and icon.
     with patch("os.system") as system:
