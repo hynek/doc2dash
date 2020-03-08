@@ -30,7 +30,7 @@ jobs:
       - name: "Run tox targets for ${{ matrix.python-version }}"
         run: "python -m tox"
 
-install-dev:
+  install-dev:
     strategy:
       matrix:
         os: ["windows-latest", "macos-latest"]
