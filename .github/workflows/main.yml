@@ -79,4 +79,4 @@ jobs:
       - name: "Install in dev mode"
         run: "python -m pip install -e .[dev]"
       - name: "Import package"
-        run: "python -c 'import pem; print(pem.__version__)'"
+        run: "python -c 'import doc2dash; print(doc2dash.__version__)'"
