@@ -9,7 +9,7 @@ The latest stable version can be always found on PyPI_.
    Either use pipx_ or create a virtualenv_ by hand.
 
 
-As of version 3.0, ``doc2dash`` only runs on Python 3.7.
+As of version 3.0, ``doc2dash`` is only tested on Python 3.8 and later.
 If you need to run it on an older Python version, use one of the 2.x releases that are available on PyPI_.
 All platforms that run Python are supported although certain features are only available on macOS.
 

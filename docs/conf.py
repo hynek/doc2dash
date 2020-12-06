@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # doc2dash documentation build configuration file, created by
 # sphinx-quickstart on Wed Aug 13 20:09:42 2014.

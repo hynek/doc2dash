@@ -6,7 +6,7 @@ Changelog
 3.0.0 (UNRELEASED)
 ------------------
 
-This version dropped every Python version older than 3.7.
+This version dropped every Python version older than 3.8.
 Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
 
 - ``zope.interface`` is not a dependency anymore.

@@ -97,7 +97,7 @@ class InterSphinxParser(IParser):
         path_str = inv_entry_to_path(inv_entry)
         return ParserEntry(name=key, type=dash_type, path=path_str)
 
-    def find_and_patch_entry(self, soup, entry):  # pragma: nocover
+    def find_and_patch_entry(self, soup, entry):  # pragma: no cover
         return find_and_patch_entry(soup, entry)
 
 

@@ -28,8 +28,8 @@ CLASSIFIERS = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python",
     "Topic :: Documentation",
@@ -56,12 +56,12 @@ def find_meta(meta: str) -> str:
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        r"^__%s__ = ['\"]([^'\"]*)['\"]" % (meta,), META_FILE, re.M
+        fr"^__{meta}__ = ['\"]([^'\"]*)['\"]", META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)
 
-    raise RuntimeError("Unable to find __%s__ string." % (meta,))
+    raise RuntimeError(f"Unable to find __{meta}__ string.")
 
 
 VERSION = find_meta("version")
@@ -77,7 +77,7 @@ LONG = (
         re.S,
     ).group(1)
     + "\n\n`Full changelog "
-    + "<%sen/stable/changelog.html>`_.\n\n" % (URL,)
+    + f"<{URL}en/stable/changelog.html>`_.\n\n"
     + read("AUTHORS.rst")
 )
 
@@ -100,4 +100,5 @@ if __name__ == "__main__":
         install_requires=INSTALL_REQUIRES,
         extras_require=EXTRAS_REQUIRE,
         classifiers=CLASSIFIERS,
+        options={"bdist_wheel": {"universal": "1"}},
     )

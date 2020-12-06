@@ -54,23 +54,23 @@ class TestInterSphinxParser:
                 }
             )
         )
-        assert set(
-            [
-                ParserEntry(
-                    name="some_method", type="Method", path="some_module.py"
-                ),
-                ParserEntry(
-                    name="--destination",
-                    type="Option",
-                    path="index.html#cmdoption--destination",
-                ),
-                ParserEntry(
-                    name="SomeConstant",
-                    type="Constant",
-                    path="some_other_module.py",
-                ),
-            ]
-        ) == set(result)
+        assert {
+            ParserEntry(
+                name="some_method",
+                type="Method",
+                path="some_module.py",
+            ),
+            ParserEntry(
+                name="--destination",
+                type="Option",
+                path="index.html#cmdoption--destination",
+            ),
+            ParserEntry(
+                name="SomeConstant",
+                type="Constant",
+                path="some_other_module.py",
+            ),
+        } == set(result)
 
     def test_convert_type_override(self):
         """
@@ -84,7 +84,7 @@ class TestInterSphinxParser:
                 if inv_type == "py:method":
                     # hide method entries
                     return
-                return super(MyInterSphinxParser, self).convert_type(inv_type)
+                return super().convert_type(inv_type)
 
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
@@ -151,9 +151,7 @@ class TestInterSphinxParser:
             def create_entry(self, dash_type, key, inv_entry):
                 if dash_type == "Option":
                     return
-                return super(MyInterSphinxParser, self).create_entry(
-                    dash_type, key, inv_entry
-                )
+                return super().create_entry(dash_type, key, inv_entry)
 
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))
         result = list(

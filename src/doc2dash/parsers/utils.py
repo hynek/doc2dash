@@ -94,7 +94,7 @@ def patch_anchors(parser, show_progressbar):
     files = defaultdict(list)
     try:
         while True:
-            pentry = (yield)
+            pentry = yield
             try:
                 fname, anchor = pentry.path.split("#")
                 files[fname].append(
@@ -140,7 +140,7 @@ def has_file_with(path, filename, content):
     try:
         with open(os.path.join(path, filename), "rb") as f:
             return content in f.read()
-    except IOError as e:
+    except OSError as e:
         if e.errno == errno.ENOENT:
             return False
         else:
