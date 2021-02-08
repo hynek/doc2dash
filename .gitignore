@@ -1,11 +1,4 @@
-.coverage
-.coverage.*
-doc2dash.egg-info
 test_data
 *.docset
-*.pyc
-dist
-.cache
-.tox
-_build
-.pytest_cache/
+doc2dash
+!cmd/doc2dash/
