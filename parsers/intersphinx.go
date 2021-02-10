@@ -9,10 +9,12 @@ import (
 	"io"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
 
 	"github.com/ryboe/q"
+	"golang.org/x/net/html"
 )
 
 // IntersphinxParser parses Sphinx-style objects.inv-indexed documentation.
@@ -34,7 +36,7 @@ func NewSphinxParser(dirName string) (*IntersphinxParser, error) {
 		return nil, ErrNotMine
 	}
 
-	f, err := os.Open(path.Join(dirName, "objects.inv"))
+	f, err := os.Open(filepath.Join(dirName, "objects.inv"))
 	if err != nil {
 		return nil, err
 	}
@@ -89,6 +91,30 @@ func (sp *IntersphinxParser) StartParsing(ctx context.Context) (<-chan *DocEntry
 	}()
 
 	return ch, errc, nil
+}
+
+// Patch parses fileIn, injects docEntries and writes the result to fileOut.
+func (sp *IntersphinxParser) Patch(
+	fileIn io.Reader,
+	fileOut *bufio.Writer,
+	docEntries []DocEntry,
+) error {
+	z := html.NewTokenizer(fileIn)
+	for {
+		tt := z.Next()
+		if tt == html.ErrorToken {
+			// ...
+			break
+		}
+		if tt == html.StartTagToken {
+			t := z.Token()
+			if t.Data == "a" { // TODO: && needToPatch ->
+				q.Q(t.Attr)
+				fmt.Fprintf(fileOut, AnchorTmpl, "XXX", "YYY")
+			}
+		}
+		fileOut.WriteString(string(z.Raw()))
+	}
 }
 
 // Close closes the underlying file.

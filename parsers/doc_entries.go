@@ -1,5 +1,8 @@
 package parsers
 
+// AnchorTmpl is a template string for Dash.app ToC anchors.
+const AnchorTmpl = `<a name="//apple_ref/cpp/%s/%s" class="dashAnchor"></a>`
+
 // DocEntry is a documentation entry with a link.
 type DocEntry struct {
 	Name   string

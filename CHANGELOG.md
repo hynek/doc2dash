@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
   Binaries for all major platforms will be provided.
 - All documentation switched from _reStructuredText_ to _Markdown_.
+- The version scheme switched from Hynek'sGutFeelingVer to CalVer.
 
 
 ### Removed

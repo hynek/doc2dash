@@ -54,6 +54,10 @@ func (idb *IndexDB) AddDocEntry(de *parsers.DocEntry) error {
 	return err
 }
 
+func (idb *IndexDB) IndexedFiles() ([]string, error) {
+	// select distinct path
+}
+
 // Close closes all resources.
 func (idb *IndexDB) Close() {
 	idb.insertStmt.Close()

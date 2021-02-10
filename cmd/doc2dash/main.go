@@ -171,7 +171,10 @@ func run(
 		}
 	}
 
-	fmt.Println(<-errc)
+	if err = <-errc; err != nil {
+		return fmt.Errorf("parsing failed: %w", err)
+	}
+
 	// fmt.Println(src, dest, force, icon, indexPage, addToDash, quiet, verbose)
 	fmt.Println(numSym, name)
 

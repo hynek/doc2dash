@@ -9,4 +9,5 @@ require (
 	github.com/otiai10/copy v1.4.2
 	github.com/ryboe/q v1.0.12
 	github.com/spf13/pflag v1.0.5
+	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
 )
