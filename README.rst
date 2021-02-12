@@ -5,11 +5,11 @@ doc2dash: Create Docsets for Dash.app and Clones
    :target: https://doc2dash.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
 
-.. image:: https://github.com/hynek/doc2dash/workflows/CI/badge.svg?branch=master
+.. image:: https://github.com/hynek/doc2dash/workflows/CI/badge.svg?branch=main
    :target: https://github.com/hynek/doc2dash/actions?workflow=CI
    :alt: CI Status
 
-.. image:: https://codecov.io/github/hynek/doc2dash/branch/master/graph/badge.svg
+.. image:: https://codecov.io/github/hynek/doc2dash/branch/main/graph/badge.svg
    :target: https://codecov.io/github/hynek/doc2dash
    :alt: Test Coverage
 

@@ -33,8 +33,8 @@ Thank you for considering to contribute to ``doc2dash``!
 .. _`PEP 8`: https://www.python.org/dev/peps/pep-0008/
 .. _`PEP 257`: https://www.python.org/dev/peps/pep-0257/
 .. _`good test docstrings`: https://jml.io/pages/test-docstrings.html
-.. _`Code of Conduct`: https://github.com/hynek/doc2dash/blob/master/CODE_OF_CONDUCT.rst
-.. _changelog: https://github.com/hynek/doc2dash/blob/master/CHANGELOG.rst
+.. _`Code of Conduct`: https://github.com/hynek/doc2dash/blob/main/CODE_OF_CONDUCT.rst
+.. _changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.rst
 .. _`tox`: https://testrun.org/tox/
 .. _`CI`: https://github.com/hynek/doc2dash/actions
 .. _pyenv: https://github.com/pyenv/pyenv
