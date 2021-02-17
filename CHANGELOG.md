@@ -79,7 +79,7 @@ If necessary, there *may* be more 2.3.x bugfix releases.
 
 ## [2.0.0](https://github.com/hynek/doc2dash/compare/1.2.1...2.0.0) - 2014-08-14
 
-- Added a new parser for Sphinx documentation that uses [intersphinx](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html) files that are machine readable.
+- Added a new parser for Sphinx documentation that uses [intersphinx](https://www.sphinx-doc.org/en/3.x/usage/extensions/intersphinx.html) files that are machine readable.
   That should lead to more reliable parsing and a better deduction of symbol types.
   [\#28](https://github.com/hynek/doc2dash/issues/28)
 - Added Sphinx-based documentation.
