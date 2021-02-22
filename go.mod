@@ -6,8 +6,8 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/otiai10/copy v1.4.2
-	github.com/ryboe/q v1.0.12
+	github.com/otiai10/copy v1.5.0
+	github.com/ryboe/q v1.0.13
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
+	golang.org/x/net v0.0.0-20210220033124-5f55cee0dc0d
 )

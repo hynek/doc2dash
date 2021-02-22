@@ -50,6 +50,8 @@ const plistTmpl = `<?xml version="1.0" encoding="UTF-8"?>
 	<string>%s</string>
 	<key>isDashDocset</key>
 	<true/>
+	<key>DashDocSetFamily</key>
+	<string>dashtoc</string>
 </dict>
 </plist>`
 
@@ -173,6 +175,23 @@ func run(
 
 	if err = <-errc; err != nil {
 		return fmt.Errorf("parsing failed: %w", err)
+	}
+
+	toPatch, err := db.IndexedFiles()
+	if err != nil {
+		return fmt.Errorf("reading indexed files failed: %w", err)
+	}
+
+	for _, file := range toPatch {
+		lt, err := db.DocEntriesForFile(file)
+		if err != nil {
+			return fmt.Errorf("reading doc entries failed: %w", err)
+		}
+
+		err = doc2dash.PatchFile(filepath.Join(pDocuments, file), lt)
+		if err != nil {
+			return fmt.Errorf("could not patch file: %w", err)
+		}
 	}
 
 	// fmt.Println(src, dest, force, icon, indexPage, addToDash, quiet, verbose)
