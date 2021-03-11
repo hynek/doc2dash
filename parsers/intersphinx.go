@@ -97,7 +97,7 @@ func (sp *IntersphinxParser) Close() {
 	sp.objInv.Close()
 }
 
-var roleToType = map[string]string{
+var roleToType = map[string]DocEntryType{
 	"attribute":    EntryAttribute,
 	"class":        EntryClass,
 	"classmethod":  EntryMethod,
@@ -157,7 +157,7 @@ func makeEntry(l string) *DocEntry {
 
 	return &DocEntry{
 		Name:   name,
-		Type:   DocEntryType(roleToType[ts[len(ts)-1]]),
+		Type:   roleToType[ts[len(ts)-1]],
 		Path:   path,
 		Anchor: anchor,
 	}
