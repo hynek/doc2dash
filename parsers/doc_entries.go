@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 package parsers
 
 // AnchorTmpl is a template string for Dash.app ToC anchors.
