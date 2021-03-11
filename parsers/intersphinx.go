@@ -44,11 +44,9 @@ func NewSphinxParser(dirName string) (*IntersphinxParser, error) {
 
 	pn, ver, err := parseHeader(r)
 	if err != nil {
-		return nil, fmt.Errorf(
-			"%w: can't parse header: %w",
-			ErrInvalidFormat,
-			err,
-		)
+		return nil, &InvalidFormatError{
+			fmt.Errorf("can't parse header: %w", err),
+		}
 	}
 
 	zr, err := zlib.NewReader(r)
