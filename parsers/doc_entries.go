@@ -18,6 +18,7 @@ type DocEntry struct {
 // for the official list.
 type DocEntryType string
 
+// Entries for DocEntry.Type
 const (
 	EntryAnnotation  DocEntryType = "Annotation"
 	EntryAttribute   DocEntryType = "Attribute"
