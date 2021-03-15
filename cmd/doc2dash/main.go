@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"image/png"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -16,6 +17,7 @@ import (
 	"github.com/hynek/doc2dash/parsers"
 	"github.com/mitchellh/go-homedir"
 	dirCopy "github.com/otiai10/copy"
+	"github.com/ryboe/q"
 	flag "github.com/spf13/pflag"
 )
 
@@ -40,23 +42,6 @@ func checkIcon(p string) error {
 	return nil
 }
 
-const plistTmpl = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>CFBundleIdentifier</key>
-	<string>%s</string>
-	<key>CFBundleName</key>
-	<string>%s</string>
-	<key>DocSetPlatformFamily</key>
-	<string>%s</string>
-	<key>isDashDocset</key>
-	<true/>
-	<key>DashDocSetFamily</key>
-	<string>dashtoc</string>
-</dict>
-</plist>`
-
 func run(
 	src string,
 	dest string,
@@ -75,8 +60,7 @@ func run(
 	}
 
 	// Check before we start doing expensive work.
-	err := checkIcon(icon)
-	if err != nil {
+	if err := checkIcon(icon); err != nil {
 		return fmt.Errorf("couldn't open icon: %w", err)
 	}
 
@@ -133,17 +117,11 @@ func run(
 		return fmt.Errorf("can't create docset directory: %w", err)
 	}
 
-	err = os.WriteFile(
-		filepath.Join(pContents, "Info.plist"),
-		[]byte(fmt.Sprintf(plistTmpl, name, name, name)),
-		0600,
-	)
-	if err != nil {
-		return fmt.Errorf("can't create plist file: %w", err)
+	if err = doc2dash.WriteInfoPlistToDir(pContents, name); err != nil {
+		return fmt.Errorf("can't create Plist metadata: %w", err)
 	}
 
-	err = dirCopy.Copy(src, pDocuments)
-	if err != nil {
+	if err = dirCopy.Copy(src, pDocuments); err != nil {
 		return fmt.Errorf("can't copy documentation tree into docset: %w", err)
 	}
 
@@ -198,6 +176,17 @@ func run(
 
 	// fmt.Println(src, dest, force, icon, indexPage, addToDash, quiet, verbose)
 	fmt.Println(numSym, name)
+
+	if addToDash {
+		cmd := exec.CommandContext(ctx, "open", "-a", "Dash", basePath)
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+
+		err = cmd.Run()
+		q.Q(err)
+		q.Q(dest)
+		return err
+	}
 
 	return nil
 }
@@ -307,7 +296,7 @@ func main() {
 		*force,
 		*icon,
 		*indexPage,
-		*addToDash,
+		*addToDash || *addToGlobal,
 		*quiet,
 		*verbose,
 		*onlineRedirectURL,
