@@ -19,7 +19,8 @@ type docSetMetaData struct {
 	DashDocSetFamily     string
 }
 
-// WriteInfoPlistToDir writes an appropriate plist to dir, based on arguments.
+// WriteInfoPlistToDir writes an appropriate Info.plist to dir, based on
+// the remaining arguments.
 func WriteInfoPlistToDir(dir string, name string) error {
 	path := filepath.Join(dir, "Info.plist")
 
