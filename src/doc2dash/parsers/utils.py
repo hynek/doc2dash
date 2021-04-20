@@ -51,7 +51,7 @@ class IParser(metaclass=abc.ABCMeta):
 
         :param soup: A soup to patch.
         :type soup: bs4.BeautifulSoup
-        :param entry: A table of contens entry that has to be patched.
+        :param entry: A table of contents entry that has to be patched.
         :type entry: TOCEntry
         """
 
