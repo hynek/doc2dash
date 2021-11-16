@@ -12,23 +12,33 @@ from .utils import APPLE_REF_TEMPLATE, IParser, ParserEntry, has_file_with
 log = logging.getLogger(__name__)
 
 
+# https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html
+# ->
+# https://kapeli.com/docsets#supportedentrytypes
 INV_TO_TYPE = {
     "attribute": types.ATTRIBUTE,
     "class": types.CLASS,
     "classmethod": types.METHOD,
+    "cmdoption": types.OPTION,
     "constant": types.CONSTANT,
     "data": types.VALUE,
+    "doc": types.GUIDE,
     "envvar": types.ENV,
     "exception": types.EXCEPTION,
     "function": types.FUNCTION,
     "interface": types.INTERFACE,
+    "label": types.SECTION,
     "macro": types.MACRO,
     "member": types.ATTRIBUTE,
     "method": types.METHOD,
     "module": types.PACKAGE,
     "opcode": types.OPCODE,
     "option": types.OPTION,
+    "property": types.PROPERTY,
+    "protocol": types.PROTOCOL,
+    "setting": types.SETTING,
     "staticmethod": types.METHOD,
+    "term": types.WORD,
     "type": types.TYPE,
     "variable": types.VARIABLE,
     "var": types.VARIABLE,
@@ -85,8 +95,10 @@ class InterSphinxParser(IParser):
         """
         try:
             return INV_TO_TYPE[inv_type.split(":")[-1]]
-        except KeyError:
-            return
+        except KeyError:  # pragma: no cover
+            log.debug("covert_type: unknown type: %s", inv_type)
+
+            return None
 
     def create_entry(self, dash_type, key, inv_entry):
         """
@@ -106,17 +118,33 @@ def find_and_patch_entry(soup, entry):
     """
     Modify soup so Dash.app can generate TOCs on the fly.
     """
-    link = soup.find("a", {"class": "headerlink"}, href="#" + entry.anchor)
-    tag = soup.new_tag("a")
-    tag["name"] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
-    if link:
-        link.parent.insert(0, tag)
-        return True
+    pos = None
+    if entry.type == types.WORD:
+        pos = soup.find("dt", id=entry.anchor)
+    elif entry.type == types.SECTION:
+        pos = soup.find(id=entry.anchor)
     elif entry.anchor.startswith("module-"):
-        soup.h1.parent.insert(0, tag)
-        return True
-    else:
+        pos = soup.h1
+
+    if not pos:
+        pos = (
+            soup.find("a", {"class": "headerlink"}, href="#" + entry.anchor)
+            or soup.find(
+                "a", {"class": "reference internal"}, href="#" + entry.anchor
+            )
+            or soup.find("span", id=entry.anchor)
+        )
+
+    if not pos:
         return False
+
+    tag = soup.new_tag("a")
+    tag["class"] = "dashAnchor"
+    tag["name"] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
+
+    pos.insert_before(tag)
+
+    return True
 
 
 def inv_entry_to_path(data):

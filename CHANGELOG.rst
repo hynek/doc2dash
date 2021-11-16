@@ -11,6 +11,18 @@ Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
 
 - Better display names with Sphinx v2 inventories.
   `#101 <https://github.com/hynek/doc2dash/pull/101>`_
+- Added new ``intersphinx`` types:
+
+  * ``cmdoption`` (deprecated alias for ``option``)
+  * ``doc``
+  * ``label``
+  * ``property``
+  * ``protocol``
+  * ``setting``
+  * ``term``
+
+  Re-indexing your documentation may add new index entries!
+
 - ``zope.interface`` is not a dependency anymore.
 - ``colorama`` is only a dependency on Windows now.
 - Work around a display bug in older Dash.app releases by setting the plist key ``DashDocSetDeclaredInStyle`` to ``originalName``.

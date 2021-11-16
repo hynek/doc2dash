@@ -1,3 +1,4 @@
+<!-- This is just a hodge-podge of snippets from actual docs. -->
 <h1>Some module</h1
 <p><span class="methodcategory">Adding Routes and Views</span></p>
 <blockquote>
@@ -12,3 +13,15 @@ to this method are divided into <em>predicate</em>, <em>non-predicate</em>,
 and <em>view-related</em> types.  <a class="reference internal" href="../glossary.html#term-route-predicate"><em class="xref std std-term">Route predicate</em></a> arguments
 narrow the circumstances in which a route will be match a
 request; non-predicate arguments are informational.</p>
+
+<section id="chains">
+    <span id="id1"></span><h2>Chains<a class="headerlink" href="#chains" title="Permalink to this headline">¶</a></h2>
+    <p>The <em>processor chain</em> is a list of processors.
+    Each processors receives three positional arguments:</p>
+
+<dl class="glossary">
+    <dt id="term-dict-classes">dict classes<a class="headerlink" href="#term-dict-classes" title="Permalink to this term">¶</a></dt><dd><p>A regular class whose attributes are stored in the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#object.__dict__" title="(in Python v3.9)"><code class="xref any docutils literal notranslate"><span class="pre">object.__dict__</span></code></a> attribute of every single instance.
+    This is quite wasteful especially for objects with very few data attributes and the space consumption can become significant when creating large numbers of instances.</p>
+    <p>This is the type of class you get by default both with and without <code class="docutils literal notranslate"><span class="pre">attrs</span></code> (except with the next APIs <a class="reference internal" href="api.html#attr.define" title="attr.define"><code class="xref any py py-func docutils literal notranslate"><span class="pre">attr.define</span></code></a>, <a class="reference internal" href="api.html#attr.attr.mutable" title="attr.attr.mutable"><code class="xref any py py-func docutils literal notranslate"><span class="pre">attr.mutable</span></code></a>, and <a class="reference internal" href="api.html#attr.attr.frozen" title="attr.attr.frozen"><code class="xref any py py-func docutils literal notranslate"><span class="pre">attr.frozen</span></code></a>).</p>
+    </dd>
+    </dl>

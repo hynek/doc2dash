@@ -1,8 +1,11 @@
-import codecs
 import os
+import pathlib
+
+import pytest
 
 from bs4 import BeautifulSoup
 
+from doc2dash.parsers import types
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
     find_and_patch_entry,
@@ -179,18 +182,19 @@ class TestInterSphinxParser:
         ] == result
 
 
+@pytest.fixture(name="soup")
+def _soup():
+    return BeautifulSoup(
+        (pathlib.Path(HERE) / "function_example.html").read_text(),
+        "html.parser",
+    )
+
+
 class TestFindAndPatchEntry:
-    def test_patch_method(self):
+    def test_patch_method(self, soup):
         """
         Patching a method adds a TOC entry.
         """
-        with codecs.open(
-            os.path.join(HERE, "function_example.html"),
-            mode="r",
-            encoding="utf-8",
-        ) as fp:
-            soup = BeautifulSoup(fp, "html.parser")
-
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
@@ -224,19 +228,40 @@ class TestFindAndPatchEntry:
                 anchor="module-some_module",
             ),
         )
-        assert '<a name="//apple_ref' in str(soup)
+        assert '<a class="dashAnchor" name="//apple_ref' in str(soup)
 
-    def test_patch_fail(self):
+    def test_patch_fail(self, soup):
         """
         Return `False` if anchor can't be found
         """
-        with codecs.open(
-            os.path.join(HERE, "function_example.html"),
-            mode="r",
-            encoding="utf-8",
-        ) as fp:
-            soup = BeautifulSoup(fp, "html.parser")
-
         assert False is find_and_patch_entry(
             soup, TOCEntry(name="foo", type="Nothing", anchor="does-not-exist")
+        )
+
+    def test_patch_term(self, soup):
+        """
+        :term: and glossaries are found.
+        """
+        assert True is find_and_patch_entry(
+            soup,
+            TOCEntry(
+                name="Whatever", type=types.WORD, anchor="term-dict-classes"
+            ),
+        )
+        assert (
+            '<a class="dashAnchor" name="//apple_ref/cpp/Word/Whatever"></a>'
+            '<dt id="term-dict-classes">' in str(soup)
+        )
+
+    def test_patch_section(self, soup):
+        """
+        Sections are found.
+        """
+        assert True is find_and_patch_entry(
+            soup,
+            TOCEntry(name="Chains", type=types.SECTION, anchor="chains"),
+        )
+        assert (
+            '<a class="dashAnchor" name="//apple_ref/cpp/Section/Chains"></a>'
+            '<section id="chains">' in str(soup)
         )

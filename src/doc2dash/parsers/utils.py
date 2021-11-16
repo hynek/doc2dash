@@ -114,8 +114,9 @@ def patch_anchors(parser, show_progressbar):
                 for entry in entries:
                     if not parser.find_and_patch_entry(soup, entry):
                         log.debug(
-                            "Can't find anchor %s in %s.",
+                            "Can't find anchor '%s' (%s) in %s.",
                             entry.anchor,
+                            entry.type,
                             click.format_filename(fname),
                         )
             with open(full_path, mode="wb") as fp:
