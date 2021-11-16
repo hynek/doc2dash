@@ -3,7 +3,7 @@
 Changelog
 =========
 
-2.4.0 (UNRELEASED)
+2.4.0 (2021-11-16)
 ------------------
 
 This version dropped every Python version older than 3.8.

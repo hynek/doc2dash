@@ -3,7 +3,7 @@ Convert docs to the docset format.
 """
 
 
-__version__ = "2.4.0.dev0"
+__version__ = "2.4.0"
 
 
 __title__ = "doc2dash"
