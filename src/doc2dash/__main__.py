@@ -327,6 +327,7 @@ def prepare_docset(
         "CFBundleName": name,
         "DocSetPlatformFamily": name.lower(),
         "DashDocSetFamily": "python",
+        "DashDocSetDeclaredInStyle": "originalName",
         "isDashDocset": True,
         "isJavaScriptEnabled": enable_js,
     }
