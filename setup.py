@@ -16,6 +16,8 @@ PROJECT_URLS = {
     "Documentation": "https://doc2dash.readthedocs.io/",
     "Bug Tracker": "https://github.com/hynek/doc2dash/issues",
     "Source Code": "https://github.com/hynek/doc2dash",
+    "Funding": "https://github.com/sponsors/hynek",
+    "Ko-fi": "https://ko-fi.com/the_hynek",
 }
 
 ENTRY_POINTS = {"console_scripts": ["doc2dash = doc2dash.__main__:main"]}
@@ -30,6 +32,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python",
     "Topic :: Documentation",
