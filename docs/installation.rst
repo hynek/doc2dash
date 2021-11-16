@@ -24,8 +24,7 @@ To view the results, you will need a docset viewer, the most commonly known bein
 Other alternatives have been developed in cooperation with Dash.app's developer `Kapeli <https://twitter.com/kapeli>`_:
 
 - `helm-dash <https://github.com/areina/helm-dash>`_ for Emacs,
-- `velocity <http://velocity.silverlakesoftware.com/>`_ for Windows,
-- and `zeal <https://zealdocs.org/>`_ for Linux, macOS, and Windows.
+- and `zeal <https://zealdocs.org/>`_ for Linux and Windows.
 
 ``doc2dash`` is only tested against the original Dash.app though.
 
