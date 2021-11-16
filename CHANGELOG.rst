@@ -20,7 +20,7 @@ Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
 ------------------
 
 This is the **final release** that works on Python versions older than 3.8.
-If necessary, there *may* be more 2.3.x bugfix releases -- the next feature release 3.0 will **require Python 3.7** or later though.
+If necessary, there *may* be more 2.3.x bugfix releases -- the next release will **require Python 3.8** or later though.
 
 - The dependencies aren't pinned anymore.
 - ``lxml`` is not a dependency anymore.
