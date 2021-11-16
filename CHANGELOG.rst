@@ -9,6 +9,8 @@ Changelog
 This version dropped every Python version older than 3.8.
 Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
 
+- Better display names with Sphinx v2 inventories.
+  `#101 <https://github.com/hynek/doc2dash/pull/101>`_
 - ``zope.interface`` is not a dependency anymore.
 - ``colorama`` is only a dependency on Windows now.
 - Work around a display bug in older Dash.app releases by setting the plist key ``DashDocSetDeclaredInStyle`` to ``originalName``.
