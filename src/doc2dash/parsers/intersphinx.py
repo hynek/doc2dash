@@ -95,7 +95,8 @@ class InterSphinxParser(IParser):
         Parameters are the dash type, intersphinx inventory key and data tuple
         """
         path_str = inv_entry_to_path(inv_entry)
-        return ParserEntry(name=key, type=dash_type, path=path_str)
+        name = inv_entry[3] if inv_entry[3] != '-' else key
+        return ParserEntry(name=name, type=dash_type, path=path_str)
 
     def find_and_patch_entry(self, soup, entry):  # pragma: no cover
         return find_and_patch_entry(soup, entry)
