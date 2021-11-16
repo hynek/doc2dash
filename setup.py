@@ -9,9 +9,17 @@ from setuptools import find_packages, setup
 
 NAME = "doc2dash"
 PYTHON_REQUIRES = ">=3.8"
-INSTALL_REQUIRES = ["Sphinx", "attrs", "beautifulsoup4", "click"]
-EXTRAS_REQUIRE = {"tests": ["coverage[toml]", "pytest"]}
-EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
+INSTALL_REQUIRES = [
+    "Sphinx",
+    "attrs",
+    "beautifulsoup4",
+    "click",
+    "colorama; platform_system=='Windows'",
+]
+EXTRAS_REQUIRE = {"tests": ["coverage[toml]", "pytest"], "docs": ["furo"]}
+EXTRAS_REQUIRE["dev"] = (
+    EXTRAS_REQUIRE["tests"] + EXTRAS_REQUIRE["docs"] + ["pre-commit"]
+)
 
 PROJECT_URLS = {
     "Changelog": "https://doc2dash.readthedocs.io/en/stable/changelog.html",
