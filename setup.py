@@ -9,7 +9,7 @@ from setuptools import find_packages, setup
 
 NAME = "doc2dash"
 INSTALL_REQUIRES = ["Sphinx", "attrs", "beautifulsoup4", "click", "colorama"]
-EXTRAS_REQUIRE = {"tests": ["coverage", "pytest"]}
+EXTRAS_REQUIRE = {"tests": ["coverage[toml]", "pytest"]}
 EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
 
 PROJECT_URLS = {
