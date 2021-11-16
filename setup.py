@@ -80,7 +80,7 @@ def find_meta(meta: str) -> str:
 VERSION = find_meta("version")
 URL = find_meta("url")
 LONG = (
-    read("README.rst")
+    read("README.rst").split(".. begin\n")[1]
     + "\n\n"
     + "Release Information\n"
     + "===================\n\n"
