@@ -8,14 +8,26 @@ from setuptools import find_packages, setup
 ###############################################################################
 
 NAME = "doc2dash"
-INSTALL_REQUIRES = ["Sphinx", "attrs", "beautifulsoup4", "click", "colorama"]
-EXTRAS_REQUIRE = {"tests": ["coverage", "pytest"]}
-EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
+PYTHON_REQUIRES = ">=3.8"
+INSTALL_REQUIRES = [
+    "Sphinx",
+    "attrs",
+    "beautifulsoup4",
+    "click",
+    "colorama; platform_system=='Windows'",
+]
+EXTRAS_REQUIRE = {"tests": ["coverage[toml]", "pytest"], "docs": ["furo"]}
+EXTRAS_REQUIRE["dev"] = (
+    EXTRAS_REQUIRE["tests"] + EXTRAS_REQUIRE["docs"] + ["pre-commit"]
+)
 
 PROJECT_URLS = {
+    "Changelog": "https://doc2dash.readthedocs.io/en/stable/changelog.html",
     "Documentation": "https://doc2dash.readthedocs.io/",
     "Bug Tracker": "https://github.com/hynek/doc2dash/issues",
     "Source Code": "https://github.com/hynek/doc2dash",
+    "Funding": "https://github.com/sponsors/hynek",
+    "Ko-fi": "https://ko-fi.com/the_hynek",
 }
 
 ENTRY_POINTS = {"console_scripts": ["doc2dash = doc2dash.__main__:main"]}
@@ -30,6 +42,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python",
     "Topic :: Documentation",
@@ -97,6 +110,7 @@ if __name__ == "__main__":
         packages=find_packages(where="src"),
         package_dir={"": "src"},
         entry_points=ENTRY_POINTS,
+        python_requires=PYTHON_REQUIRES,
         install_requires=INSTALL_REQUIRES,
         extras_require=EXTRAS_REQUIRE,
         classifiers=CLASSIFIERS,

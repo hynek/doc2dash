@@ -3,13 +3,14 @@
 Changelog
 =========
 
-3.0.0 (UNRELEASED)
+2.4.0 (UNRELEASED)
 ------------------
 
 This version dropped every Python version older than 3.8.
 Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
 
 - ``zope.interface`` is not a dependency anymore.
+- ``colorama`` is only a dependency on Windows now.
 
 
 ----
@@ -18,8 +19,8 @@ Please use 2.3 if you need to run ``doc2dash`` on legacy Python versions.
 2.3.0 (2018-11-24)
 ------------------
 
-This is the **final minor release** that works on Python versions older than 3.7.
-If necessary, there *may* be more 2.3.x bugfix releases -- the next feature release 3.0 will **require Python 3.7** or later though.
+This is the **final release** that works on Python versions older than 3.8.
+If necessary, there *may* be more 2.3.x bugfix releases -- the next release will **require Python 3.8** or later though.
 
 - The dependencies aren't pinned anymore.
 - ``lxml`` is not a dependency anymore.
