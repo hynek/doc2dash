@@ -8,11 +8,13 @@ from setuptools import find_packages, setup
 ###############################################################################
 
 NAME = "doc2dash"
-INSTALL_REQUIRES = ["Sphinx", "attrs", "beautifulsoup4", "click", "colorama"]
+PYTHON_REQUIRES = ">=3.8"
+INSTALL_REQUIRES = ["Sphinx", "attrs", "beautifulsoup4", "click"]
 EXTRAS_REQUIRE = {"tests": ["coverage[toml]", "pytest"]}
 EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
 
 PROJECT_URLS = {
+    "Changelog": "https://doc2dash.readthedocs.io/en/stable/changelog.html",
     "Documentation": "https://doc2dash.readthedocs.io/",
     "Bug Tracker": "https://github.com/hynek/doc2dash/issues",
     "Source Code": "https://github.com/hynek/doc2dash",
@@ -100,6 +102,7 @@ if __name__ == "__main__":
         packages=find_packages(where="src"),
         package_dir={"": "src"},
         entry_points=ENTRY_POINTS,
+        python_requires=PYTHON_REQUIRES,
         install_requires=INSTALL_REQUIRES,
         extras_require=EXTRAS_REQUIRE,
         classifiers=CLASSIFIERS,
