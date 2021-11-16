@@ -1,21 +1,23 @@
 doc2dash: Create Docsets for Dash.app and Clones
 ================================================
 
-.. image:: https://readthedocs.org/projects/doc2dash/badge/?version=stable
-   :target: https://doc2dash.readthedocs.io/en/stable/?badge=stable
-   :alt: Documentation Status
+.. raw:: html
 
-.. image:: https://github.com/hynek/doc2dash/workflows/CI/badge.svg?branch=main
-   :target: https://github.com/hynek/doc2dash/actions?workflow=CI
-   :alt: CI Status
+   <p align="center">
+      <a href="https://doc2dash.readthedocs.io/">
+          <img src="https://img.shields.io/badge/Docs-Read%20The%20Docs-black" alt="Documentation" />
+      </a>
+      <a href="https://github.com/hynek/doc2dash/blob/main/LICENSE">
+         <img src="https://img.shields.io/badge/license-MIT%2FApache--2.0-C06524" alt="License: MIT / Apache 2.0" />
+      </a>
+      <a href="https://pypi.org/project/doc2dash/">
+         <img src="https://img.shields.io/pypi/v/doc2dash" alt="PyPI release" />
+      </a>
+      <a href="https://pepy.tech/project/doc2dash">
+          <img src="https://static.pepy.tech/personalized-badge/doc2dash?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads%20/%20Month" alt="Downloads per month" />
+      </a>
+   </p>
 
-.. image:: https://codecov.io/github/hynek/doc2dash/branch/main/graph/badge.svg
-   :target: https://codecov.io/github/hynek/doc2dash
-   :alt: Test Coverage
-
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/ambv/black
-   :alt: Code style: black
 
 .. begin
 
