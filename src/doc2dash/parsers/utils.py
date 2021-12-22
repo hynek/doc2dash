@@ -109,7 +109,9 @@ def patch_anchors(parser, show_progressbar):
 
     def patch_files(files):
         for fname, entries in files:
-            full_path = urllib.parse.unquote(os.path.join(parser.doc_path, fname))
+            full_path = urllib.parse.unquote(
+                os.path.join(parser.doc_path, fname)
+            )
             with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
                 soup = BeautifulSoup(fp, "html.parser")
                 for entry in entries:
