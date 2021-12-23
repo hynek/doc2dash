@@ -45,6 +45,14 @@ def entries():
     ]
 
 
+@pytest.fixture
+def entries_url_format():
+    return [
+        ParserEntry(name="foo", type="Method", path="foo%20bar.html#foo"),
+        ParserEntry(name="qux", type="Class", path="foo%20bar.html"),
+    ]
+
+
 class TestPatchTOCAnchors:
     @pytest.mark.parametrize("progressbar", [True, False])
     def test_with_empty_db(self, progressbar):
@@ -64,6 +72,21 @@ class TestPatchTOCAnchors:
         parser = FakeParser(doc_path=str(foo))
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
+            print(e)
+            toc.send(e)
+        toc.close()
+        assert [
+            TOCEntry(name="foo", type="Method", anchor="foo")
+        ] == parser._patched_entries
+
+    def test_single_entry_url_format(
+        self, monkeypatch, tmpdir, entries_url_format
+    ):
+        foo = tmpdir.mkdir("foo")
+        foo.join("foo bar.html").write("docs!")
+        parser = FakeParser(doc_path=str(foo))
+        toc = patch_anchors(parser, show_progressbar=False)
+        for e in entries_url_format:
             print(e)
             toc.send(e)
         toc.close()
