@@ -7,7 +7,7 @@ Changelog
 ------------------
 
 - Fix URL decoding of filenames.
-  `#104 https://github.com/hynek/doc2dash/pull/104`
+  `#104 <https://github.com/hynek/doc2dash/pull/104>`_
 
 
 ----

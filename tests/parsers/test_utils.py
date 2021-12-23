@@ -82,12 +82,14 @@ class TestPatchTOCAnchors:
     def test_single_entry_url_format(
         self, monkeypatch, tmpdir, entries_url_format
     ):
+    """
+    URL-encoded filenames are decoded before being added.
+    """
         foo = tmpdir.mkdir("foo")
         foo.join("foo bar.html").write("docs!")
         parser = FakeParser(doc_path=str(foo))
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries_url_format:
-            print(e)
             toc.send(e)
         toc.close()
         assert [
