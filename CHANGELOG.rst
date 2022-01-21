@@ -1,4 +1,4 @@
-.. :changelog:
+.. changelog
 
 Changelog
 =========
