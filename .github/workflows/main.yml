@@ -110,5 +110,5 @@ jobs:
         with:
           python-version: ${{env.PYTHON_LATEST}}
       - run: python -m pip install -e .[dev]
-      - run: "python -c 'import doc2dash; print(doc2dash.__version__)'"
-      - run: "python -m doc2dash"
+      - run: python -c 'import doc2dash; print(doc2dash.__version__)'
+      - run: python -m doc2dash --version
