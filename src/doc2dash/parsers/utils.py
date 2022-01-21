@@ -3,6 +3,7 @@ import codecs
 import errno
 import logging
 import os
+import urllib
 
 from collections import defaultdict
 
@@ -108,13 +109,14 @@ def patch_anchors(parser, show_progressbar):
 
     def patch_files(files):
         for fname, entries in files:
+            fname = urllib.parse.unquote(fname)
             full_path = os.path.join(parser.doc_path, fname)
             with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
                 soup = BeautifulSoup(fp, "html.parser")
                 for entry in entries:
                     if not parser.find_and_patch_entry(soup, entry):
                         log.debug(
-                            "Can't find anchor '%s' (%s) in %s.",
+                            "Can't find anchor '%s' (%s) in %r.",
                             entry.anchor,
                             entry.type,
                             click.format_filename(fname),

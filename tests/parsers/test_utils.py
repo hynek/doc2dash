@@ -1,4 +1,4 @@
-from unittest.mock import patch
+import logging
 
 import attr
 import pytest
@@ -34,14 +34,21 @@ class FakeParser(IParser):
         return self._succeed_patching
 
 
-@pytest.fixture
-def entries():
+@pytest.fixture(name="doc_entries")
+def _doc_entries(tmpdir):
     """
     Test `ParserEntry`s
     """
-    return [
-        ParserEntry(name="foo", type="Method", path="bar.html#foo"),
+    test_dir = tmpdir.mkdir("foo")
+    test_dir.join("bar.html").write("docs!")
+    test_dir.join("foo bar.html").write("docs too!")
+
+    return test_dir, [
+        ParserEntry(name="foo", type="Method", path="bar.html#anchor-1"),
         ParserEntry(name="qux", type="Class", path="bar.html"),
+        ParserEntry(
+            name="foo-url", type="Method", path="foo%20bar.html#anchor-2"
+        ),
     ]
 
 
@@ -55,35 +62,47 @@ class TestPatchTOCAnchors:
         toc = patch_anchors(parser, show_progressbar=progressbar)
         toc.close()
 
-    def test_single_entry(self, monkeypatch, tmpdir, entries):
+    def test_single_entry(self, doc_entries):
         """
         Only entries with URL anchors get patched.
         """
-        foo = tmpdir.mkdir("foo")
-        foo.join("bar.html").write("docs!")
-        parser = FakeParser(doc_path=str(foo))
+        path, entries = doc_entries
+        parser = FakeParser(doc_path=str(path))
+
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
-            print(e)
             toc.send(e)
         toc.close()
+
         assert [
-            TOCEntry(name="foo", type="Method", anchor="foo")
+            TOCEntry(name="foo", type="Method", anchor="anchor-1"),
+            TOCEntry(name="foo-url", type="Method", anchor="anchor-2"),
         ] == parser._patched_entries
 
-    def test_complains(self, entries, tmpdir):
+    def test_complains(self, doc_entries, caplog):
         """
         If patching fails, a debug message is logged.
         """
-        foo = tmpdir.mkdir("foo")
-        foo.join("bar.html").write("docs!")
-        parser = FakeParser(doc_path=str(foo), succeed_patching=False)
+        from doc2dash.parsers.utils import log
+
+        old_level = log.getEffectiveLevel()
+        log.setLevel(logging.DEBUG)
+
+        path, entries = doc_entries
+
+        parser = FakeParser(doc_path=str(path), succeed_patching=False)
         toc = patch_anchors(parser, show_progressbar=False)
         for e in entries:
             toc.send(e)
-        with patch("doc2dash.parsers.utils.log.debug") as mock:
-            toc.close()
-            assert mock.call_count == 1
+
+        toc.close()
+
+        assert [
+            "Can't find anchor 'anchor-1' (Method) in 'bar.html'.",
+            "Can't find anchor 'anchor-2' (Method) in 'foo bar.html'.",
+        ] == caplog.messages
+
+        log.setLevel(old_level)
 
 
 class TestHasFileWith:
