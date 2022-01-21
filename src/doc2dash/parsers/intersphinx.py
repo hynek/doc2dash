@@ -96,7 +96,7 @@ class InterSphinxParser(IParser):
         try:
             return INV_TO_TYPE[inv_type.split(":")[-1]]
         except KeyError:  # pragma: no cover
-            log.debug("covert_type: unknown type: %s", inv_type)
+            log.debug("convert_type: unknown type: %r", inv_type)
 
             return None
 
