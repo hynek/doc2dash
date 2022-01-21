@@ -1,5 +1,29 @@
 .. changelog
 
+XX.Y.Z (UNRELEASED)
+-------------------
+
+Backwards-incompatible changes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+*none*
+
+
+Deprecations
+^^^^^^^^^^^^
+
+*none*
+
+
+Changes
+^^^^^^^
+
+*none*
+
+
+----
+
+
 Changelog
 =========
 
