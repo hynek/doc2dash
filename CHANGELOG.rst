@@ -3,10 +3,10 @@
 Changelog
 =========
 
-2.4.1 (2021-12-23)
+2.4.1 (UNRELEASED)
 ------------------
 
-- Fix URL decoding of filenames.
+- Added support for URL-encoded filenames.
   `#104 <https://github.com/hynek/doc2dash/pull/104>`_
 
 
