@@ -69,7 +69,7 @@ def find_meta(meta: str) -> str:
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        fr"^__{meta}__ = ['\"]([^'\"]*)['\"]", META_FILE, re.M
+        rf"^__{meta}__ = ['\"]([^'\"]*)['\"]", META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)

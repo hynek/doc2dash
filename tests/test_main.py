@@ -255,26 +255,32 @@ class TestSetupPaths:
         """
         monkeypatch.chdir(tmpdir)
         os.mkdir("foo")
-        assert "foo" == main.setup_paths(
-            source="foo/",
-            force=False,
-            name=None,
-            destination=None,
-            add_to_global=False,
-        )[0]
+        assert (
+            "foo"
+            == main.setup_paths(
+                source="foo/",
+                force=False,
+                name=None,
+                destination=None,
+                add_to_global=False,
+            )[0]
+        )
 
     def test_cleans_name(self, tmpdir):
         """
         If the name ends with .docset, remove it.
         """
         d = tmpdir.mkdir("foo")
-        assert "baz" == main.setup_paths(
-            source=str(d),
-            force=False,
-            name="baz.docset",
-            destination="bar",
-            add_to_global=False,
-        )[2]
+        assert (
+            "baz"
+            == main.setup_paths(
+                source=str(d),
+                force=False,
+                name="baz.docset",
+                destination="bar",
+                add_to_global=False,
+            )[2]
+        )
 
 
 class TestPrepareDocset:
