@@ -1,6 +1,10 @@
 ---
+
 ci:
   autoupdate_schedule: monthly
+
+default_language_version:
+  python: python3.10
 
 repos:
   - repo: https://github.com/psf/black
@@ -14,8 +18,13 @@ repos:
       - id: isort
         additional_dependencies: [toml]
 
+  - repo: https://github.com/asottile/yesqa
+    rev: v1.4.0
+    hooks:
+      - id: yesqa
+
   - repo: https://github.com/PyCQA/flake8
-    rev: 5.0.2
+    rev: 5.0.4
     hooks:
       - id: flake8
 
@@ -25,3 +34,5 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: debug-statements
+      - id: check-yaml
+      - id: check-toml
