@@ -18,7 +18,9 @@ Deprecations
 Changes
 ^^^^^^^
 
-*none*
+- Tolerate the absence of ``py-modindex.html``.
+  It can be useful to use ``doc2dash`` with non-Python documentation, but it can be missing that file.
+  `#115 <https://github.com/hynek/doc2dash/issues/115>`_
 
 
 ----

@@ -111,18 +111,16 @@ def patch_anchors(parser, show_progressbar):
         for fname, entries in files:
             fname = urllib.parse.unquote(fname)
             full_path = os.path.join(parser.doc_path, fname)
-            with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
-                soup = BeautifulSoup(fp, "html.parser")
-                for entry in entries:
-                    if not parser.find_and_patch_entry(soup, entry):
-                        log.debug(
-                            "Can't find anchor '%s' (%s) in %r.",
-                            entry.anchor,
-                            entry.type,
-                            click.format_filename(fname),
-                        )
-            with open(full_path, mode="wb") as fp:
-                fp.write(soup.encode("utf-8"))
+            try:
+                soup = _patch_file(parser, fname, full_path, entries)
+            except FileNotFoundError:
+                if fname == "py-modindex.html":
+                    log.warning("Can't open file %s. Skipping.", full_path)
+                else:
+                    raise
+            else:
+                with open(full_path, mode="wb") as fp:
+                    fp.write(soup.encode("utf-8"))
 
     if show_progressbar is True:
         with click.progressbar(
@@ -134,6 +132,22 @@ def patch_anchors(parser, show_progressbar):
             patch_files(pbar)
     else:
         patch_files(files.items())
+
+
+def _patch_file(
+    parser: IParser, fname: str, full_path: str, entries
+) -> BeautifulSoup:
+    with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
+        soup = BeautifulSoup(fp, "html.parser")
+        for entry in entries:
+            if not parser.find_and_patch_entry(soup, entry):
+                log.debug(
+                    "Can't find anchor '%s' (%s) in %r.",
+                    entry.anchor,
+                    entry.type,
+                    click.format_filename(fname),
+                )
+    return soup
 
 
 def has_file_with(path, filename, content):
