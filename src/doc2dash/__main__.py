@@ -7,10 +7,12 @@ import plistlib
 import shutil
 import sqlite3
 
+from importlib import metadata
+
 import attr
 import click
 
-from . import __version__, parsers
+from . import parsers
 from .parsers.utils import patch_anchors
 
 
@@ -134,7 +136,7 @@ IMPORTABLE = ImportableType()
     "doc2dash.parsers.intersphinx.InterSphinxParser). Default behavior "
     "is to auto-detect documentation type.",
 )
-@click.version_option(version=__version__)
+@click.version_option(version=metadata.version("doc2dash"))
 def main(
     source,
     force,

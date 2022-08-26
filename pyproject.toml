@@ -1,15 +1,64 @@
 [build-system]
-requires = ["setuptools>=40.6.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+
+[project]
+dynamic = ["version", "readme"]
+name = "doc2dash"
+authors = [{ name = "Hynek Schlawack", email = "hs@ox.cx" }]
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development",
+    "Topic :: Text Processing",
+]
+dependencies = [
+    "Sphinx",
+    "attrs",
+    "beautifulsoup4",
+    "click",
+    "colorama; platform_system=='Windows'",
+]
+
+[project.optional-dependencies]
+tests = ["coverage[toml]", "pytest"]
+docs = ["Sphinx", "furo", "myst-parser"]
+dev = ["doc2dash[tests,docs]"]
+
+[project.urls]
+Documentation = "https://doc2dash.readthedocs.io/"
+Changelog = "https://doc2dash.readthedocs.io/en/stable/changelog.html"
+"Source Code" = "https://github.com/hynek/doc2dash"
+Funding = "https://github.com/sponsors/hynek"
+Ko-fi = "https://ko-fi.com/the_hynek"
+
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { version_scheme = "no-guess-dev" }
 
 
 [tool.pytest.ini_options]
-addopts = "-ra --strict-markers "
+addopts = ["-ra", "--strict-markers", "--strict-config"]
 xfail_strict = true
 testpaths = "tests"
-filterwarnings = [
-    "once::Warning",
-]
+filterwarnings = ["once::Warning"]
 
 
 [tool.coverage.run]
@@ -27,7 +76,7 @@ exclude_lines = [
     "pragma: no cover",
     "if TYPE_CHECKING:",
     "raise NotImplementedError",
-     # typing-related code
+    # typing-related code
     "^if (False|TYPE_CHECKING):",
     ": \\.\\.\\.$",
     "^ +\\.\\.\\.$",
@@ -41,3 +90,37 @@ line-length = 79
 
 [tool.isort]
 profile = "attrs"
+
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = "# doc2dash\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+start-after = "<!-- begin-short -->\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = """
+
+
+## Release Information for """
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "CHANGELOG.md"
+start-after = "<!-- changelog follows -->"
+pattern = "## ([^\n]+?\n\n)###"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "CHANGELOG.md"
+start-after = "<!-- changelog follows -->"
+pattern = "\n(###.+?\n)## "
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = "\n## Credits\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "AUTHORS.md"
+start-after = "# Authors\n"

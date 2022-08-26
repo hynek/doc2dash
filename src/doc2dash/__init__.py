@@ -3,9 +3,6 @@ Convert docs to the docset format.
 """
 
 
-__version__ = "2.5.0.dev0"
-
-
 __title__ = "doc2dash"
 __description__ = "Convert docs to the docset format."
 __url__ = "https://doc2dash.readthedocs.io/"
