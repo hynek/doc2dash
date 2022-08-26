@@ -31,6 +31,10 @@ Currently supported formats are:
 
 ## Project Information
 
-`doc2dash`’s documentation lives at [Read the Docs](https://doc2dash.readthedocs.io/), the code on [GitHub](https://github.com/hynek/doc2dash).
-Current versions are tested on Python 3.8+, but older versions run even under Python 2.
-Both Linux and macOS are tested although certain features are only available on macOS.
+- **License**: MIT
+- **PyPI**: <https://pypi.org/project/doc2dash/>
+- **Source Code**: <https://github.com/hynek/doc2dash>
+- **Documentation**: <https://doc2dash.readthedocs.io/>
+- **Changelog**: <https://doc2dash.readthedocs.io/en/stable/changelog.html>
+- **Supported Python Versions**: 3.8 and later (check the changelog for older releases that support _much_ older Python versions)
+- **Platforms**: Both Linux and macOS are tested although certain features are only available on macOS. Windows should work too.

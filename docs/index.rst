@@ -20,6 +20,7 @@ User's Guide
    installation
    formats
    usage
+   license
 
 
 Project Information
@@ -29,11 +30,12 @@ Project Information
    :parser: myst_parser.sphinx_
    :start-after: ## Project Information
 
+
+.. stop Sphinx from complaints about orphaned docs, we link them elsewhere
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    changelog
-   license
 
 
 Indices and tables
