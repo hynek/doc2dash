@@ -1,4 +1,4 @@
-include LICENSE *.rst *.txt tox.ini *.yml .coveragerc *.yaml *.toml
+include LICENSE *.rst tox.ini *.yml *.yaml *.toml
 graft docs
 graft tests
 recursive-exclude tests *.pyc
