@@ -1,10 +1,11 @@
 *.docset
-*.egg-info
 *.pyc
+.DS_Store
 .cache
 .coverage
 .coverage.*
 .direnv
+.envrc
 .pytest_cache/
 .tox
 .vscode

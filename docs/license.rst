@@ -6,4 +6,5 @@ The full license text can be also found in the `source code repository <https://
 
 .. _authors:
 
-.. include:: ../AUTHORS.rst
+.. include:: ../AUTHORS.md
+   :parser: myst_parser.sphinx_

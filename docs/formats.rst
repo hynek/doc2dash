@@ -7,25 +7,25 @@ Currently, ``doc2dash`` supports two documentation formats:
 - :ref:`pydoctor-sec`
 
 Feel free to help adding more! While ``doc2dash`` is implemented in Python, the scope for the supported documentation types is unlimited.
-So go on and submit a parser for your favourite Ruby, Haskell, Lisp, Erlang, JavaScript, …  format!
-
 
 .. _Sphinx-sec:
 
 Sphinx
 ------
 
-Sphinx_ is a very common documentation format in the Python world and beyond.
+Sphinx_ is a very common documentation framework in the Python world and beyond.
 
-Building Sphinx documentation is usually easy:
+`doc2dash` uses the machine-readable `objects.inv` file (`intersphinx`) to determine the symbols and patches the documentation such that Dash.app can link to them.
+
+-----
+
+Building Sphinx documentation is usually straight-forward:
 after installing the ``sphinx`` package, ``cd`` into their documentation directory (usually ``docs`` or ``doc``) and enter ``make html``.
 
 .. warning::
 
    Do **not** attempt to run ``doc2dash`` over pre-built HTML documentation downloaded from Read The Docs.
    Those downloads aren't direct equivalents of the actual, pristine builds and indexing will not work.
-
-
 
 .. _pydoctor-sec:
 
@@ -41,5 +41,5 @@ Fortunately, no theming is common in the pydoctor world, so the parsing is relia
 
 
 .. _Twisted: https://twistedmatrix.com/
-.. _pydoctor: https://launchpad.net/pydoctor
-.. _Sphinx:  http://sphinx-doc.org/
+.. _pydoctor: https://github.com/twisted/pydoctor
+.. _Sphinx: https://www.sphinx-doc.org/
