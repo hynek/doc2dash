@@ -38,7 +38,12 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = ["coverage[toml]", "pytest"]
-docs = ["Sphinx", "furo", "myst-parser"]
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-include-markdown-plugin",
+    "mkdocs-click",
+]
 dev = ["doc2dash[tests,docs]"]
 
 [project.scripts]

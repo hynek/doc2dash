@@ -1,6 +1,6 @@
 # Authors
 
-`doc2dash` is written and maintained by Hynek Schlawack.
+*doc2dash* is written and maintained by Hynek Schlawack.
 
 The development is kindly supported by my employer  [Variomedia AG](https://www.variomedia.de/) and all my amazing [GitHub Sponsors](https://github.com/sponsors/hynek).
 
