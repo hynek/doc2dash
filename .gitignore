@@ -13,5 +13,3 @@ site
 build
 dist
 test_data
-pyoxidizer.bzl
-requirements.txt
