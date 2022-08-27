@@ -132,7 +132,7 @@ class InterSphinxParser(IParser):
 
 def find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
     """
-    Modify soup so Dash.app can generate TOCs on the fly.
+    Modify *soup* so Dash.app can generate TOCs on the fly.
     """
     pos = None
     if entry.type == entry_types.WORD:

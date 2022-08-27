@@ -53,4 +53,5 @@ nav:
   - Installation: installation.md
   - Supported Formats: formats.md
   - Usage: usage.md
+  - Custom Formats: extending.md
   - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md

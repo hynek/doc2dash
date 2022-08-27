@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from . import intersphinx, pydoctor
-from .types import IParser
+from . import intersphinx, pydoctor, types
 
 
 DOCTYPES = [pydoctor.PyDoctorParser, intersphinx.InterSphinxParser]
 
 
-def get_doctype(path: str) -> type[IParser] | None:
+def get_doctype(path: str) -> type[types.IParser] | None:
     """
     Gets the apropriate doctype for *path*.
     """
@@ -16,3 +15,6 @@ def get_doctype(path: str) -> type[IParser] | None:
             return dt
     else:
         return None
+
+
+__all__ = ["get_doctype", "types"]
