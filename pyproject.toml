@@ -29,7 +29,6 @@ classifiers = [
     "Topic :: Text Processing",
 ]
 dependencies = [
-    "Sphinx",
     "attrs>=21.3",
     "beautifulsoup4",
     "click",

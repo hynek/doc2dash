@@ -34,13 +34,9 @@ class TestInterSphinxParser:
         result = list(
             p._inv_to_entries(
                 {
-                    "py:method": {
-                        "some_method": (None, None, "some_module.py", "-")
-                    },
+                    "py:method": {"some_method": ("some_module.py", "-")},
                     "std:option": {
                         "--destination": (
-                            "doc2dash",
-                            "2.0",
                             "index.html#document-usage#cmdoption--"
                             "destination",
                             "-",
@@ -48,8 +44,6 @@ class TestInterSphinxParser:
                     },
                     "std:constant": {
                         "SomeConstant": (
-                            None,
-                            None,
                             "some_other_module.py",
                             "-",
                         )
@@ -93,13 +87,9 @@ class TestInterSphinxParser:
         result = list(
             p._inv_to_entries(
                 {
-                    "py:method": {
-                        "some_method": (None, None, "some_module.py", "-")
-                    },
+                    "py:method": {"some_method": ("some_module.py", "-")},
                     "std:constant": {
                         "SomeConstant": (
-                            None,
-                            None,
                             "some_other_module.py",
                             "-",
                         )
@@ -132,11 +122,7 @@ class TestInterSphinxParser:
         p = MyInterSphinxParser(doc_path=os.path.join(HERE))
         result = list(
             p._inv_to_entries(
-                {
-                    "py:method": {
-                        "some_method": (None, None, "some_module.py", "-")
-                    }
-                }
+                {"py:method": {"some_method": ("some_module.py", "-")}}
             )
         )
         assert [
@@ -160,9 +146,7 @@ class TestInterSphinxParser:
         result = list(
             p._inv_to_entries(
                 {
-                    "py:method": {
-                        "some_method": (None, None, "some_module.py", "-")
-                    },
+                    "py:method": {"some_method": ("some_module.py", "-")},
                     "std:option": {
                         "--destination": (
                             "doc2dash",

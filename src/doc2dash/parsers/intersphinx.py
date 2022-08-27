@@ -3,14 +3,14 @@ from __future__ import annotations
 import logging
 import os
 
-from typing import ClassVar, Generator, Mapping, Tuple
+from typing import ClassVar, Generator, Mapping
 
 import attrs
 
 from bs4 import BeautifulSoup
-from sphinx.ext.intersphinx import InventoryFile  # type: ignore[attr-defined]
 
 from . import entry_types
+from .sphinx_inventory import InventoryEntry, load_inventory
 from .types import IParser, ParserEntry, TOCEntry
 from .utils import format_ref, has_file_with
 
@@ -50,9 +50,6 @@ INV_TO_TYPE = {
     "var": entry_types.VARIABLE,
 }
 
-# This is what we get from the objects.inv inventory.
-InventoryEntry = Tuple[str, str, str, str]
-
 
 @attrs.define(hash=True)
 class InterSphinxParser(IParser):
@@ -77,9 +74,7 @@ class InterSphinxParser(IParser):
         yield `ParserEntry`s.
         """
         with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
-            yield from self._inv_to_entries(
-                InventoryFile.load(inv_f, "", os.path.join)
-            )
+            yield from self._inv_to_entries(load_inventory(inv_f))
 
     def _inv_to_entries(
         self, inv: Mapping[str, Mapping[str, InventoryEntry]]
@@ -120,7 +115,7 @@ class InterSphinxParser(IParser):
         Parameters are the dash type, intersphinx inventory key and data tuple
         """
         path_str = inv_entry_to_path(inv_entry)
-        name = inv_entry[3] if inv_entry[3] != "-" else key
+        name = inv_entry[1] if inv_entry[1] != "-" else key
 
         return ParserEntry(name=name, type=dash_type, path=path_str)
 
@@ -170,8 +165,8 @@ def inv_entry_to_path(data: InventoryEntry) -> str:
     Discard the anchors between head and tail to make it
     compatible with situations where extra meta information is encoded.
     """
-    path_tuple = data[2].split("#")
+    path_tuple = data[0].split("#")
     if len(path_tuple) > 1:
         return "#".join((path_tuple[0], path_tuple[-1]))
 
-    return data[2]
+    return data[0]
