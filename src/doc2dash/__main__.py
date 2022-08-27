@@ -13,7 +13,7 @@ import attr
 import click
 
 from . import parsers
-from .parsers.utils import patch_anchors
+from .parsers.patcher import patch_anchors
 
 
 log = logging.getLogger(__name__)

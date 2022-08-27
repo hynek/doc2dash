@@ -5,13 +5,13 @@ import pytest
 
 from bs4 import BeautifulSoup
 
-from doc2dash.parsers import types
+from doc2dash.parsers import entry_types
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
     find_and_patch_entry,
     inv_entry_to_path,
 )
-from doc2dash.parsers.utils import ParserEntry, TOCEntry
+from doc2dash.parsers.types import ParserEntry, TOCEntry
 
 
 HERE = os.path.dirname(__file__)
@@ -245,7 +245,9 @@ class TestFindAndPatchEntry:
         assert True is find_and_patch_entry(
             soup,
             TOCEntry(
-                name="Whatever", type=types.WORD, anchor="term-dict-classes"
+                name="Whatever",
+                type=entry_types.WORD,
+                anchor="term-dict-classes",
             ),
         )
         assert (
@@ -259,7 +261,7 @@ class TestFindAndPatchEntry:
         """
         assert True is find_and_patch_entry(
             soup,
-            TOCEntry(name="Chains", type=types.SECTION, anchor="chains"),
+            TOCEntry(name="Chains", type=entry_types.SECTION, anchor="chains"),
         )
         assert (
             '<a class="dashAnchor" name="//apple_ref/cpp/Section/Chains"></a>'

@@ -3,13 +3,9 @@ import logging
 import attr
 import pytest
 
-from doc2dash.parsers.utils import (
-    IParser,
-    ParserEntry,
-    TOCEntry,
-    has_file_with,
-    patch_anchors,
-)
+from doc2dash.parsers.patcher import patch_anchors
+from doc2dash.parsers.types import IParser, ParserEntry, TOCEntry
+from doc2dash.parsers.utils import has_file_with
 
 
 @attr.s
@@ -113,7 +109,7 @@ class TestPatchTOCAnchors:
         """
         If patching fails, a debug message is logged.
         """
-        from doc2dash.parsers.utils import log
+        from doc2dash.parsers.patcher import log
 
         old_level = log.getEffectiveLevel()
         log.setLevel(logging.DEBUG)

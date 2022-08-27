@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import codecs
 import logging
 import os
 
-import attr
+from typing import ClassVar, Generator
+
+import attrs
 
 from bs4 import BeautifulSoup
 
-from .utils import APPLE_REF_TEMPLATE, IParser, ParserEntry, has_file_with
+from .types import IParser, ParserEntry, TOCEntry
+from .utils import format_ref, has_file_with
 
 
 log = logging.getLogger(__name__)
@@ -25,25 +30,24 @@ PYDOCTOR_HEADER_REALLY_OLD = b"""\
       <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a>"""
 
 
-@attr.s(hash=True)
+@attrs.define(hash=True)
 class PyDoctorParser(IParser):
     """
     Parser for pydoctor-based documentation: mainly Twisted.
     """
 
-    doc_path = attr.ib()
+    name: ClassVar[str] = "pydoctor"
+    doc_path: str
 
-    name = "pydoctor"
-
-    @classmethod
-    def detect(cls, path):
+    @staticmethod
+    def detect(path: str) -> bool:
         return (
             has_file_with(path, "index.html", PYDOCTOR_HEADER)
             or has_file_with(path, "index.html", PYDOCTOR_HEADER_OLD)
             or has_file_with(path, "index.html", PYDOCTOR_HEADER_REALLY_OLD)
         )
 
-    def parse(self):
+    def parse(self) -> Generator[ParserEntry, None, None]:
         """
         Parse pydoctor docs at *doc_path*.
 
@@ -62,18 +66,22 @@ class PyDoctorParser(IParser):
             data_type = tag.get("data-type")
             if path and data_type and not path.startswith("#"):
                 name = tag.string
+
                 yield ParserEntry(
                     name=name,
                     type=data_type.replace("Instance ", ""),
                     path=str(path),
                 )
 
-    def find_and_patch_entry(self, soup, entry):
+    def find_and_patch_entry(
+        self, soup: BeautifulSoup, entry: TOCEntry
+    ) -> bool:
         link = soup.find("a", attrs={"name": entry.anchor})
         if link:
             tag = soup.new_tag("a")
-            tag["name"] = APPLE_REF_TEMPLATE.format(entry.type, entry.name)
+            tag["name"] = format_ref(entry.type, entry.name)
             link.insert_before(tag)
+
             return True
-        else:
-            return False
+
+        return False

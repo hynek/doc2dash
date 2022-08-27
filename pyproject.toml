@@ -30,7 +30,7 @@ classifiers = [
 ]
 dependencies = [
     "Sphinx",
-    "attrs",
+    "attrs>=21.3",
     "beautifulsoup4",
     "click",
     "colorama; platform_system=='Windows'",
@@ -119,6 +119,10 @@ ignore_errors = true
 
 [[tool.mypy.overrides]]
 module = "conftest.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "doc2dash.__main__"
 ignore_errors = true
 
 

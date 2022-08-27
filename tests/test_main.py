@@ -15,7 +15,7 @@ from click.testing import CliRunner
 import doc2dash
 
 from doc2dash import __main__ as main
-from doc2dash.parsers.utils import IParser, ParserEntry
+from doc2dash.parsers.types import IParser, ParserEntry
 
 
 log = logging.getLogger(__name__)

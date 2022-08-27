@@ -5,9 +5,9 @@ from unittest.mock import mock_open, patch
 
 from bs4 import BeautifulSoup
 
-from doc2dash.parsers import types
+from doc2dash.parsers import entry_types
 from doc2dash.parsers.pydoctor import PyDoctorParser
-from doc2dash.parsers.utils import ParserEntry, TOCEntry
+from doc2dash.parsers.types import ParserEntry, TOCEntry
 
 
 HERE = os.path.dirname(__file__)
@@ -18,58 +18,58 @@ EXAMPLE_PARSE_RESULT = [
         (
             "twisted.conch.insults.insults.ServerProtocol"
             ".ControlSequenceParser.A",
-            types.METHOD,
+            entry_types.METHOD,
             "twisted.conch.insults.insults.ServerProtocol"
             ".ControlSequenceParser.html#A",
         ),
         (
             "twisted.test.myrebuilder1.A",
-            types.CLASS,
+            entry_types.CLASS,
             "twisted.test.myrebuilder1.A.html",
         ),
         (
             "twisted.test.myrebuilder2.A",
-            types.CLASS,
+            entry_types.CLASS,
             "twisted.test.myrebuilder2.A.html",
         ),
         (
             "twisted.test.test_jelly.A",
-            types.CLASS,
+            entry_types.CLASS,
             "twisted.test.test_jelly.A.html",
         ),
         (
             "twisted.test.test_persisted.A",
-            types.CLASS,
+            entry_types.CLASS,
             "twisted.test.test_persisted.A.html",
         ),
         (
             "twisted.internet.task.LoopingCall.a",
-            types.VARIABLE,
+            entry_types.VARIABLE,
             "twisted.internet.task.LoopingCall.html#a",
         ),
         (
             "twisted.test.myrebuilder1.A.a",
-            types.METHOD,
+            entry_types.METHOD,
             "twisted.test.myrebuilder1.A.html#a",
         ),
         (
             "twisted.test.myrebuilder1.Inherit.a",
-            types.METHOD,
+            entry_types.METHOD,
             "twisted.test.myrebuilder1.Inherit.html#a",
         ),
         (
             "twisted.test.myrebuilder2.A.a",
-            types.METHOD,
+            entry_types.METHOD,
             "twisted.test.myrebuilder2.A.html#a",
         ),
         (
             "twisted.test.myrebuilder2.Inherit.a",
-            types.METHOD,
+            entry_types.METHOD,
             "twisted.test.myrebuilder2.Inherit.html#a",
         ),
         (
             "twisted.web._newclient.HTTP11ClientProtocol.abort",
-            types.METHOD,
+            entry_types.METHOD,
             "twisted.web._newclient.HTTP11ClientProtocol.html#abort",
         ),
     ]
