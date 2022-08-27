@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import errno
 import importlib
 import logging
@@ -9,10 +11,11 @@ import sqlite3
 
 from importlib import metadata
 
-import attr
+import attrs
 import click
 
 from . import parsers
+from .output import create_log_config
 from .parsers.patcher import patch_anchors
 
 
@@ -22,24 +25,6 @@ DEFAULT_DOCSET_PATH = os.path.expanduser(
     "~/Library/Application Support/doc2dash/DocSets"
 )
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
-
-
-class ClickEchoHandler(logging.Handler):
-    """
-    Use click.echo() for logging.  Has the advantage of stripping color codes
-    if output is redirected.  Also is generally more predictable.
-    """
-
-    _level_to_fg = {logging.ERROR: "red", logging.WARN: "yellow"}
-
-    def emit(self, record):
-        click.echo(
-            click.style(
-                record.getMessage(),
-                fg=self._level_to_fg.get(record.levelno, "reset"),
-            ),
-            err=record.levelno >= logging.WARN,
-        )
 
 
 class ImportableType(click.ParamType):
@@ -236,37 +221,6 @@ def main(
         os.system(f'open -a dash "{dest}"')
 
 
-def create_log_config(verbose, quiet):
-    """
-    We use logging's levels as an easy-to-use verbosity controller.
-    """
-    if verbose and quiet:
-        raise ValueError(
-            "Supplying both --quiet and --verbose makes no sense."
-        )
-    elif verbose:
-        level = logging.DEBUG
-    elif quiet:
-        level = logging.ERROR
-    else:
-        level = logging.INFO
-
-    logger_cfg = {"handlers": ["click_handler"], "level": level}
-
-    return {
-        "version": 1,
-        "formatters": {"click_formatter": {"format": "%(message)s"}},
-        "handlers": {
-            "click_handler": {
-                "level": level,
-                "class": "doc2dash.__main__.ClickEchoHandler",
-                "formatter": "click_formatter",
-            }
-        },
-        "loggers": {"doc2dash": logger_cfg, "__main__": logger_cfg},
-    }
-
-
 def setup_paths(source, destination, name, add_to_global, force):
     """
     Determine source and destination using the options.
@@ -291,16 +245,16 @@ def setup_paths(source, destination, name, add_to_global, force):
     return source, dest, name
 
 
-@attr.s(hash=True)
+@attrs.define(hash=True)
 class DocSet:
     """
     Summary of docset path and parameters.
     """
 
-    path = attr.ib()
-    docs = attr.ib()
-    plist = attr.ib()
-    db_conn = attr.ib()
+    path: str
+    docs: str
+    plist: str
+    db_conn: sqlite3.Connection
 
 
 def prepare_docset(

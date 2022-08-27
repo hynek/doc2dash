@@ -5,9 +5,10 @@ import shutil
 import sqlite3
 import sys
 
+from typing import ClassVar
 from unittest.mock import MagicMock, patch
 
-import attr
+import attrs
 import pytest
 
 from click.testing import CliRunner
@@ -21,8 +22,8 @@ from doc2dash.parsers.types import IParser, ParserEntry
 log = logging.getLogger(__name__)
 
 
-@pytest.fixture
-def runner():
+@pytest.fixture(name="runner")
+def _runner():
     """
     Click's test helper.
     """
@@ -84,11 +85,10 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     os.mkdir("foo")
     monkeypatch.setattr(main, "prepare_docset", fake_prepare)
 
-    @attr.s
+    @attrs.define
     class FakeParser(IParser):
-        doc_path = attr.ib(validator=attr.validators.instance_of(str))
-
-        name = "testtype"
+        name: ClassVar[str] = "testtype"
+        doc_path: str
 
         @staticmethod
         def detect(path):

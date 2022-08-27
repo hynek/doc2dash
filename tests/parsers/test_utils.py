@@ -1,6 +1,8 @@
 import logging
 
-import attr
+from typing import ClassVar
+
+import attrs
 import pytest
 
 from doc2dash.parsers.patcher import patch_anchors
@@ -8,13 +10,13 @@ from doc2dash.parsers.types import IParser, ParserEntry, TOCEntry
 from doc2dash.parsers.utils import has_file_with
 
 
-@attr.s
+@attrs.define
 class FakeParser(IParser):
-    doc_path = attr.ib(validator=attr.validators.instance_of(str))
-    _succeed_patching = attr.ib(default=True)
-    _patched_entries = attr.ib(default=attr.Factory(list))
+    doc_path: str
+    _succeed_patching: bool = True
+    _patched_entries: list = attrs.Factory(list)
 
-    name = "FakeParser"
+    name: ClassVar[str] = "FakeParser"
 
     @staticmethod
     def detect(path):

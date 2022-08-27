@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import os
 
-from typing import ClassVar, Generator, Mapping
+from typing import ClassVar, Generator, Mapping, Tuple
 
 import attrs
 
@@ -50,6 +50,9 @@ INV_TO_TYPE = {
     "var": entry_types.VARIABLE,
 }
 
+# This is what we get from the objects.inv inventory.
+InventoryEntry = Tuple[str, str, str, str]
+
 
 @attrs.define(hash=True)
 class InterSphinxParser(IParser):
@@ -79,7 +82,7 @@ class InterSphinxParser(IParser):
             )
 
     def _inv_to_entries(
-        self, inv: Mapping[str, Mapping]
+        self, inv: Mapping[str, Mapping[str, InventoryEntry]]
     ) -> Generator[ParserEntry, None, None]:
         """
         Iterate over a dictionary as returned from Sphinx's object.inv parser
@@ -109,7 +112,7 @@ class InterSphinxParser(IParser):
             return None
 
     def create_entry(
-        self, dash_type: str, key: str, inv_entry: tuple
+        self, dash_type: str, key: str, inv_entry: InventoryEntry
     ) -> ParserEntry:
         """
         Create a ParserEntry (or None) given inventory details
@@ -160,7 +163,7 @@ def find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
     return True
 
 
-def inv_entry_to_path(data: tuple) -> str:
+def inv_entry_to_path(data: InventoryEntry) -> str:
     """
     Determine the path from the intersphinx inventory entry
 

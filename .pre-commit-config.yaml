@@ -12,6 +12,12 @@ repos:
     hooks:
       - id: black
 
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.37.3
+    hooks:
+      - id: pyupgrade
+        args: [--py38-plus]
+
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:

@@ -18,7 +18,7 @@ from .types import IParser, ParserEntry, TOCEntry
 log = logging.getLogger(__name__)
 
 
-def coroutine(func: Callable) -> Callable:
+def coroutine(func: Callable) -> Callable:  # type: ignore[type-arg]
     def start(*args: Any, **kwargs: Any) -> Any:
         g = func(*args, **kwargs)
         g.__next__()
