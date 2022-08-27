@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Tolerate the absence of `py-modindex.html`. It can be useful to use `doc2dash` with non-Python *Sphinx* documentation, but it can be missing that file. [\#115](https://github.com/hynek/doc2dash/issues/115)
+- The absence of `py-modindex.html` files is now tolerated. It can be useful to use *doc2dash* with non-Python *Sphinx* documentation, but it can be missing that file. [\#115](https://github.com/hynek/doc2dash/issues/115)
 
 
 ## [2.4.1](https://github.com/hynek/doc2dash/compare/2.4.0...2.4.1) - 2022-01-21
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Every Python version older than 3.8. Please use 2.3 if you need to run `doc2dash` on legacy Python versions.
+- Every Python version older than 3.8. Please use 2.3 if you need to run *doc2dash* on legacy Python versions.
 
 ### Added
 
@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Work around a display bug in older Dash.app releases by setting the plist key `DashDocSetDeclaredInStyle` to `originalName`.
+- Work around a display bug in older*Dash.app*releases by setting the plist key `DashDocSetDeclaredInStyle` to `originalName`.
 
 
 ## [2.3.0](https://github.com/hynek/doc2dash/compare/2.2.0...2.3.0) - 2018-11-24
@@ -149,7 +149,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Fixed
 
-- Use better Dash.app types for modules and attributes.
+- Use better*Dash.app*types for modules and attributes.
 
 
 ## [1.0.0](https://github.com/hynek/doc2dash/compare/0.3.1...1.0.0) - 2012-10-14
@@ -174,8 +174,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add table of contents links to docs to get a nice TOC in dash when inside of a module.
-- Support DashDocSetFamily field.
+- Add table of contents links to docs to get a nice TOC in *Dash.app* when inside of a module.
+- Support `DashDocSetFamily` field.
 - Add `--verbose` and `--quiet` options.
 - Add `--destination` option.
 - Add `--add-to-dash` option.

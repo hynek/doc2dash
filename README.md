@@ -17,9 +17,9 @@
 
 <!-- begin-short -->
 
-`doc2dash` is an MIT-licensed extensible [Documentation Set](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6) generator intended to be used with the [Dash.app](https://kapeli.com/dash/) API browser for macOS or one of its many *free* [clones](https://doc2dash.readthedocs.io/en/latest/installation.html#viewer) for all relevant platforms.
+*doc2dash* is an MIT-licensed extensible [Documentation Set](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6) generator intended to be used with the [*Dash.app*](https://kapeli.com/dash/) API browser for macOS or one of its many *free* [clones](https://doc2dash.readthedocs.io/en/latest/installation.html#viewer) for all relevant platforms.
 
-If you’ve never heard of Dash.app and its likes, you’re missing out: together with `doc2dash` it’s all your API documentation at your fingertips – even when you're offline!
+If you’ve never heard of *Dash.app* and its likes, you’re missing out: together with *doc2dash* it’s all your API documentation at your fingertips – even when you're offline!
 
 <!-- end-short -->
 
@@ -37,4 +37,4 @@ Currently supported formats are:
 - **Documentation**: <https://doc2dash.readthedocs.io/>
 - **Changelog**: <https://doc2dash.readthedocs.io/en/stable/changelog.html>
 - **Supported Python Versions**: 3.8 and later (check the changelog for older releases that support _much_ older Python versions)
-- **Platforms**: Both Linux and macOS are tested although certain features are only available on macOS. Windows should work too.
+- **Platforms**: Both Linux and macOS are tested; Windows should work too.

@@ -1,0 +1,48 @@
+---
+site_name: doc2dash
+copyright: Copyright &copy; 2012 Hynek Schlawack
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+repo_url: https://github.com/hynek/doc2dash
+repo_name: hynek/doc2dash
+edit_uri: blob/main/docs
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/hynek
+
+markdown_extensions:
+  - admonition
+  - smarty
+  - attr_list
+  - mkdocs-click
+  - pymdownx.smartsymbols
+
+plugins:
+  - include-markdown
+
+nav:
+  - About: index.md
+  - Installation: installation.md
+  - Supported Formats: formats.md
+  - Usage: usage.md
