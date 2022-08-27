@@ -1,5 +1,6 @@
 ---
 site_name: doc2dash
+site_author: Hynek Schlawack
 copyright: Copyright &copy; 2012 Hynek Schlawack
 
 theme:
@@ -34,6 +35,8 @@ extra:
       link: https://twitter.com/hynek
     - icon: fontawesome/brands/github-alt
       link: https://github.com/hynek
+  version:
+    provider: mike  # liesssss
 
 markdown_extensions:
   - admonition
