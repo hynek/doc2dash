@@ -1,30 +1,22 @@
 # Create Docsets for Dash.app and Friends
 
-<p align="center">
-   <a href="https://doc2dash.readthedocs.io/">
-       <img src="https://img.shields.io/badge/Docs-Read%20The%20Docs-black" alt="Documentation" />
-   </a>
-   <a href="https://github.com/hynek/doc2dash/blob/main/LICENSE">
-      <img src="https://img.shields.io/badge/license-MIT%2FApache--2.0-C06524" alt="License: MIT / Apache 2.0" />
-   </a>
-   <a href="https://pypi.org/project/doc2dash/">
-      <img src="https://img.shields.io/pypi/v/doc2dash" alt="PyPI release" />
-   </a>
-   <a href="https://pepy.tech/project/doc2dash">
-       <img src="https://static.pepy.tech/personalized-badge/doc2dash?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads%20/%20Month" alt="Downloads per month" />
-   </a>
-</p>
+[![Documentation](https://img.shields.io/badge/Docs-Read%20The%20Docs-black)](https://doc2dash.readthedocs.io/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-C06524)](https://github.com/hynek/doc2dash/blob/main/LICENSE)
+[![Current PyPI release](https://img.shields.io/pypi/v/doc2dash)](https://pypi.org/project/doc2dash/)
+[![Downloads per month](https://static.pepy.tech/personalized-badge/doc2dash?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads%20/%20Month)](https://pepy.tech/project/doc2dash)
 
 <!-- begin-short -->
 
-*doc2dash* is an extensible [Documentation Set](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6) generator intended to be used with [*Dash.app*-compatible](https://kapeli.com/dash/) API browsers.
+*doc2dash* is an extensible [Documentation Set](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6) (*docset*) generator that helps you to have documentation for all your favorite APIs in [*Dash.app*-compatible](https://kapeli.com/dash/) API browsers.
 
-If you've never heard of *Dash.app* and its likes, you're missing out: together with *doc2dash* it's all your API documentation at your fingertips – even when you're offline!
+An API browser is an application that runs locally on your computer and allows you to search various API docs by pressing a key combination and starting to type (I have bound it to Alt-Space bar and can't write code without it).
 
-Currently supported formats are:
+The most common ones – [*Dash.app*](https://kapeli.com/dash) (macOS) and [*Zeal*](https://zealdocs.org) (Windows and Linux) – come with **many** docsets out of the box, but they can never offer you docsets for *every* package you'll ever use.
+This is where *doc2dash* comes in:
+It takes your offline documentation and converts it into an indexed format that API browsers can read and search (very fast!).
 
-- [*Sphinx*](https://www.sphinx-doc.org/)
-- [*pydoctor*](https://github.com/twisted/pydoctor)
+Currently it supports [*Sphinx*](https://www.sphinx-doc.org/) and [*pydoctor*](https://github.com/twisted/pydoctor), but it can be extended by its users:
+you can write your own private parsers.
 
 
 ## Project Information
