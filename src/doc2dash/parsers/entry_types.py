@@ -1,4 +1,11 @@
-# Pick from https://kapeli.com/docsets#supportedentrytypes
+"""
+Possible types for entries.
+
+Pick from https://kapeli.com/docsets#supportedentrytypes
+"""
+
+from __future__ import annotations
+
 
 ATTRIBUTE = "Attribute"
 CLASS = "Class"

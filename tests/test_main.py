@@ -1,12 +1,11 @@
 import errno
 import logging
 import os
-import shutil
 import sqlite3
 import sys
 
 from typing import ClassVar
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import attrs
 import pytest
@@ -16,6 +15,7 @@ from click.testing import CliRunner
 import doc2dash
 
 from doc2dash import __main__ as main
+from doc2dash import docsets
 from doc2dash.parsers.types import IParser, ParserEntry
 
 
@@ -31,7 +31,7 @@ def _runner():
 
 
 class TestArguments:
-    def test_fails_with_unknown_icon(self, runner, tmpdir, monkeypatch):
+    def test_fails_with_unknown_icon(self, runner, tmpdir):
         """
         Fail if icon is not PNG.
         """
@@ -75,7 +75,8 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
             "CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, "
             "type TEXT, path TEXT)"
         )
-        return main.DocSet(
+
+        return docsets.DocSet(
             path=str(tmpdir), docs="data", plist=None, db_conn=db_conn
         )
 
@@ -83,7 +84,7 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
     png_file = tmpdir.join("icon.png")
     png_file.write(main.PNG_HEADER, mode="wb")
     os.mkdir("foo")
-    monkeypatch.setattr(main, "prepare_docset", fake_prepare)
+    monkeypatch.setattr(docsets, "prepare_docset", fake_prepare)
 
     @attrs.define
     class FakeParser(IParser):
@@ -113,37 +114,42 @@ Adding to Dash.app...
 
     # alternative 1: use --parser
     sys.modules["fake_module"] = fake_module
-    with patch("os.system") as system:
-        result = runner.invoke(
-            main.main,
-            [
-                "foo",
-                "--parser",
-                "fake_module.Parser",
-                "-n",
-                "bah",
-                "-a",
-                "-i",
-                str(png_file),
-            ],
-        )
+    system_mock = MagicMock(spec_set=os.system)
+    monkeypatch.setattr(os, "system", system_mock)
+
+    result = runner.invoke(
+        main.main,
+        [
+            "foo",
+            "--parser",
+            "fake_module.Parser",
+            "-n",
+            "bah",
+            "-a",
+            "-i",
+            str(png_file),
+        ],
+    )
+
     assert expected.format(name="bah") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "./bah.docset"',) == system.call_args[0]
+    assert ('open -a dash "./bah.docset"',) == system_mock.call_args[0]
 
     # alternative 2: patch doc2dash.parsers
     monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
-    with patch("os.system") as system:
-        result = runner.invoke(
-            main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
-        )
+    system_mock.reset_mock()
+
+    result = runner.invoke(
+        main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
+    )
+
     assert expected.format(name="bar") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "./bar.docset"',) == system.call_args[0]
+    assert ('open -a dash "./bar.docset"',) == system_mock.call_args[0]
 
     # Again, just without adding and icon.
-    with patch("os.system") as system:
-        result = runner.invoke(main.main, ["foo", "-n", "baz"])
+    system_mock.reset_mock()
+    result = runner.invoke(main.main, ["foo", "-n", "baz"])
 
     assert 0 == result.exit_code
 
@@ -152,22 +158,23 @@ Adding to Dash.app...
     result = runner.invoke(
         main.main, ["foo", "-n", "bing", "--parser", "no_dot"]
     )
+
     assert "'no_dot' is not an import path" in result.output
     assert 2 == result.exit_code
 
-    with patch("os.system") as system:
-        result = runner.invoke(
-            main.main,
-            ["foo", "-n", "bing", "--parser", "nonexistent_module.Parser"],
-        )
+    result = runner.invoke(
+        main.main,
+        ["foo", "-n", "bing", "--parser", "nonexistent_module.Parser"],
+    )
+
     assert "Could not import module 'nonexistent_module'" in result.output
     assert 2 == result.exit_code
 
-    with patch("os.system") as system:
-        result = runner.invoke(
-            main.main,
-            ["foo", "-n", "bing", "--parser", "sys.NonexistentParser"],
-        )
+    result = runner.invoke(
+        main.main,
+        ["foo", "-n", "bing", "--parser", "sys.NonexistentParser"],
+    )
+
     assert (
         "Failed to get attribute 'NonexistentParser' from module 'sys'"
         in result.output
@@ -281,140 +288,6 @@ class TestSetupPaths:
                 add_to_global=False,
             )[2]
         )
-
-
-class TestPrepareDocset:
-    def test_plist_creation(self, monkeypatch, tmpdir):
-        """
-        All arguments should be reflected in the plist.
-        """
-        monkeypatch.chdir(tmpdir)
-        m_ct = MagicMock()
-        monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
-        docset = main.prepare_docset(
-            "some/path/foo",
-            "bar",
-            name="foo",
-            index_page=None,
-            enable_js=False,
-            online_redirect_url=None,
-        )
-        m_ct.assert_called_once_with(
-            "some/path/foo", "bar/Contents/Resources/Documents"
-        )
-
-        assert os.path.isfile("bar/Contents/Resources/docSet.dsidx")
-
-        p = main.read_plist(docset.plist)
-
-        assert p == {
-            "CFBundleIdentifier": "foo",
-            "CFBundleName": "foo",
-            "DocSetPlatformFamily": "foo",
-            "DashDocSetFamily": "python",
-            "DashDocSetDeclaredInStyle": "originalName",
-            "isDashDocset": True,
-            "isJavaScriptEnabled": False,
-        }
-
-        with sqlite3.connect("bar/Contents/Resources/docSet.dsidx") as db_conn:
-            cur = db_conn.cursor()
-            # ensure table exists and is empty
-            cur.execute("select count(1) from searchIndex")
-
-            assert cur.fetchone()[0] == 0
-
-    def test_with_index_page(self, monkeypatch, tmpdir):
-        """
-        If an index page is passed, it is added to the plist.
-        """
-        monkeypatch.chdir(tmpdir)
-        m_ct = MagicMock()
-        monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
-        docset = main.prepare_docset(
-            "some/path/foo",
-            "bar",
-            name="foo",
-            index_page="foo.html",
-            enable_js=False,
-            online_redirect_url=None,
-        )
-
-        p = main.read_plist(docset.plist)
-
-        assert p == {
-            "CFBundleIdentifier": "foo",
-            "CFBundleName": "foo",
-            "DocSetPlatformFamily": "foo",
-            "DashDocSetFamily": "python",
-            "DashDocSetDeclaredInStyle": "originalName",
-            "isDashDocset": True,
-            "dashIndexFilePath": "foo.html",
-            "isJavaScriptEnabled": False,
-        }
-
-    def test_with_javascript_enabled(self, monkeypatch, tmpdir):
-        """
-        If an index page is passed, it is added to the plist.
-        """
-        monkeypatch.chdir(tmpdir)
-        m_ct = MagicMock()
-        monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
-        docset = main.prepare_docset(
-            "some/path/foo",
-            "bar",
-            name="foo",
-            index_page="foo.html",
-            enable_js=True,
-            online_redirect_url=None,
-        )
-
-        p = main.read_plist(docset.plist)
-
-        assert p == {
-            "CFBundleIdentifier": "foo",
-            "CFBundleName": "foo",
-            "DocSetPlatformFamily": "foo",
-            "DashDocSetFamily": "python",
-            "DashDocSetDeclaredInStyle": "originalName",
-            "isDashDocset": True,
-            "dashIndexFilePath": "foo.html",
-            "isJavaScriptEnabled": True,
-        }
-
-    def test_with_online_redirect_url(self, monkeypatch, tmpdir):
-        """
-        If an index page is passed, it is added to the plist.
-        """
-        monkeypatch.chdir(tmpdir)
-        m_ct = MagicMock()
-        monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
-        docset = main.prepare_docset(
-            "some/path/foo",
-            "bar",
-            name="foo",
-            index_page="foo.html",
-            enable_js=False,
-            online_redirect_url="https://domain.com",
-        )
-
-        p = main.read_plist(docset.plist)
-
-        assert p == {
-            "CFBundleIdentifier": "foo",
-            "CFBundleName": "foo",
-            "DocSetPlatformFamily": "foo",
-            "DashDocSetFamily": "python",
-            "DashDocSetDeclaredInStyle": "originalName",
-            "isDashDocset": True,
-            "dashIndexFilePath": "foo.html",
-            "isJavaScriptEnabled": False,
-            "DashDocSetFallbackURL": "https://domain.com",
-        }
 
 
 class TestSetupLogging:

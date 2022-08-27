@@ -5,16 +5,13 @@ import importlib
 import logging
 import logging.config
 import os
-import plistlib
 import shutil
-import sqlite3
 
 from importlib import metadata
 
-import attrs
 import click
 
-from . import parsers
+from . import docsets, parsers
 from .output import create_log_config
 from .parsers.patcher import patch_anchors
 
@@ -152,9 +149,8 @@ def main(
         icon_data = icon.read()
         if not icon_data.startswith(PNG_HEADER):
             log.error(
-                '"{}" is not a valid PNG image.'.format(
-                    click.format_filename(icon.name)
-                )
+                '"%s" is not a valid PNG image.',
+                click.format_filename(icon.name),
             )
             raise SystemExit(1)
     else:
@@ -176,7 +172,7 @@ def main(
                 )
             )
             raise SystemExit(errno.EINVAL)
-    docset = prepare_docset(
+    docset = docsets.prepare_docset(
         source, dest, name, index_page, enable_js, online_redirect_url
     )
     doc_parser = parser(doc_path=docset.docs)
@@ -214,7 +210,7 @@ def main(
         toc.close()
 
     if icon_data:
-        add_icon(icon_data, dest)
+        docsets.add_icon(icon_data, dest)
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash.app...")
@@ -242,79 +238,8 @@ def setup_paths(source, destination, name, add_to_global, force):
             f'Destination path "{click.format_filename(dest)}" already exists.'
         )
         raise SystemExit(errno.EEXIST)
+
     return source, dest, name
-
-
-@attrs.define(hash=True)
-class DocSet:
-    """
-    Summary of docset path and parameters.
-    """
-
-    path: str
-    docs: str
-    plist: str
-    db_conn: sqlite3.Connection
-
-
-def prepare_docset(
-    source, dest, name, index_page, enable_js, online_redirect_url
-):
-    """
-    Create boilerplate files & directories and copy vanilla docs inside.
-
-    Return a tuple of path to resources and connection to sqlite db.
-    """
-    resources = os.path.join(dest, "Contents", "Resources")
-    docs = os.path.join(resources, "Documents")
-    os.makedirs(resources)
-
-    db_conn = sqlite3.connect(os.path.join(resources, "docSet.dsidx"))
-    db_conn.row_factory = sqlite3.Row
-    db_conn.execute(
-        "CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, "
-        "type TEXT, path TEXT)"
-    )
-    db_conn.commit()
-
-    plist_path = os.path.join(dest, "Contents", "Info.plist")
-    plist_cfg = {
-        "CFBundleIdentifier": name,
-        "CFBundleName": name,
-        "DocSetPlatformFamily": name.lower(),
-        "DashDocSetFamily": "python",
-        "DashDocSetDeclaredInStyle": "originalName",
-        "isDashDocset": True,
-        "isJavaScriptEnabled": enable_js,
-    }
-    if index_page is not None:
-        plist_cfg["dashIndexFilePath"] = index_page
-    if online_redirect_url is not None:
-        plist_cfg["DashDocSetFallbackURL"] = online_redirect_url
-
-    write_plist(plist_cfg, plist_path)
-
-    shutil.copytree(source, docs)
-
-    return DocSet(path=dest, docs=docs, plist=plist_path, db_conn=db_conn)
-
-
-def add_icon(icon_data, dest):
-    """
-    Add icon to docset
-    """
-    with open(os.path.join(dest, "icon.png"), "wb") as f:
-        f.write(icon_data)
-
-
-def read_plist(full_path):
-    with open(full_path, "rb") as fp:
-        return plistlib.load(fp)
-
-
-def write_plist(plist, full_path):
-    with open(full_path, "wb") as fp:
-        plistlib.dump(plist, fp)
 
 
 if __name__ == "__main__":
