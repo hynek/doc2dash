@@ -4,7 +4,7 @@ version: 2
 build:
   os: ubuntu-20.04
   tools:
-    # Keep version in sync with tox.ini (docs and gh-actions).
+    # Keep version in sync with docs session in noxfile.py.
     python: "3.8"
 
 python:

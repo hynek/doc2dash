@@ -10,13 +10,12 @@ on:
 
 env:
   FORCE_COLOR: "1" # Make tools pretty.
-  TOX_TESTENV_PASSENV: FORCE_COLOR
   SETUPTOOLS_SCM_PRETEND_VERSION: "1.0" # avoid warnings about shallow checkout
   PYTHON_LATEST: "3.10"
 
 jobs:
   tests:
-    name: tox on ${{ matrix.python-version }}
+    name: nox on ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,9 +33,9 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip wheel
-          python -m pip install --upgrade virtualenv tox tox-gh-actions
+          python -m pip install --upgrade virtualenv nox
 
-      - run: python -m tox
+      - run: nox --python ${{ matrix.python-version }}
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v2
