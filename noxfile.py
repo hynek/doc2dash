@@ -57,3 +57,18 @@ def update_rtd_versions(session: nox.Session) -> None:
     session.install("urllib3")
 
     session.run("python", "docs/update-rtd-versions.py", "doc2dash")
+
+
+@nox.session
+def pin_for_oxidizer(session: nox.Session) -> None:
+    session.install("pip-tools")
+
+    session.run(
+        "pip-compile",
+        "--no-emit-index-url",
+        "--resolver",
+        "backtracking",
+        "--output-file",
+        "pyoxidizer-requirements.txt",
+        "pyproject.toml",
+    )
