@@ -44,7 +44,7 @@ docs = [
     "mkdocs-click",
 ]
 typing = ["mypy", "types-urllib3"]
-dev = ["doc2dash[tests,docs,typing]"]
+dev = ["doc2dash[tests,typing]"]
 
 [project.scripts]
 doc2dash = "doc2dash.__main__:main"

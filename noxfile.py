@@ -40,9 +40,12 @@ def coverage_report(session: nox.Session) -> None:
 
 @nox.session(python="3.9")
 def docs(session: nox.Session) -> None:
-    session.install("-r", "requirements/docs.txt", ".")
+    session.install("-r", "requirements/docs.txt", "-e", ".")
 
-    session.run("mkdocs", "build", "--clean", "--strict")
+    if session.posargs:
+        session.run("mkdocs", *session.posargs)
+    else:
+        session.run("mkdocs", "build", "--clean", "--strict")
 
 
 @nox.session(python=DEFAULT_PYTHON)

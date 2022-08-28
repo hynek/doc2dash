@@ -7,6 +7,7 @@ Here are a few guidelines to get you started:
 - No contribution is too small; please submit as many fixes for typos and grammar bloopers as you can!
 - Try to limit each pull request to one change only.
 - To run the test suite, all you need is a recent [*Nox*](https://nox.thea.codes/en/stable/).
+- To build the docs run `nox -e docs`, to start a local webserver with the docs run `nox -e docs -- serve`.
   It will ensure the test suite runs with all dependencies against all Python versions just as it will in our [CI](https://github.com/hynek/doc2dash/actions).
 - Make sure your changes pass our CI.
   You won't get any feedback until it's green unless you ask for it.
