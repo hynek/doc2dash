@@ -38,9 +38,9 @@ def coverage_report(session: nox.Session) -> None:
     session.run("coverage", "report")
 
 
-@nox.session(python="3.8")
+@nox.session(python="3.9")
 def docs(session: nox.Session) -> None:
-    session.install(".[docs]")
+    session.install("-r", "requirements/docs.txt", ".")
 
     session.run("mkdocs", "build", "--clean", "--strict")
 
@@ -61,14 +61,31 @@ def update_rtd_versions(session: nox.Session) -> None:
 
 @nox.session
 def pin_for_oxidizer(session: nox.Session) -> None:
-    session.install("pip-tools")
+    session.install("pip-tools>=6.8.0")
 
     session.run(
         "pip-compile",
-        "--no-emit-index-url",
         "--resolver",
         "backtracking",
         "--output-file",
-        "pyoxidizer-requirements.txt",
+        "requirements/pyoxidizer.txt",
+        "--no-emit-index-url",
+        "pyproject.toml",
+    )
+
+
+@nox.session
+def pin_docs(session: nox.Session) -> None:
+    session.install("pip-tools>=6.8.0")
+
+    session.run(
+        "pip-compile",
+        "--extra",
+        "docs",
+        "--resolver",
+        "backtracking",
+        "--output-file",
+        "requirements/docs.txt",
+        "--no-emit-index-url",
         "pyproject.toml",
     )

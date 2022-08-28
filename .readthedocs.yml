@@ -5,14 +5,13 @@ build:
   os: ubuntu-20.04
   tools:
     # Keep version in sync with docs session in noxfile.py.
-    python: "3.8"
+    python: "3.9"
 
 python:
   install:
+    - requirements: requirements/docs.txt
     - method: pip
       path: .
-      extra_requirements:
-        - docs
 
 mkdocs:
   configuration: mkdocs.yml

@@ -202,14 +202,14 @@ def make_exe():
     # resources, and other options. The returned object represents the
     # standalone executable that will be built.
     exe = dist.to_python_executable(
-        name="doc2dash",
+        name = "doc2dash",
 
         # If no argument passed, the default `PythonPackagingPolicy` for the
         # distribution is used.
-        packaging_policy=policy,
+        packaging_policy = policy,
 
         # If no argument passed, the default `PythonInterpreterConfig` is used.
-        config=python_config,
+        config = python_config,
     )
 
     # Install tcl/tk support files to a specified directory so the `tkinter` Python
@@ -247,9 +247,8 @@ def make_exe():
     # attributes.
 
     # Install pinned dependencies, then ourselves.
-    exe.add_python_resources(exe.pip_install(["-r", "pyoxidizer-requirements.txt"]))
+    exe.add_python_resources(exe.pip_install(["-r", "requirements/pyoxidizer.txt"]))
     exe.add_python_resources(exe.pip_install(["."]))
-
 
     # Read Python files from a local directory and add them to our embedded
     # context, taking just the resources belonging to the `foo` and `bar`
@@ -295,9 +294,8 @@ def make_msi(exe):
         # The version of your application.
         "1.0",
         # The author/manufacturer of your application.
-        "Alice Jones"
+        "Alice Jones",
     )
-
 
 # Dynamically enable automatic code signing.
 def register_code_signers():
@@ -330,15 +328,14 @@ def register_code_signers():
     # Activate your signer so it gets called automatically.
     # signer.activate()
 
-
 # Call our function to set up automatic code signers.
 register_code_signers()
 
 # Tell PyOxidizer about the build targets defined above.
 register_target("exe", make_exe)
-register_target("resources", make_embedded_resources, depends=["exe"], default_build_script=True)
-register_target("install", make_install, depends=["exe"], default=True)
-register_target("msi_installer", make_msi, depends=["exe"])
+register_target("resources", make_embedded_resources, depends = ["exe"], default_build_script = True)
+register_target("install", make_install, depends = ["exe"], default = True)
+register_target("msi_installer", make_msi, depends = ["exe"])
 
 # Resolve whatever targets the invoker of this configuration file is requesting
 # be resolved.
