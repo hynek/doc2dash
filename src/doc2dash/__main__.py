@@ -64,7 +64,13 @@ IMPORTABLE = ImportableType()
         path_type=Path,
     ),
 )
-@click.option("--name", "-n", help="Name docset explicitly.", metavar="NAME")
+@click.option(
+    "--name",
+    "-n",
+    help="Name docset explicitly. If not passed, the parser tries to guess. "
+    "If it fails, the directory name of SOURCE is used.",
+    metavar="NAME",
+)
 @click.option(
     "--destination",
     "-d",
