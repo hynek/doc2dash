@@ -41,7 +41,7 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     """
     result = runner.invoke(
         main.main,
-        [str(sphinx_built), "-n", "SphinxDocs", "-d", str(tmp_path)],
+        [str(sphinx_built), "-q", "-n", "SphinxDocs", "-d", str(tmp_path)],
         catch_exceptions=False,
     )
 
@@ -50,14 +50,7 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     resources = contents / "Resources"
 
     assert 0 == result.exit_code
-    assert (
-        f"""Converting intersphinx docs from '{sphinx_built}' to '{docset}'.
-Parsing documentation...
-Adding table of contents meta data...
-Added 15 index entries.
-"""
-        == result.stdout
-    )
+    assert "\n" == result.stdout
     assert {
         "CFBundleIdentifier": "SphinxDocs",
         "CFBundleName": "SphinxDocs",
@@ -213,7 +206,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     expected = """\
 Converting testtype docs from '{src}' to '{name}.docset'.
 Parsing documentation...
-Adding table of contents meta data...
+Patching files... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   0% -:--:--
 Added 1 index entries.
 Adding to Dash.app...
 """

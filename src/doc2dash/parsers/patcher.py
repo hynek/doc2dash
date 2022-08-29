@@ -6,12 +6,12 @@ import os
 import urllib
 
 from collections import defaultdict
-from typing import Any, Callable, Generator, Iterable
-
-import click
+from typing import Any, Callable, Generator
 
 from bs4 import BeautifulSoup
+from rich.progress import Progress
 
+from ..output import console
 from .types import IParser, ParserEntry, TOCEntry
 
 
@@ -51,26 +51,22 @@ def patch_anchors(
     except GeneratorExit:
         pass
 
-    if show_progressbar is True:
-        with click.progressbar(
-            files.items(),
-            width=0,
-            length=len(files),
-            label="Adding table of contents meta data...",
-        ) as pbar:
-            _patch_files(parser, pbar)
-    else:
-        _patch_files(parser, files.items())
+    with Progress(console=console, disable=not show_progressbar) as pbar:
+        _patch_files(parser, files, pbar)
 
 
 def _patch_files(
-    parser: IParser, files: Iterable[tuple[str, list[TOCEntry]]]
+    parser: IParser,
+    files: dict[str, list[TOCEntry]],
+    pbar: Progress,
 ) -> None:
-    for fname, entries in files:
+    files_task = pbar.add_task("Patching files...", total=len(files))
+
+    for fname, entries in files.items():
         fname = urllib.parse.unquote(fname)
         full_path = os.path.join(parser.doc_path, fname)
         try:
-            soup = _patch_file(parser, fname, full_path, entries)
+            soup = _patch_file(pbar, parser, fname, full_path, entries)
         except FileNotFoundError:
             # This can happen in non-Python Sphinx docs.
             if fname == "py-modindex.html":
@@ -81,10 +77,17 @@ def _patch_files(
             with open(full_path, mode="wb") as fp:
                 fp.write(soup.encode("utf-8"))
 
+        pbar.update(files_task, advance=1)
+
 
 def _patch_file(
-    parser: IParser, fname: str, full_path: str, entries: list[TOCEntry]
+    pbar: Progress,
+    parser: IParser,
+    fname: str,
+    full_path: str,
+    entries: list[TOCEntry],
 ) -> BeautifulSoup:
+    task = pbar.add_task(f"Patching {fname}...", total=len(entries))
     with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
         soup = BeautifulSoup(fp, "html.parser")
         for entry in entries:
@@ -95,4 +98,6 @@ def _patch_file(
                     entry.type,
                     fname,
                 )
+            pbar.update(task, advance=1)
+
     return soup

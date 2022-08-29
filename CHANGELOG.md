@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - *Sphinx*: if no explicit name is passed, the docset name is derived von the docs's metadata (and not the directory name, which is more often than not just `html`).
+- We use [*rich*](https://rich.readthedocs.io/) for output and progress bars now. This allows us more granular progress indication.
 
 
 ### Changed
