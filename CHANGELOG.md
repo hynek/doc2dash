@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - *Sphinx*: The absence of `py-modindex.html` files is now tolerated. It can be useful to use *doc2dash* with non-Python *Sphinx* documentation, but it can be missing that file. [\#115](https://github.com/hynek/doc2dash/issues/115)
 - *Sphinx*: we now  parse `intersphinx` inventories on our own; *Sphinx* is not a dependency anymore.
+- *doc2dash* now checks if the index page passed via `--index-page` / `-I` exists and fails if it doesn't.
 
 
 ## [2.4.1](https://github.com/hynek/doc2dash/compare/2.4.0...2.4.1) - 2022-01-21

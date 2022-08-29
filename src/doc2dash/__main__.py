@@ -88,9 +88,9 @@ IMPORTABLE = ImportableType()
     "--index-page",
     "-I",
     metavar="FILENAME",
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(path_type=Path),
     help="Set the file that is shown when the docset is clicked within "
-    "Dash.app.",
+    "Dash.app relative to the root of SOURCE.",
 )
 @click.option(
     "--add-to-dash",
@@ -166,7 +166,15 @@ def main(
                 '"%s" is not a valid PNG image.',
                 click.format_filename(icon.name),
             )
-            raise SystemExit(1)
+            raise SystemExit(errno.EINVAL)
+
+    if index_page and not (source / index_page).exists():
+        log.error(
+            'Index page "%s" does not exist within "%s".',
+            index_page,
+            source,
+        )
+        raise SystemExit(errno.ENOENT)
 
     if parser_type is None:
         parser_type = parsers.get_doctype(source)
@@ -188,6 +196,7 @@ def main(
     docset = docsets.prepare_docset(
         source, dest, name, index_page, enable_js, online_redirect_url, icon
     )
+
     parser = parser_type(doc_path=docset.docs)
 
     log.info(

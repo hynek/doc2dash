@@ -124,7 +124,23 @@ class TestArguments:
         result = runner.invoke(main.main, [str(tmp_path), "-i", str(p)])
 
         assert result.output.endswith(" is not a valid PNG image.\n")
-        assert 1 == result.exit_code
+        assert errno.EINVAL == result.exit_code
+
+    def test_fails_with_missing_index_page(
+        self, runner, sphinx_built, tmp_path
+    ):
+        """
+        Fail if --index-page file is missing.
+        """
+        result = runner.invoke(
+            main.main,
+            [str(sphinx_built), "-d", str(tmp_path), "--index-page", "xxx"],
+        )
+
+        assert (
+            f'Index page "xxx" does not exist within "{sphinx_built}".\n'
+            == result.output
+        )
 
     def test_handles_unknown_doc_types(self, runner, tmp_path):
         """
