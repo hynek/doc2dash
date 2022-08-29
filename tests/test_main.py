@@ -50,7 +50,7 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
 
     assert 0 == result.exit_code
     assert (
-        f"""Converting intersphinx docs from "html" to "{docset}".
+        f"""Converting intersphinx docs from "{sphinx_built}" to "{docset}".
 Parsing documentation...
 Adding table of contents meta data...
 Added 15 index entries.
@@ -184,7 +184,8 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     png_file = tmp_path / "icon.png"
     png_file.write_bytes(main.PNG_HEADER)
 
-    Path("foo").mkdir()
+    src = Path("foo").resolve()
+    src.mkdir()
     monkeypatch.setattr(docsets, "prepare_docset", fake_prepare)
 
     @attrs.define
@@ -209,7 +210,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         Parser = FakeParser
 
     expected = """\
-Converting testtype docs from "foo" to "{name}.docset".
+Converting testtype docs from "{src}" to "{name}.docset".
 Parsing documentation...
 Adding table of contents meta data...
 Added 1 index entries.
@@ -236,7 +237,7 @@ Adding to Dash.app...
         catch_exceptions=False,
     )
 
-    assert expected.format(name="bah") == result.output
+    assert expected.format(src=src, name="bah") == result.output
     assert 0 == result.exit_code
     assert ('open -a dash "bah.docset"',) == system_mock.call_args[0]
 
@@ -250,7 +251,7 @@ Adding to Dash.app...
         catch_exceptions=False,
     )
 
-    assert expected.format(name="bar") == result.output
+    assert expected.format(src=src, name="bar") == result.output
     assert 0 == result.exit_code
     assert ('open -a dash "bar.docset"',) == system_mock.call_args[0]
 

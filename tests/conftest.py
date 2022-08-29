@@ -7,7 +7,7 @@ import pytest
 def _sphinx_docs():
     return (
         Path("tests") / "parsers" / "intersphinx" / "example-sphinx-docs"
-    ).absolute()
+    ).resolve()
 
 
 @pytest.fixture(name="sphinx_built", scope="session")

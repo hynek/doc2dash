@@ -96,16 +96,15 @@ IMPORTABLE = ImportableType()
     "--add-to-dash",
     "-a",
     is_flag=True,
-    help="Automatically add resulting docset to Dash.app.",
+    help="Automatically add resulting docset to Dash.app (works only on "
+    "macOS).",
 )
 @click.option(
     "--add-to-global",
     "-A",
     is_flag=True,
-    help="Create docset in doc2dash's default global directory [{}] "
-    "and add it to Dash.app (works only on macOS).".format(
-        click.format_filename(DEFAULT_DOCSET_PATH)
-    ),
+    help="Create docset in doc2dash's default global directory "
+    f"[{DEFAULT_DOCSET_PATH}] and add it to Dash.app (works only on macOS).",
 )
 @click.option(
     "--quiet", "-q", is_flag=True, help="Limit output to errors and warnings."
@@ -164,7 +163,7 @@ def main(
         if header != PNG_HEADER:
             log.error(
                 '"%s" is not a valid PNG image.',
-                click.format_filename(icon.name),
+                icon.name,
             )
             raise SystemExit(errno.EINVAL)
 
@@ -180,9 +179,7 @@ def main(
         parser_type = parsers.get_doctype(source)
         if parser_type is None:
             log.error(
-                '"{}" does not contain a known documentation format.'.format(
-                    click.format_filename(source)
-                )
+                '"%s" does not contain a known documentation format.', source
             )
             raise SystemExit(errno.EINVAL)
 
@@ -204,8 +201,8 @@ def main(
         + click.style("%s", bold=True)
         + ' docs from "%s" to "%s".',
         parser.name,
-        click.format_filename(source, shorten=True),
-        click.format_filename(dest),
+        source,
+        dest,
     )
 
     convert_docs(parser=parser, docset=docset, quiet=quiet)
@@ -245,9 +242,8 @@ def setup_destination(
     if dst_exists and force:
         shutil.rmtree(dest)
     elif dst_exists:
-        log.error(
-            f'Destination path "{click.format_filename(dest)}" already exists.'
-        )
+        log.error('Destination path "%s" already exists.', dest)
+
         raise SystemExit(errno.EEXIST)
 
     return dest

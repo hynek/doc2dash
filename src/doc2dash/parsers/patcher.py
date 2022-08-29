@@ -86,9 +86,9 @@ def _patch_file(
         for entry in entries:
             if not parser.find_and_patch_entry(soup, entry):
                 log.debug(
-                    "Can't find anchor '%s' (%s) in %r.",
+                    "Can't find anchor '%s' (%s) in '%s'.",
                     entry.anchor,
                     entry.type,
-                    click.format_filename(fname),
+                    fname,
                 )
     return soup
