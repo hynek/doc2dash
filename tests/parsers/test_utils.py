@@ -98,7 +98,7 @@ class TestPatchTOCAnchors:
         toc.close()
 
         assert [
-            "Can't open file foo/py-modindex.html. Skipping."
+            "Can't open file 'foo/py-modindex.html'. Skipping."
         ] == caplog.messages
 
     def test_missing_other_files_explode(self):

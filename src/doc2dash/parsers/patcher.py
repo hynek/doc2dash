@@ -59,7 +59,7 @@ def patch_anchors(
                 soup = _patch_file(parser, fname, full_path, entries)
             except FileNotFoundError:
                 if fname == "py-modindex.html":
-                    log.warning("Can't open file %s. Skipping.", full_path)
+                    log.warning("Can't open file '%s'. Skipping.", full_path)
                 else:
                     raise
             else:
