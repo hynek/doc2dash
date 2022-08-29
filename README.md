@@ -18,6 +18,8 @@ It takes your offline documentation and converts it into an indexed format that 
 Currently it supports [*Sphinx*](https://www.sphinx-doc.org/) and [*pydoctor*](https://github.com/twisted/pydoctor), but it can be extended by its users:
 you can write your own private parsers.
 
+![doc2dash Session](docs/doc2dash-session.png)
+
 
 ## Project Information
 
