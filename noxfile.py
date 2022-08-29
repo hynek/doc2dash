@@ -51,11 +51,11 @@ def rebuild_sample_docs(session: nox.Session) -> None:
     # Awkward name to avoid "_build" / "build" from .gitignore.
     session.run("sphinx-build", "-M", "html", "source", "built_docs")
 
-    # CLean up stuff we don't need
+    # Clean up stuff we don't need.
     built = Path("built_docs")
-    shutil.rmtree(built / "doctrees")
-
     html = built / "html"
+
+    shutil.rmtree(built / "doctrees")
     shutil.rmtree(html / "_sources")
     shutil.rmtree(html / "_static")
     os.remove(html / ".buildinfo")
