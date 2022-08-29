@@ -51,7 +51,7 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
 
     assert 0 == result.exit_code
     assert (
-        f"""Converting intersphinx docs from "{sphinx_built}" to "{docset}".
+        f"""Converting intersphinx docs from '{sphinx_built}' to '{docset}'.
 Parsing documentation...
 Adding table of contents meta data...
 Added 15 index entries.
@@ -211,7 +211,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         Parser = FakeParser
 
     expected = """\
-Converting testtype docs from "{src}" to "{name}.docset".
+Converting testtype docs from '{src}' to '{name}.docset'.
 Parsing documentation...
 Adding table of contents meta data...
 Added 1 index entries.

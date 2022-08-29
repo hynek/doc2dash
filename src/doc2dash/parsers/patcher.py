@@ -51,22 +51,6 @@ def patch_anchors(
     except GeneratorExit:
         pass
 
-    def patch_files(files: Iterable[tuple[str, list[TOCEntry]]]) -> None:
-        for fname, entries in files:
-            fname = urllib.parse.unquote(fname)
-            full_path = os.path.join(parser.doc_path, fname)
-            try:
-                soup = _patch_file(parser, fname, full_path, entries)
-            except FileNotFoundError:
-                # This can happen in non-Python Sphinx docs.
-                if fname == "py-modindex.html":
-                    log.warning("Can't open file '%s'. Skipping.", full_path)
-                else:
-                    raise
-            else:
-                with open(full_path, mode="wb") as fp:
-                    fp.write(soup.encode("utf-8"))
-
     if show_progressbar is True:
         with click.progressbar(
             files.items(),
@@ -74,9 +58,28 @@ def patch_anchors(
             length=len(files),
             label="Adding table of contents meta data...",
         ) as pbar:
-            patch_files(pbar)
+            _patch_files(parser, pbar)
     else:
-        patch_files(files.items())
+        _patch_files(parser, files.items())
+
+
+def _patch_files(
+    parser: IParser, files: Iterable[tuple[str, list[TOCEntry]]]
+) -> None:
+    for fname, entries in files:
+        fname = urllib.parse.unquote(fname)
+        full_path = os.path.join(parser.doc_path, fname)
+        try:
+            soup = _patch_file(parser, fname, full_path, entries)
+        except FileNotFoundError:
+            # This can happen in non-Python Sphinx docs.
+            if fname == "py-modindex.html":
+                log.warning("Can't open file '%s'. Skipping.", full_path)
+            else:
+                raise
+        else:
+            with open(full_path, mode="wb") as fp:
+                fp.write(soup.encode("utf-8"))
 
 
 def _patch_file(

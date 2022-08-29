@@ -18,7 +18,7 @@ from doc2dash import docsets
 from doc2dash.convert import convert_docs
 
 from . import parsers
-from .output import create_log_config
+from .output import create_log_config, error_console
 from .parsers.types import IParser
 
 
@@ -150,8 +150,8 @@ def main(
     Convert docs from SOURCE to Dash.app's docset format.
     """
     if verbose and quiet:
-        click.secho(
-            "Passing both --quiet and --verbose makes no sense.", fg="red"
+        error_console.print(
+            "Passing both --quiet and --verbose makes no sense."
         )
         raise SystemExit(1)
 
@@ -198,9 +198,7 @@ def main(
     parser = parser_type(doc_path=docset.docs)
 
     log.info(
-        "Converting "
-        + click.style("%s", bold=True)
-        + ' docs from "%s" to "%s".',
+        "Converting [b]%s[/b] docs from '%s' to '%s'.",
         parser.name,
         source,
         dest,

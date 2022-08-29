@@ -4,24 +4,30 @@ import logging
 
 from typing import Any
 
-import click
+from rich.console import Console
 
 
-class ClickEchoHandler(logging.Handler):
+console = Console(soft_wrap=True)
+error_console = Console(stderr=True, style="bold red", soft_wrap=True)
+
+
+class RichEchoHandler(logging.Handler):
     """
-    Use click.echo() for logging.  Has the advantage of stripping color codes
+    Use rich.echo() for logging.  Has the advantage of stripping color codes
     if output is redirected.  Also is generally more predictable.
     """
 
     _level_to_fg = {logging.ERROR: "red", logging.WARN: "yellow"}
 
     def emit(self, record: logging.LogRecord) -> None:
-        click.echo(
-            click.style(
-                record.getMessage(),
-                fg=self._level_to_fg.get(record.levelno, "reset"),
-            ),
-            err=record.levelno >= logging.WARN,
+        if record.levelno >= logging.WARN:
+            print = error_console.print
+        else:
+            print = console.print
+
+        print(
+            record.getMessage(),
+            style=self._level_to_fg.get(record.levelno, "reset"),
         )
 
 
@@ -37,16 +43,16 @@ def create_log_config(verbose: bool, quiet: bool) -> dict[str, Any]:
     else:
         level = logging.INFO
 
-    logger_cfg = {"handlers": ["click_handler"], "level": level}
+    logger_cfg = {"handlers": ["rich_handler"], "level": level}
 
     return {
         "version": 1,
-        "formatters": {"click_formatter": {"format": "%(message)s"}},
+        "formatters": {"rich_formatter": {"format": "%(message)s"}},
         "handlers": {
-            "click_handler": {
+            "rich_handler": {
                 "level": level,
-                "class": "doc2dash.output.ClickEchoHandler",
-                "formatter": "click_formatter",
+                "class": "doc2dash.output.RichEchoHandler",
+                "formatter": "rich_formatter",
             }
         },
         "loggers": {"doc2dash": logger_cfg, "__main__": logger_cfg},

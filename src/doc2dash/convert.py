@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import logging
 
-import click
-
 from doc2dash.parsers.types import IParser
 
 from .docsets import DocSet
@@ -36,10 +34,5 @@ def convert_docs(
             "SELECT COUNT(1) FROM searchIndex"
         ).fetchone()[0]
 
-    log.info(
-        (
-            "Added "
-            + click.style("{count:,}", fg="green" if count > 0 else "red")
-            + " index entries."
-        ).format(count=count)
-    )
+    color = "green" if count > 0 else "red"
+    log.info(f"Added [{color}]{count:,}[/{color}] index entries.")
