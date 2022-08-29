@@ -121,7 +121,7 @@ class InterSphinxParser(IParser):
 
     def find_and_patch_entry(
         self, soup: BeautifulSoup, entry: TOCEntry
-    ) -> bool:  # pragma: no cover
+    ) -> bool:
         return find_and_patch_entry(soup, entry)
 
 

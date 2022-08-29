@@ -4,6 +4,7 @@ import os
 import sqlite3
 import sys
 
+from pathlib import Path
 from typing import ClassVar
 from unittest.mock import MagicMock
 
@@ -28,6 +29,83 @@ def _runner():
     Click's test helper.
     """
     return CliRunner()
+
+
+def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
+    """
+    Convert our test project and look at the result
+    """
+    result = runner.invoke(
+        main.main,
+        [str(sphinx_built), "-n", "SphinxDocs", "-d", str(tmp_path)],
+    )
+
+    docset = tmp_path / "SphinxDocs.docset"
+    contents = docset / "Contents"
+    resources = contents / "Resources"
+
+    assert 0 == result.exit_code
+    assert (
+        f"""Converting intersphinx docs from "html" to "{docset}".
+Parsing documentation...
+Added 15 index entries.
+Adding table of contents meta data...
+"""
+        == result.stdout
+    )
+    assert {
+        "CFBundleIdentifier": "SphinxDocs",
+        "CFBundleName": "SphinxDocs",
+        "DashDocSetDeclaredInStyle": "originalName",
+        "DashDocSetFamily": "python",
+        "DocSetPlatformFamily": "sphinxdocs",
+        "isDashDocset": True,
+        "isJavaScriptEnabled": False,
+    } == docsets.read_plist(contents / "Info.plist")
+
+    conn = sqlite3.connect(resources / "docSet.dsidx")
+    curs = conn.execute("SELECT name, type, path FROM searchIndex")
+    rows = set(curs.fetchall())
+    curs.close()
+    conn.close()
+
+    assert {
+        ("--foo", "Option", "index.html#cmdoption-foo"),
+        ("ENV_VARIABLE", "Environment", "index.html#envvar-ENV_VARIABLE"),
+        ("Foobar", "Word", "index.html#term-Foobar"),
+        ("Index", "Section", "genindex.html"),
+        (
+            "Let’s define some symbols and see if doc2dash can handle them!",
+            "Guide",
+            "index.html",
+        ),
+        ("Module Index", "Section", "py-modindex.html"),
+        ("Python Module Index", "Section", "py-modindex.html"),
+        ("Search Page", "Section", "search.html"),
+        ("some_module", "Module", "index.html#module-some_module"),
+        (
+            "some_module.BoringData",
+            "Value",
+            "index.html#some_module.BoringData",
+        ),
+        ("some_module.LeClass", "Class", "index.html#some_module.LeClass"),
+        (
+            "some_module.LeClass.AnAttr",
+            "Attribute",
+            "index.html#some_module.LeClass.AnAttr",
+        ),
+        (
+            "some_module.LeClass.DieMethod",
+            "Method",
+            "index.html#some_module.LeClass.DieMethod",
+        ),
+        (
+            "some_module.LeClass.Mine",
+            "Property",
+            "index.html#some_module.LeClass.Mine",
+        ),
+        ("some_module.func", "Function", "index.html#some_module.func"),
+    } == rows
 
 
 class TestArguments:

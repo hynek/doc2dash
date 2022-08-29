@@ -1,21 +1,11 @@
-from pathlib import Path
-
 from doc2dash.parsers.sphinx_inventory import load_inventory
 
 
-def test_parse_example():
+def test_parse_example(objects_inv):
     """
     Parses our example objects.inv correctly.
     """
-    inv = (
-        Path(__file__).parent
-        / "example-sphinx-docs"
-        / "built_docs"
-        / "html"
-        / "objects.inv"
-    )
-
-    with inv.open("rb") as f:
+    with objects_inv.open("rb") as f:
         entries = dict(load_inventory(f))
 
     assert {
