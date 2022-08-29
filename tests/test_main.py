@@ -109,36 +109,40 @@ Adding table of contents meta data...
 
 
 class TestArguments:
-    def test_fails_with_unknown_icon(self, runner, tmpdir):
+    def test_fails_with_unknown_icon(self, runner, tmp_path):
         """
         Fail if icon is not PNG.
         """
-        p = tmpdir.mkdir("sub").join("bar.png")
-        p.write("GIF89afoobarbaz")
-        result = runner.invoke(main.main, [str(tmpdir), "-i", str(p)])
+        p = tmp_path / "sub" / "bar.png"
+        p.parent.mkdir()
+        p.write_text("GIF89afoobarbaz")
+
+        result = runner.invoke(main.main, [str(tmp_path), "-i", str(p)])
 
         assert result.output.endswith(" is not a valid PNG image.\n")
         assert 1 == result.exit_code
 
-    def test_handles_unknown_doc_types(self, tmpdir, runner):
+    def test_handles_unknown_doc_types(self, runner, tmp_path):
         """
-        If docs are passed but are unknown, exit with EINVAL.
+        If existing docs are passed but are unknown, exit with EINVAL.
         """
-        result = runner.invoke(main.main, [str(tmpdir.mkdir("foo"))])
+        (tmp_path / "readme.txt").write_text("unknown docs")
+
+        result = runner.invoke(main.main, [str(tmp_path)])
+
         assert errno.EINVAL == result.exit_code
 
-    def test_quiet_and_verbose_conflict(self, runner, tmpdir):
+    def test_quiet_and_verbose_conflict(self, runner, tmp_path):
         """
         Ensure main() exits on -q + -v
         """
-        result = runner.invoke(
-            main.main, [str(tmpdir.mkdir("foo")), "-q", "-v"]
-        )
+        result = runner.invoke(main.main, [str(tmp_path), "-q", "-v"])
+
         assert 1 == result.exit_code
         assert "makes no sense" in result.output
 
 
-def test_normal_flow(monkeypatch, tmpdir, runner):
+def test_normal_flow(monkeypatch, tmp_path, runner):
     """
     Integration test with a mock parser.
     """
@@ -155,13 +159,14 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
         )
 
         return docsets.DocSet(
-            path=str(tmpdir), docs="data", plist=None, db_conn=db_conn
+            path=str(tmp_path), docs="data", plist=None, db_conn=db_conn
         )
 
-    monkeypatch.chdir(tmpdir)
-    png_file = tmpdir.join("icon.png")
-    png_file.write(main.PNG_HEADER, mode="wb")
-    os.mkdir("foo")
+    monkeypatch.chdir(tmp_path)
+    png_file = tmp_path / "icon.png"
+    png_file.write_bytes(main.PNG_HEADER)
+
+    Path("foo").mkdir()
     monkeypatch.setattr(docsets, "prepare_docset", fake_prepare)
 
     @attrs.define
@@ -183,7 +188,7 @@ def test_normal_flow(monkeypatch, tmpdir, runner):
         Parser = FakeParser
 
     expected = """\
-Converting testtype docs from "foo" to "./{name}.docset".
+Converting testtype docs from "foo" to "{name}.docset".
 Parsing documentation...
 Added 1 index entries.
 Adding table of contents meta data...
@@ -211,7 +216,7 @@ Adding to Dash.app...
 
     assert expected.format(name="bah") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "./bah.docset"',) == system_mock.call_args[0]
+    assert ('open -a dash "bah.docset"',) == system_mock.call_args[0]
 
     # alternative 2: patch doc2dash.parsers
     monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
@@ -223,7 +228,7 @@ Adding to Dash.app...
 
     assert expected.format(name="bar") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "./bar.docset"',) == system_mock.call_args[0]
+    assert ('open -a dash "bar.docset"',) == system_mock.call_args[0]
 
     # Again, just without adding and icon.
     system_mock.reset_mock()
@@ -261,44 +266,47 @@ Adding to Dash.app...
 
 
 class TestSetupPaths:
-    def test_works(self, tmpdir):
+    def test_works(self, tmp_path):
         """
         Integration tests with fake paths.
         """
-        foo_path = str(tmpdir.join("foo"))
-        os.mkdir(foo_path)
-        assert (
-            foo_path,
-            str(tmpdir.join("foo.docset")),
-            "foo",
-        ) == main.setup_paths(
-            foo_path, str(tmpdir), name=None, add_to_global=False, force=False
-        )
-        abs_foo = os.path.abspath(foo_path)
+        foo_path = tmp_path / "foo"
+        docset = tmp_path / "foo.docset"
+        foo_path.mkdir()
 
-        assert (
-            abs_foo,
-            str(tmpdir.join("foo.docset")),
-            "foo",
-        ) == main.setup_paths(
-            abs_foo, str(tmpdir), name=None, add_to_global=False, force=False
+        assert (foo_path, docset, "foo",) == main.setup_paths(
+            str(foo_path),
+            str(tmp_path),
+            name=None,
+            add_to_global=False,
+            force=False,
         )
-        assert (
-            abs_foo,
-            str(tmpdir.join("baz.docset")),
-            "baz",
-        ) == main.setup_paths(
-            abs_foo, str(tmpdir), name="baz", add_to_global=False, force=False
+
+        abs_foo = foo_path.absolute()
+
+        assert (abs_foo, docset, "foo",) == main.setup_paths(
+            str(abs_foo),
+            str(tmp_path),
+            name=None,
+            add_to_global=False,
+            force=False,
+        )
+        assert (abs_foo, tmp_path / "baz.docset", "baz",) == main.setup_paths(
+            str(abs_foo),
+            str(tmp_path),
+            name="baz",
+            add_to_global=False,
+            force=False,
         )
 
     def test_add_to_global_overrides_destination(self):
         """
         Passing -A computes the destination and overrides an argument.
         """
-        assert "~" not in main.DEFAULT_DOCSET_PATH  # resolved?
+        assert main.DEFAULT_DOCSET_PATH.is_absolute
         assert (
-            "foo",
-            os.path.join(main.DEFAULT_DOCSET_PATH, "foo.docset"),
+            Path("foo"),
+            main.DEFAULT_DOCSET_PATH / "foo.docset",
             "foo",
         ) == main.setup_paths(
             source="foo",
@@ -308,11 +316,11 @@ class TestSetupPaths:
             force=False,
         )
 
-    def test_detects_existing_dest(self, tmpdir, monkeypatch):
+    def test_detects_existing_dest(self, tmp_path, monkeypatch):
         """
         Exit with EEXIST if the selected destination already exists.
         """
-        monkeypatch.chdir(tmpdir)
+        monkeypatch.chdir(tmp_path)
         os.mkdir("foo")
         os.mkdir("foo.docset")
         with pytest.raises(SystemExit) as e:
@@ -334,14 +342,15 @@ class TestSetupPaths:
         )
         assert not os.path.lexists("foo.docset")
 
-    def test_deducts_name_with_trailing_slash(self, tmpdir, monkeypatch):
+    def test_deducts_name_with_trailing_slash(self, tmp_path, monkeypatch):
         """
         If the source path ends with a /, the name is still correctly deducted.
         """
-        monkeypatch.chdir(tmpdir)
+        monkeypatch.chdir(tmp_path)
         os.mkdir("foo")
+
         assert (
-            "foo"
+            Path("foo")
             == main.setup_paths(
                 source="foo/",
                 force=False,
@@ -351,11 +360,12 @@ class TestSetupPaths:
             )[0]
         )
 
-    def test_cleans_name(self, tmpdir):
+    def test_cleans_name(self, tmp_path):
         """
         If the name ends with .docset, remove it.
         """
-        d = tmpdir.mkdir("foo")
+        d = (tmp_path / "foo").mkdir()
+
         assert (
             "baz"
             == main.setup_paths(

@@ -90,7 +90,6 @@ def test_parse():
         mock_open(read_data=example),
         create=True,
     ):
-        print(list(PyDoctorParser(doc_path="foo").parse()))
         assert (
             list(PyDoctorParser(doc_path="foo").parse())
             == EXAMPLE_PARSE_RESULT

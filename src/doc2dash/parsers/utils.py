@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import errno
-import os
+
+from pathlib import Path
 
 
 def format_ref(type: str, entry: str) -> str:
@@ -11,7 +12,7 @@ def format_ref(type: str, entry: str) -> str:
     return f"//apple_ref/cpp/{type}/{entry}"
 
 
-def has_file_with(path: str, filename: str, content: bytes) -> bool:
+def has_file_with(path: Path, filename: str, content: bytes) -> bool:
     """
     Check whether *filename* in *path* contains the string *content*.
 
@@ -19,7 +20,7 @@ def has_file_with(path: str, filename: str, content: bytes) -> bool:
     objects.inv.
     """
     try:
-        with open(os.path.join(path, filename), "rb") as f:
+        with (path / filename).open("rb") as f:
             return content in f.read()
     except OSError as e:
         if e.errno == errno.ENOENT:

@@ -1,5 +1,6 @@
 import logging
 
+from pathlib import Path
 from typing import ClassVar
 
 import attrs
@@ -33,13 +34,14 @@ class FakeParser(IParser):
 
 
 @pytest.fixture(name="doc_entries")
-def _doc_entries(tmpdir):
+def _doc_entries(tmp_path):
     """
     Test `ParserEntry`s
     """
-    test_dir = tmpdir.mkdir("foo")
-    test_dir.join("bar.html").write("docs!")
-    test_dir.join("foo bar.html").write("docs too!")
+    test_dir = tmp_path / "foo"
+    test_dir.mkdir()
+    (test_dir / "bar.html").write_text("docs!")
+    (test_dir / "foo bar.html").write_text("docs too!")
 
     return test_dir, [
         ParserEntry(name="foo", type="Method", path="bar.html#anchor-1"),
@@ -137,28 +139,28 @@ class TestHasFileWith:
     @pytest.mark.parametrize(
         "content,has", [(b"xxxfooxxx", True), (b"xxxbarxxx", False)]
     )
-    def test_exists(self, tmpdir, content, has):
+    def test_exists(self, tmp_path, content, has):
         """
-        If file contains content, return True, ealse False.
+        If file contains content, return True, else False.
         """
-        f = tmpdir.join("test")
-        f.write(content)
+        f = tmp_path / "test.txt"
+        f.write_bytes(content)
 
-        assert has is has_file_with("/", str(f), b"foo")
+        assert has is has_file_with(tmp_path, "test.txt", b"foo")
 
     def test_eent(self):
         """
         If file doesn't exist, return False.
         """
-        assert False is has_file_with("foo", "bar", b"")
+        assert False is has_file_with(Path("foo"), "bar", b"")
 
-    def test_error(self, tmpdir):
+    def test_error(self, tmp_path):
         """
-        If opening/reading fails with a differnt error, propate.
+        If opening/reading fails with a different error, propagate.
         """
-        f = tmpdir.join("test")
-        f.write(b"foo")
+        f = tmp_path / "test.txt"
+        f.write_bytes(b"foo")
         f.chmod(0)
 
         with pytest.raises(PermissionError):
-            has_file_with("/", str(f), "foo")
+            has_file_with(tmp_path, "test.txt", b"foo")

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from . import intersphinx, pydoctor, types
 
 
 DOCTYPES = [pydoctor.PyDoctorParser, intersphinx.InterSphinxParser]
 
 
-def get_doctype(path: str) -> type[types.IParser] | None:
+def get_doctype(path: Path) -> type[types.IParser] | None:
     """
     Gets the apropriate doctype for *path*.
     """

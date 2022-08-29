@@ -1,5 +1,4 @@
-import os
-
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -9,37 +8,45 @@ import doc2dash
 from doc2dash.parsers import DOCTYPES
 
 
+@pytest.fixture(name="dt", params=DOCTYPES)
+def _dt(request):
+    return request.param
+
+
 def test_get_doctype(monkeypatch):
     monkeypatch.setattr(doc2dash.parsers, "DOCTYPES", [])
+
     assert doc2dash.parsers.get_doctype("foo") is None
+
     dt = MagicMock("testtype", detect=lambda _: True)
     monkeypatch.setattr(doc2dash.parsers, "DOCTYPES", [dt])
+
     assert doc2dash.parsers.get_doctype("foo") is dt
 
 
 class TestDetectors:
     @pytest.mark.skipif(
-        not os.path.exists("test_data"), reason="No test_data present."
+        not Path("test_data").exists(), reason="No test_data present."
     )
-    def test_detectors_detect(self):
+    def test_detectors_detect(self, dt):
+        """
+        Everything that is inside `test_data` is detected by respective
+        parsers.
+        """
+        type_dir = Path("test_data") / dt.name
+        for d in type_dir.glob("*"):
+            assert dt.detect(d)
+
+    def test_detect_handles_enoent_gracefully(self, dt):
+        """
+        Non-existent paths are treated like they don't belong to the parser.
+        """
         for dt in DOCTYPES:
-            type_dir = os.path.join("test_data", dt.name)
-            for d in os.listdir(type_dir):
-                assert dt.detect(os.path.join(type_dir, d))
+            assert not dt.detect(Path("foo"))
 
-    def test_detect_reraises_everything_except_enoent(self, monkeypatch):
-        def raiser(exc):
-            def _raiser(*args, **kwargs):
-                raise exc()
 
-            return _raiser
+def raiser(exc):
+    def _raiser(*args, **kwargs):
+        raise exc()
 
-        for dt in DOCTYPES:
-            for exc in IOError, ValueError:
-                with pytest.raises(exc):
-                    monkeypatch.setattr(os.path, "join", raiser(exc))
-                    dt.detect("foo")
-
-    def test_detect_handles_enoent_gracefully(self):
-        for dt in DOCTYPES:
-            assert not dt.detect("foo")
+    return _raiser

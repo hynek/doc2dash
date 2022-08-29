@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 from doc2dash.parsers import entry_types
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
-    find_and_patch_entry,
-    inv_entry_to_path,
+    _find_and_patch_entry,
+    _inv_entry_to_path,
 )
 from doc2dash.parsers.types import ParserEntry, TOCEntry
 
@@ -115,7 +115,7 @@ class TestInterSphinxParser:
 
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
-                path_str = inv_entry_to_path(inv_entry)
+                path_str = _inv_entry_to_path(inv_entry)
                 return ParserEntry(
                     name=f"!{key}!", type=dash_type, path=path_str
                 )
@@ -180,7 +180,7 @@ class TestFindAndPatchEntry:
         """
         Patching a method adds a TOC entry.
         """
-        assert True is find_and_patch_entry(
+        assert True is _find_and_patch_entry(
             soup,
             TOCEntry(
                 name="pyramid.config.Configurator.add_route",
@@ -205,7 +205,7 @@ class TestFindAndPatchEntry:
         works.
         """
         soup = BeautifulSoup("<h1>Some Module</h1>", "html.parser")
-        assert True is find_and_patch_entry(
+        assert True is _find_and_patch_entry(
             soup,
             TOCEntry(
                 name="some_module",
@@ -219,7 +219,7 @@ class TestFindAndPatchEntry:
         """
         Return `False` if anchor can't be found
         """
-        assert False is find_and_patch_entry(
+        assert False is _find_and_patch_entry(
             soup, TOCEntry(name="foo", type="Nothing", anchor="does-not-exist")
         )
 
@@ -227,7 +227,7 @@ class TestFindAndPatchEntry:
         """
         :term: and glossaries are found.
         """
-        assert True is find_and_patch_entry(
+        assert True is _find_and_patch_entry(
             soup,
             TOCEntry(
                 name="Whatever",
@@ -244,7 +244,7 @@ class TestFindAndPatchEntry:
         """
         Sections are found.
         """
-        assert True is find_and_patch_entry(
+        assert True is _find_and_patch_entry(
             soup,
             TOCEntry(name="Chains", type=entry_types.SECTION, anchor="chains"),
         )

@@ -111,6 +111,7 @@ warn_redundant_casts = true
 # warn_return_any = true
 warn_unused_ignores = true
 
+allow_redefinition = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"
@@ -118,10 +119,6 @@ ignore_errors = true
 
 [[tool.mypy.overrides]]
 module = "conftest.*"
-ignore_errors = true
-
-[[tool.mypy.overrides]]
-module = "doc2dash.__main__"
 ignore_errors = true
 
 

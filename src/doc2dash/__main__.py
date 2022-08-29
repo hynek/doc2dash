@@ -8,26 +8,29 @@ import os
 import shutil
 
 from importlib import metadata
+from pathlib import Path
+from typing import IO, Any
 
 import click
 
 from . import docsets, parsers
 from .output import create_log_config
 from .parsers.patcher import patch_anchors
+from .parsers.types import IParser
 
 
 log = logging.getLogger(__name__)
 
-DEFAULT_DOCSET_PATH = os.path.expanduser(
+DEFAULT_DOCSET_PATH = Path(
     "~/Library/Application Support/doc2dash/DocSets"
-)
+).expanduser()
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 
 
 class ImportableType(click.ParamType):
     name = "importable"
 
-    def convert(self, value, param, ctx):
+    def convert(self, value: str, param: Any, ctx: Any) -> IParser:
         path, dot, name = value.rpartition(".")
 
         if not dot:
@@ -37,6 +40,7 @@ class ImportableType(click.ParamType):
             mod = importlib.import_module(path)
         except ImportError:
             self.fail(f"Could not import module {path!r}")
+
         try:
             return getattr(mod, name)
         except AttributeError:
@@ -50,7 +54,10 @@ IMPORTABLE = ImportableType()
 @click.argument(
     "source",
     type=click.Path(
-        exists=True, file_okay=False, readable=True, resolve_path=True
+        exists=True,
+        file_okay=False,
+        readable=True,
+        resolve_path=True,
     ),
 )
 @click.option("--name", "-n", help="Name docset explicitly.", metavar="NAME")
@@ -120,20 +127,20 @@ IMPORTABLE = ImportableType()
 )
 @click.version_option(version=metadata.version("doc2dash"))
 def main(
-    source,
-    force,
-    name,
-    quiet,
-    verbose,
-    destination,
-    add_to_dash,
-    add_to_global,
-    icon,
-    index_page,
-    enable_js,
-    online_redirect_url,
-    parser,
-):
+    source: str,
+    force: bool,
+    name: str | None,
+    quiet: bool,
+    verbose: bool,
+    destination: str | None,
+    add_to_dash: bool,
+    add_to_global: bool,
+    icon: IO[bytes] | None,
+    index_page: str | None,
+    enable_js: bool,
+    online_redirect_url: str | None,
+    parser: type[IParser] | None,
+) -> None:
     """
     Convert docs from SOURCE to Dash.app's docset format.
     """
@@ -163,6 +170,7 @@ def main(
         add_to_global=add_to_global,
         force=force,
     )
+
     if parser is None:
         parser = parsers.get_doctype(source)
         if parser is None:
@@ -172,6 +180,7 @@ def main(
                 )
             )
             raise SystemExit(errno.EINVAL)
+
     docset = docsets.prepare_docset(
         source, dest, name, index_page, enable_js, online_redirect_url
     )
@@ -217,19 +226,30 @@ def main(
         os.system(f'open -a dash "{dest}"')
 
 
-def setup_paths(source, destination, name, add_to_global, force):
+def setup_paths(
+    source: str,
+    destination: str | None,
+    name: str | None,
+    add_to_global: bool,
+    force: bool,
+) -> tuple[Path, Path, str]:
     """
     Determine source and destination using the options.
     """
-    if source[-1] == "/":
-        source = source[:-1]
-    if not name:
-        name = os.path.split(source)[-1]
-    elif name.endswith(".docset"):
-        name = name.replace(".docset", "")
+    source = Path(source)
+
     if add_to_global:
-        destination = DEFAULT_DOCSET_PATH
-    dest = os.path.join(destination or "", name + ".docset")
+        dest_path = DEFAULT_DOCSET_PATH
+    elif destination:
+        dest_path = Path(destination)
+    else:
+        dest_path = Path(".")
+
+    if not name:
+        name = source.name
+
+    dest = (dest_path / name).with_suffix(".docset")
+    name = str(dest.with_suffix("").name)
     dst_exists = os.path.lexists(dest)
     if dst_exists and force:
         shutil.rmtree(dest)

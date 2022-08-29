@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 
+from pathlib import Path
 from typing import ClassVar, Generator
 
 import attrs
@@ -26,11 +27,14 @@ class IParser(metaclass=abc.ABCMeta):
     """
 
     name: ClassVar[str] = NotImplemented
-    doc_path: str = NotImplemented
+    doc_path: Path = NotImplemented
+
+    def __init__(self, doc_path: Path):
+        self.doc_path = doc_path
 
     @staticmethod
     @abc.abstractmethod
-    def detect(path: str) -> bool:
+    def detect(path: Path) -> bool:
         """
         A static method that returns whether *path* can be parsed by us.
         """

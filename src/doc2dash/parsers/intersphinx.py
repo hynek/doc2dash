@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import logging
-import os
 
+from pathlib import Path
 from typing import ClassVar, Generator, Mapping
 
 import attrs
@@ -51,7 +51,7 @@ INV_TO_TYPE = {
 }
 
 
-@attrs.define(hash=True)
+@attrs.define(hash=True, init=False)
 class InterSphinxParser(IParser):
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for
@@ -59,10 +59,10 @@ class InterSphinxParser(IParser):
     """
 
     name: ClassVar[str] = "intersphinx"
-    doc_path: str
+    doc_path: Path
 
     @staticmethod
-    def detect(path: str) -> bool:
+    def detect(path: Path) -> bool:
         return has_file_with(
             path, "objects.inv", b"# Sphinx inventory version 2"
         )
@@ -73,7 +73,7 @@ class InterSphinxParser(IParser):
 
         yield `ParserEntry`s.
         """
-        with open(os.path.join(self.doc_path, "objects.inv"), "rb") as inv_f:
+        with (self.doc_path / "objects.inv").open("rb") as inv_f:
             yield from self._inv_to_entries(load_inventory(inv_f))
 
     def _inv_to_entries(
@@ -112,9 +112,11 @@ class InterSphinxParser(IParser):
         """
         Create a ParserEntry (or None) given inventory details
 
-        Parameters are the dash type, intersphinx inventory key and data tuple
+        Parameters are the dash type, intersphinx inventory key and data tuple.
+
+        This is a method to allow customization by inheritance.
         """
-        path_str = inv_entry_to_path(inv_entry)
+        path_str = _inv_entry_to_path(inv_entry)
         name = inv_entry[1] if inv_entry[1] != "-" else key
 
         return ParserEntry(name=name, type=dash_type, path=path_str)
@@ -122,10 +124,10 @@ class InterSphinxParser(IParser):
     def find_and_patch_entry(
         self, soup: BeautifulSoup, entry: TOCEntry
     ) -> bool:
-        return find_and_patch_entry(soup, entry)
+        return _find_and_patch_entry(soup, entry)
 
 
-def find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
+def _find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
     """
     Modify *soup* so Dash.app can generate TOCs on the fly.
     """
@@ -158,7 +160,7 @@ def find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
     return True
 
 
-def inv_entry_to_path(data: InventoryEntry) -> str:
+def _inv_entry_to_path(data: InventoryEntry) -> str:
     """
     Determine the path from the intersphinx inventory entry
 

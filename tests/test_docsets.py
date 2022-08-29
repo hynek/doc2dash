@@ -1,34 +1,35 @@
-import os
 import shutil
 import sqlite3
 
+from pathlib import Path
 from unittest.mock import MagicMock
 
 from doc2dash import docsets
 
 
 class TestPrepareDocset:
-    def test_plist_creation(self, monkeypatch, tmpdir):
+    def test_plist_creation(self, monkeypatch, tmp_path):
         """
         All arguments should be reflected in the plist.
         """
-        monkeypatch.chdir(tmpdir)
+        monkeypatch.chdir(tmp_path)
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
+        (tmp_path / "bar").mkdir()
+
         docset = docsets.prepare_docset(
-            "some/path/foo",
-            "bar",
+            Path("some/path/foo"),
+            Path("bar"),
             name="foo",
             index_page=None,
             enable_js=False,
             online_redirect_url=None,
         )
-        m_ct.assert_called_once_with(
-            "some/path/foo", "bar/Contents/Resources/Documents"
-        )
 
-        assert os.path.isfile("bar/Contents/Resources/docSet.dsidx")
+        m_ct.assert_called_once_with(
+            Path("some/path/foo"), Path("bar/Contents/Resources/Documents")
+        )
+        assert Path("bar/Contents/Resources/docSet.dsidx").is_file()
 
         p = docsets.read_plist(docset.plist)
 
@@ -49,17 +50,18 @@ class TestPrepareDocset:
 
             assert cur.fetchone()[0] == 0
 
-    def test_with_index_page(self, monkeypatch, tmpdir):
+    def test_with_index_page(self, monkeypatch, tmp_path):
         """
         If an index page is passed, it is added to the plist.
         """
-        monkeypatch.chdir(tmpdir)
+        monkeypatch.chdir(tmp_path)
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
+        (tmp_path / "bar").mkdir()
+
         docset = docsets.prepare_docset(
-            "some/path/foo",
-            "bar",
+            Path("some/path/foo"),
+            Path("bar"),
             name="foo",
             index_page="foo.html",
             enable_js=False,
@@ -79,17 +81,18 @@ class TestPrepareDocset:
             "isJavaScriptEnabled": False,
         }
 
-    def test_with_javascript_enabled(self, monkeypatch, tmpdir):
+    def test_with_javascript_enabled(self, monkeypatch, tmp_path):
         """
         If an index page is passed, it is added to the plist.
         """
-        monkeypatch.chdir(tmpdir)
+        monkeypatch.chdir(tmp_path)
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
+        (tmp_path / "bar").mkdir()
+
         docset = docsets.prepare_docset(
-            "some/path/foo",
-            "bar",
+            Path("some/path/foo"),
+            Path("bar"),
             name="foo",
             index_page="foo.html",
             enable_js=True,
@@ -109,17 +112,18 @@ class TestPrepareDocset:
             "isJavaScriptEnabled": True,
         }
 
-    def test_with_online_redirect_url(self, monkeypatch, tmpdir):
+    def test_with_online_redirect_url(self, monkeypatch, tmp_path):
         """
         If an index page is passed, it is added to the plist.
         """
-        monkeypatch.chdir(tmpdir)
+        monkeypatch.chdir(tmp_path)
         m_ct = MagicMock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
-        os.mkdir("bar")
+        (tmp_path / "bar").mkdir()
+
         docset = docsets.prepare_docset(
-            "some/path/foo",
-            "bar",
+            Path("some/path/foo"),
+            Path("bar"),
             name="foo",
             index_page="foo.html",
             enable_js=False,

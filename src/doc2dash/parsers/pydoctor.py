@@ -4,6 +4,7 @@ import codecs
 import logging
 import os
 
+from pathlib import Path
 from typing import ClassVar, Generator
 
 import attrs
@@ -30,17 +31,17 @@ PYDOCTOR_HEADER_REALLY_OLD = b"""\
       <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a>"""
 
 
-@attrs.define(hash=True)
+@attrs.define(hash=True, init=False)
 class PyDoctorParser(IParser):
     """
     Parser for pydoctor-based documentation: mainly Twisted.
     """
 
     name: ClassVar[str] = "pydoctor"
-    doc_path: str
+    doc_path: Path
 
     @staticmethod
-    def detect(path: str) -> bool:
+    def detect(path: Path) -> bool:
         return (
             has_file_with(path, "index.html", PYDOCTOR_HEADER)
             or has_file_with(path, "index.html", PYDOCTOR_HEADER_OLD)
