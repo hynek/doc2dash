@@ -58,6 +58,7 @@ def patch_anchors(
             try:
                 soup = _patch_file(parser, fname, full_path, entries)
             except FileNotFoundError:
+                # This can happen in non-Python Sphinx docs.
                 if fname == "py-modindex.html":
                     log.warning("Can't open file '%s'. Skipping.", full_path)
                 else:
