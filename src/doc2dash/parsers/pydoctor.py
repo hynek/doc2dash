@@ -31,7 +31,7 @@ PYDOCTOR_HEADER_REALLY_OLD = b"""\
       <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a>"""
 
 
-@attrs.define(hash=True, init=False)
+@attrs.define(init=False)
 class PyDoctorParser(IParser):
     """
     Parser for pydoctor-based documentation: mainly Twisted.
@@ -47,6 +47,10 @@ class PyDoctorParser(IParser):
             or has_file_with(path, "index.html", PYDOCTOR_HEADER_OLD)
             or has_file_with(path, "index.html", PYDOCTOR_HEADER_REALLY_OLD)
         )
+
+    @staticmethod
+    def guess_name(path: Path) -> str | None:
+        return None
 
     def parse(self) -> Generator[ParserEntry, None, None]:
         """

@@ -29,11 +29,8 @@ def create_log_config(verbose: bool, quiet: bool) -> dict[str, Any]:
     """
     We use logging's levels as an easy-to-use verbosity controller.
     """
-    if verbose and quiet:
-        raise ValueError(
-            "Supplying both --quiet and --verbose makes no sense."
-        )
-    elif verbose:
+    assert not (verbose and quiet)
+    if verbose:
         level = logging.DEBUG
     elif quiet:
         level = logging.ERROR

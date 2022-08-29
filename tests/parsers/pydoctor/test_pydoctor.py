@@ -1,6 +1,7 @@
 import codecs
 import os
 
+from pathlib import Path
 from unittest.mock import mock_open, patch
 
 from bs4 import BeautifulSoup
@@ -125,3 +126,10 @@ def test_patcher():
     assert not p.find_and_patch_entry(
         soup, TOCEntry(name="invented", type="cl", anchor="nonex")
     )
+
+
+def test_guess_name():
+    """
+    Currently guessing is not supported.
+    """
+    assert PyDoctorParser.guess_name(Path(".")) is None

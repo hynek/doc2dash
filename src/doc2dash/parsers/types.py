@@ -39,6 +39,13 @@ class IParser(metaclass=abc.ABCMeta):
         A static method that returns whether *path* can be parsed by us.
         """
 
+    @staticmethod
+    @abc.abstractmethod
+    def guess_name(path: Path) -> str | None:
+        """
+        Try to guess an appropriate name for the docset.
+        """
+
     @abc.abstractmethod
     def parse(self) -> Generator[ParserEntry, None, None]:
         """

@@ -14,24 +14,23 @@ from doc2dash.parsers.types import ParserEntry, TOCEntry
 
 
 HERE = Path(__file__).parent
-SPHINX_DOCS = HERE / "example-sphinx-docs" / "built_docs" / "html"
 
 
 class TestInterSphinxParser:
-    def test_parses(self):
+    def test_parses(self, sphinx_built):
         """
         Parsing of the example objects.inv in the current directory does not
         fail.
         """
-        p = InterSphinxParser(doc_path=SPHINX_DOCS)
+        p = InterSphinxParser(doc_path=sphinx_built)
 
         assert [] != list(p.parse())
 
-    def test_inv_to_entries(self):
+    def test_inv_to_entries(self, sphinx_built):
         """
         Inventory items are correctly converted.
         """
-        p = InterSphinxParser(doc_path=SPHINX_DOCS)
+        p = InterSphinxParser(doc_path=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {
@@ -70,7 +69,7 @@ class TestInterSphinxParser:
             ),
         } == set(result)
 
-    def test_convert_type_override(self):
+    def test_convert_type_override(self, sphinx_built):
         """
         `convert_type` can be overridden.
 
@@ -84,7 +83,7 @@ class TestInterSphinxParser:
                     return
                 return super().convert_type(inv_type)
 
-        p = MyInterSphinxParser(doc_path=SPHINX_DOCS)
+        p = MyInterSphinxParser(doc_path=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {
@@ -106,7 +105,7 @@ class TestInterSphinxParser:
             )
         ] == result
 
-    def test_create_entry_override(self):
+    def test_create_entry_override(self, sphinx_built):
         """
         `create_entry` has the expected interface and can be overridden.
 
@@ -120,7 +119,7 @@ class TestInterSphinxParser:
                     name=f"!{key}!", type=dash_type, path=path_str
                 )
 
-        p = MyInterSphinxParser(doc_path=SPHINX_DOCS)
+        p = MyInterSphinxParser(doc_path=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {"py:method": {"some_method": ("some_module.py", "-")}}
@@ -132,7 +131,7 @@ class TestInterSphinxParser:
             )
         ] == result
 
-    def test_create_entry_none(self):
+    def test_create_entry_none(self, sphinx_built):
         """
         `create_entry` can return None.
         """
@@ -143,7 +142,7 @@ class TestInterSphinxParser:
                     return
                 return super().create_entry(dash_type, key, inv_entry)
 
-        p = MyInterSphinxParser(doc_path=SPHINX_DOCS)
+        p = MyInterSphinxParser(doc_path=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {

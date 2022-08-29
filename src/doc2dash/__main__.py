@@ -9,13 +9,15 @@ import shutil
 
 from importlib import metadata
 from pathlib import Path
-from typing import IO, Any
+from typing import Any
 
 import click
 
-from . import docsets, parsers
+from doc2dash import docsets
+from doc2dash.convert import convert_docs
+
+from . import parsers
 from .output import create_log_config
-from .parsers.patcher import patch_anchors
 from .parsers.types import IParser
 
 
@@ -58,16 +60,17 @@ IMPORTABLE = ImportableType()
         file_okay=False,
         readable=True,
         resolve_path=True,
+        path_type=Path,
     ),
 )
 @click.option("--name", "-n", help="Name docset explicitly.", metavar="NAME")
 @click.option(
     "--destination",
     "-d",
-    type=click.Path(),
+    type=click.Path(path_type=Path),
     default=".",
     show_default=True,
-    help="Destination directory for docset, ignored if " "-A is specified.",
+    help="Destination directory for docset, ignored if -A is specified.",
 )
 @click.option(
     "--force",
@@ -76,13 +79,16 @@ IMPORTABLE = ImportableType()
     help="Force overwriting if destination already exists.",
 )
 @click.option(
-    "--icon", "-i", type=click.File("rb"), help="Add PNG icon to docset."
+    "--icon",
+    "-i",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    help="Add PNG icon to docset.",
 )
 @click.option(
     "--index-page",
     "-I",
     metavar="FILENAME",
-    type=click.Path(),
+    type=click.Path(exists=True, path_type=Path),
     help="Set the file that is shown when the docset is clicked within "
     "Dash.app.",
 )
@@ -114,12 +120,11 @@ IMPORTABLE = ImportableType()
 @click.option(
     "--online-redirect-url",
     "-u",
-    default=None,
     help="The base URL of the online documentation.",
 )
 @click.option(
     "--parser",
-    default=None,
+    "parser_type",
     type=IMPORTABLE,
     help="The import path of a parser class (e.g. "
     "doc2dash.parsers.intersphinx.InterSphinxParser). Default behavior "
@@ -127,53 +132,45 @@ IMPORTABLE = ImportableType()
 )
 @click.version_option(version=metadata.version("doc2dash"))
 def main(
-    source: str,
+    source: Path,
     force: bool,
     name: str | None,
     quiet: bool,
     verbose: bool,
-    destination: str | None,
+    destination: Path,
     add_to_dash: bool,
     add_to_global: bool,
-    icon: IO[bytes] | None,
-    index_page: str | None,
+    icon: Path | None,
+    index_page: Path | None,
     enable_js: bool,
     online_redirect_url: str | None,
-    parser: type[IParser] | None,
+    parser_type: type[IParser] | None,
 ) -> None:
     """
     Convert docs from SOURCE to Dash.app's docset format.
     """
-    try:
-        logging.config.dictConfig(
-            create_log_config(verbose=verbose, quiet=quiet)
+    if verbose and quiet:
+        click.secho(
+            "Passing both --quiet and --verbose makes no sense.", fg="red"
         )
-    except ValueError as e:
-        click.secho(e.args[0], fg="red")
         raise SystemExit(1)
 
+    logging.config.dictConfig(create_log_config(verbose=verbose, quiet=quiet))
+
     if icon:
-        icon_data = icon.read()
-        if not icon_data.startswith(PNG_HEADER):
+        with icon.open("rb") as f:
+            header = f.read(len(PNG_HEADER))
+
+        if header != PNG_HEADER:
             log.error(
                 '"%s" is not a valid PNG image.',
                 click.format_filename(icon.name),
             )
             raise SystemExit(1)
-    else:
-        icon_data = None
 
-    source, dest, name = setup_paths(
-        source,
-        destination,
-        name=name,
-        add_to_global=add_to_global,
-        force=force,
-    )
-
-    if parser is None:
-        parser = parsers.get_doctype(source)
-        if parser is None:
+    if parser_type is None:
+        parser_type = parsers.get_doctype(source)
+        if parser_type is None:
             log.error(
                 '"{}" does not contain a known documentation format.'.format(
                     click.format_filename(source)
@@ -181,75 +178,60 @@ def main(
             )
             raise SystemExit(errno.EINVAL)
 
+    name = deduct_name(parser_type, source, name)
+    dest = setup_destination(
+        destination,
+        name,
+        add_to_global=add_to_global,
+        force=force,
+    )
     docset = docsets.prepare_docset(
-        source, dest, name, index_page, enable_js, online_redirect_url
+        source, dest, name, index_page, enable_js, online_redirect_url, icon
     )
-    doc_parser = parser(doc_path=docset.docs)
+    parser = parser_type(doc_path=docset.docs)
+
     log.info(
-        (
-            "Converting "
-            + click.style("{parser_name}", bold=True)
-            + ' docs from "{src}" to "{dst}".'
-        ).format(
-            parser_name=parser.name,
-            src=click.format_filename(source, shorten=True),
-            dst=click.format_filename(dest),
-        )
+        "Converting "
+        + click.style("%s", bold=True)
+        + ' docs from "%s" to "%s".',
+        parser.name,
+        click.format_filename(source, shorten=True),
+        click.format_filename(dest),
     )
 
-    with docset.db_conn:
-        log.info("Parsing documentation...")
-        toc = patch_anchors(doc_parser, show_progressbar=not quiet)
-        for entry in doc_parser.parse():
-            docset.db_conn.execute(
-                "INSERT INTO searchIndex VALUES (NULL, ?, ?, ?)",
-                entry.as_tuple(),
-            )
-            toc.send(entry)
-        count = docset.db_conn.execute(
-            "SELECT COUNT(1) FROM searchIndex"
-        ).fetchone()[0]
-        log.info(
-            (
-                "Added "
-                + click.style("{count:,}", fg="green" if count > 0 else "red")
-                + " index entries."
-            ).format(count=count)
-        )
-        toc.close()
-
-    if icon_data:
-        docsets.add_icon(icon_data, dest)
+    convert_docs(parser=parser, docset=docset, quiet=quiet)
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash.app...")
         os.system(f'open -a dash "{dest}"')
 
 
-def setup_paths(
-    source: str,
-    destination: str | None,
-    name: str | None,
+def deduct_name(parser: type[IParser], path: Path, name: str | None) -> str:
+    # If the user supplied a name, respect it.
+    if name:
+        return name
+
+    guess = parser.guess_name(path)
+    if guess:
+        return guess
+
+    # Fall back to the name of the source directory.
+    return path.name
+
+
+def setup_destination(
+    destination: Path,
+    name: str,
     add_to_global: bool,
     force: bool,
-) -> tuple[Path, Path, str]:
+) -> Path:
     """
     Determine source and destination using the options.
     """
-    source = Path(source)
-
     if add_to_global:
-        dest_path = DEFAULT_DOCSET_PATH
-    elif destination:
-        dest_path = Path(destination)
-    else:
-        dest_path = Path(".")
+        destination = DEFAULT_DOCSET_PATH
 
-    if not name:
-        name = source.name
-
-    dest = (dest_path / name).with_suffix(".docset")
-    name = str(dest.with_suffix("").name)
+    dest = (destination / name).with_suffix(".docset")
     dst_exists = os.path.lexists(dest)
     if dst_exists and force:
         shutil.rmtree(dest)
@@ -259,7 +241,7 @@ def setup_paths(
         )
         raise SystemExit(errno.EEXIST)
 
-    return source, dest, name
+    return dest
 
 
 if __name__ == "__main__":

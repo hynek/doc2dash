@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from pathlib import Path
@@ -22,6 +24,9 @@ class FakeParser(IParser):
     @staticmethod
     def detect(path):
         return True
+
+    def guess_name(self) -> str | None:
+        return None
 
     def parse(self):
         pass

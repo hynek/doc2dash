@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import errno
 import logging
 import os
@@ -6,7 +8,7 @@ import sys
 
 from pathlib import Path
 from typing import ClassVar
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 
 import attrs
 import pytest
@@ -17,6 +19,7 @@ import doc2dash
 
 from doc2dash import __main__ as main
 from doc2dash import docsets
+from doc2dash.parsers.intersphinx import InterSphinxParser
 from doc2dash.parsers.types import IParser, ParserEntry
 
 
@@ -38,6 +41,7 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     result = runner.invoke(
         main.main,
         [str(sphinx_built), "-n", "SphinxDocs", "-d", str(tmp_path)],
+        catch_exceptions=False,
     )
 
     docset = tmp_path / "SphinxDocs.docset"
@@ -48,8 +52,8 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     assert (
         f"""Converting intersphinx docs from "html" to "{docset}".
 Parsing documentation...
-Added 15 index entries.
 Adding table of contents meta data...
+Added 15 index entries.
 """
         == result.stdout
     )
@@ -148,7 +152,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     """
 
     def fake_prepare(
-        source, dest, name, index_page, enable_js, online_redirect_url
+        source, dest, name, index_page, enable_js, online_redirect_url, icon
     ):
         os.mkdir(dest)
         db_conn = sqlite3.connect(":memory:")
@@ -158,9 +162,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
             "type TEXT, path TEXT)"
         )
 
-        return docsets.DocSet(
-            path=str(tmp_path), docs="data", plist=None, db_conn=db_conn
-        )
+        return docsets.DocSet(path=tmp_path, plist=None, db_conn=db_conn)
 
     monkeypatch.chdir(tmp_path)
     png_file = tmp_path / "icon.png"
@@ -178,6 +180,9 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         def detect(path):
             return True
 
+        def guess_name(self) -> str | None:
+            return None
+
         def parse(self):
             yield ParserEntry(name="testmethod", type="cm", path="testpath")
 
@@ -190,8 +195,8 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     expected = """\
 Converting testtype docs from "foo" to "{name}.docset".
 Parsing documentation...
-Added 1 index entries.
 Adding table of contents meta data...
+Added 1 index entries.
 Adding to Dash.app...
 """
 
@@ -212,6 +217,7 @@ Adding to Dash.app...
             "-i",
             str(png_file),
         ],
+        catch_exceptions=False,
     )
 
     assert expected.format(name="bah") == result.output
@@ -223,7 +229,9 @@ Adding to Dash.app...
     system_mock.reset_mock()
 
     result = runner.invoke(
-        main.main, ["foo", "-n", "bar", "-a", "-i", str(png_file)]
+        main.main,
+        ["foo", "-n", "bar", "-a", "-i", str(png_file)],
+        catch_exceptions=False,
     )
 
     assert expected.format(name="bar") == result.output
@@ -232,14 +240,20 @@ Adding to Dash.app...
 
     # Again, just without adding and icon.
     system_mock.reset_mock()
-    result = runner.invoke(main.main, ["foo", "-n", "baz"])
+    result = runner.invoke(
+        main.main,
+        ["foo", "-n", "baz"],
+        catch_exceptions=False,
+    )
 
     assert 0 == result.exit_code
 
     # some tests for --parser validation
 
     result = runner.invoke(
-        main.main, ["foo", "-n", "bing", "--parser", "no_dot"]
+        main.main,
+        ["foo", "-n", "bing", "--parser", "no_dot"],
+        catch_exceptions=False,
     )
 
     assert "'no_dot' is not an import path" in result.output
@@ -248,6 +262,7 @@ Adding to Dash.app...
     result = runner.invoke(
         main.main,
         ["foo", "-n", "bing", "--parser", "nonexistent_module.Parser"],
+        catch_exceptions=False,
     )
 
     assert "Could not import module 'nonexistent_module'" in result.output
@@ -256,6 +271,7 @@ Adding to Dash.app...
     result = runner.invoke(
         main.main,
         ["foo", "-n", "bing", "--parser", "sys.NonexistentParser"],
+        catch_exceptions=False,
     )
 
     assert (
@@ -274,26 +290,15 @@ class TestSetupPaths:
         docset = tmp_path / "foo.docset"
         foo_path.mkdir()
 
-        assert (foo_path, docset, "foo",) == main.setup_paths(
-            str(foo_path),
-            str(tmp_path),
-            name=None,
+        assert docset == main.setup_destination(
+            tmp_path,
+            name="foo",
             add_to_global=False,
             force=False,
         )
 
-        abs_foo = foo_path.absolute()
-
-        assert (abs_foo, docset, "foo",) == main.setup_paths(
-            str(abs_foo),
-            str(tmp_path),
-            name=None,
-            add_to_global=False,
-            force=False,
-        )
-        assert (abs_foo, tmp_path / "baz.docset", "baz",) == main.setup_paths(
-            str(abs_foo),
-            str(tmp_path),
+        assert (tmp_path / "baz.docset") == main.setup_destination(
+            tmp_path,
             name="baz",
             add_to_global=False,
             force=False,
@@ -305,13 +310,10 @@ class TestSetupPaths:
         """
         assert main.DEFAULT_DOCSET_PATH.is_absolute
         assert (
-            Path("foo"),
-            main.DEFAULT_DOCSET_PATH / "foo.docset",
-            "foo",
-        ) == main.setup_paths(
-            source="foo",
-            name=None,
-            destination="foobar",
+            main.DEFAULT_DOCSET_PATH / "foo.docset"
+        ) == main.setup_destination(
+            destination=Path("foobar"),
+            name="foo",
             add_to_global=True,
             force=False,
         )
@@ -321,85 +323,48 @@ class TestSetupPaths:
         Exit with EEXIST if the selected destination already exists.
         """
         monkeypatch.chdir(tmp_path)
-        os.mkdir("foo")
-        os.mkdir("foo.docset")
+        (tmp_path / "foo.docset").mkdir()
+
         with pytest.raises(SystemExit) as e:
-            main.setup_paths(
-                source="foo",
+            main.setup_destination(
+                destination=Path("."),
+                name="foo",
                 force=False,
-                name=None,
-                destination=None,
                 add_to_global=False,
             )
         assert e.value.code == errno.EEXIST
 
-        main.setup_paths(
-            source="foo",
+        main.setup_destination(
+            destination=Path("."),
+            name="foo",
             force=True,
-            name=None,
-            destination=None,
             add_to_global=False,
         )
         assert not os.path.lexists("foo.docset")
 
-    def test_deducts_name_with_trailing_slash(self, tmp_path, monkeypatch):
-        """
-        If the source path ends with a /, the name is still correctly deducted.
-        """
-        monkeypatch.chdir(tmp_path)
-        os.mkdir("foo")
 
-        assert (
-            Path("foo")
-            == main.setup_paths(
-                source="foo/",
-                force=False,
-                name=None,
-                destination=None,
-                add_to_global=False,
-            )[0]
+class TestDeductName:
+    def test_supplied(self):
+        """
+        If the user passes a name, respect their choice.
+        """
+        assert "foo" == main.deduct_name(None, None, "foo")
+
+    def test_path_name(self, tmp_path):
+        """
+        If nothing is guessed or passed, use the source directory name.
+        """
+        p = tmp_path / "foo" / "bar/"
+        p.mkdir(parents=True)
+
+        assert "bar" == main.deduct_name(
+            Mock(guess_name=lambda p: None), p, None
         )
 
-    def test_cleans_name(self, tmp_path):
+    def test_guess(self, sphinx_built):
         """
-        If the name ends with .docset, remove it.
+        If no name is passed, but the parser can guess a name: use it.
         """
-        d = (tmp_path / "foo").mkdir()
-
-        assert (
-            "baz"
-            == main.setup_paths(
-                source=str(d),
-                force=False,
-                name="baz.docset",
-                destination="bar",
-                add_to_global=False,
-            )[2]
+        assert "sphinx-example" == main.deduct_name(
+            InterSphinxParser, sphinx_built, None
         )
-
-
-class TestSetupLogging:
-    @pytest.mark.parametrize(
-        "verbose, quiet, expected",
-        [
-            (False, False, logging.INFO),
-            (True, False, logging.DEBUG),
-            (False, True, logging.ERROR),
-        ],
-    )
-    def test_logging(self, verbose, quiet, expected):
-        """
-        Ensure verbosity options cause the correct log level.
-        """
-        level = main.create_log_config(verbose, quiet)["loggers"]["doc2dash"][
-            "level"
-        ]
-        assert level is expected
-
-    def test_quiet_and_verbose(self):
-        """
-        Fail if both -q and -v are passed.
-        """
-        with pytest.raises(ValueError) as e:
-            main.create_log_config(verbose=True, quiet=True)
-        assert "makes no sense" in e.value.args[0]

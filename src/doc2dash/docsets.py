@@ -5,30 +5,35 @@ import plistlib
 import shutil
 import sqlite3
 
+from functools import cached_property
 from pathlib import Path
 
 import attrs
 
 
-@attrs.define(hash=True)
+@attrs.frozen(slots=False)
 class DocSet:
     """
     Summary of docset path and parameters.
     """
 
     path: Path
-    docs: Path
     plist: Path
     db_conn: sqlite3.Connection
+
+    @cached_property
+    def docs(self) -> Path:
+        return self.path / "Contents" / "Resources" / "Documents"
 
 
 def prepare_docset(
     source: Path,
     dest: Path,
     name: str,
-    index_page: str | None,
+    index_page: Path | None,
     enable_js: bool,
     online_redirect_url: str | None,
+    icon: Path | None,
 ) -> DocSet:
     """
     Create boilerplate files & directories and copy vanilla docs inside.
@@ -58,7 +63,7 @@ def prepare_docset(
         "isJavaScriptEnabled": enable_js,
     }
     if index_page is not None:
-        plist_cfg["dashIndexFilePath"] = index_page
+        plist_cfg["dashIndexFilePath"] = str(index_page)
     if online_redirect_url is not None:
         plist_cfg["DashDocSetFallbackURL"] = online_redirect_url
 
@@ -66,15 +71,10 @@ def prepare_docset(
 
     shutil.copytree(source, docs)
 
-    return DocSet(path=dest, docs=docs, plist=plist_path, db_conn=db_conn)
+    if icon:
+        shutil.copy2(icon, dest / "icon.png")
 
-
-def add_icon(icon_data: bytes, dest: Path) -> None:
-    """
-    Add icon to docset
-    """
-    with (dest / "icon.png").open("wb") as f:
-        f.write(icon_data)
+    return DocSet(path=dest, plist=plist_path, db_conn=db_conn)
 
 
 def read_plist(full_path: Path) -> dict[str, str | bool]:

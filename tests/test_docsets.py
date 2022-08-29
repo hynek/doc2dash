@@ -24,6 +24,7 @@ class TestPrepareDocset:
             index_page=None,
             enable_js=False,
             online_redirect_url=None,
+            icon=None,
         )
 
         m_ct.assert_called_once_with(
@@ -66,6 +67,7 @@ class TestPrepareDocset:
             index_page="foo.html",
             enable_js=False,
             online_redirect_url=None,
+            icon=None,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -97,6 +99,7 @@ class TestPrepareDocset:
             index_page="foo.html",
             enable_js=True,
             online_redirect_url=None,
+            icon=None,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -128,6 +131,7 @@ class TestPrepareDocset:
             index_page="foo.html",
             enable_js=False,
             online_redirect_url="https://domain.com",
+            icon=None,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -143,3 +147,22 @@ class TestPrepareDocset:
             "isJavaScriptEnabled": False,
             "DashDocSetFallbackURL": "https://domain.com",
         }
+
+    def test_with_icon(self, tmp_path, sphinx_built):
+        """
+        If an icon is passed, it's copied to the root of the docset.
+        """
+        icon = Path("tests") / "logo.png"
+        dest = tmp_path / "bar"
+
+        docsets.prepare_docset(
+            sphinx_built,
+            dest,
+            name="foo",
+            index_page=None,
+            enable_js=False,
+            online_redirect_url=None,
+            icon=icon,
+        )
+
+        assert (Path(dest) / "icon.png").exists()

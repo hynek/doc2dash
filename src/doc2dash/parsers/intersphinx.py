@@ -51,7 +51,7 @@ INV_TO_TYPE = {
 }
 
 
-@attrs.define(hash=True, init=False)
+@attrs.define(init=False)
 class InterSphinxParser(IParser):
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for
@@ -67,6 +67,16 @@ class InterSphinxParser(IParser):
             path, "objects.inv", b"# Sphinx inventory version 2"
         )
 
+    @staticmethod
+    def guess_name(path: Path) -> str | None:
+        with (path / "objects.inv").open("rb") as f:
+            f.readline()  # Sphinx inventory...
+            line = f.readline().decode().strip()
+
+        assert line.startswith("# Project: ")
+
+        return line[11:]
+
     def parse(self) -> Generator[ParserEntry, None, None]:
         """
         Parse sphinx docs at self.doc_path.
@@ -75,6 +85,11 @@ class InterSphinxParser(IParser):
         """
         with (self.doc_path / "objects.inv").open("rb") as inv_f:
             yield from self._inv_to_entries(load_inventory(inv_f))
+
+    def find_and_patch_entry(
+        self, soup: BeautifulSoup, entry: TOCEntry
+    ) -> bool:
+        return _find_and_patch_entry(soup, entry)
 
     def _inv_to_entries(
         self, inv: Mapping[str, Mapping[str, InventoryEntry]]
@@ -120,11 +135,6 @@ class InterSphinxParser(IParser):
         name = inv_entry[1] if inv_entry[1] != "-" else key
 
         return ParserEntry(name=name, type=dash_type, path=path_str)
-
-    def find_and_patch_entry(
-        self, soup: BeautifulSoup, entry: TOCEntry
-    ) -> bool:
-        return _find_and_patch_entry(soup, entry)
 
 
 def _find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:

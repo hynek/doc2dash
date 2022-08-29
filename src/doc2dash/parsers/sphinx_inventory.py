@@ -45,11 +45,11 @@ def load_inventory(
     """
     assert b"# Sphinx inventory version 2\n" == fp.readline()
 
-    key, value = fp.readline().split(b":", 1)
+    key, value = fp.readline().split(b": ", 1)
     assert b"# Project" == key
     # project = value.strip().decode()
 
-    key, value = fp.readline().split(b":", 1)
+    key, value = fp.readline().split(b": ", 1)
     assert b"# Version" == key
     # version = value.strip().decode()
 
