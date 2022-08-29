@@ -1,5 +1,4 @@
-import os
-import pathlib
+from pathlib import Path
 
 import pytest
 
@@ -14,7 +13,8 @@ from doc2dash.parsers.intersphinx import (
 from doc2dash.parsers.types import ParserEntry, TOCEntry
 
 
-HERE = os.path.dirname(__file__)
+HERE = Path(__file__).parent
+SPHINX_DOCS = HERE / "example-sphinx-docs" / "built_docs" / "html"
 
 
 class TestInterSphinxParser:
@@ -23,14 +23,15 @@ class TestInterSphinxParser:
         Parsing of the example objects.inv in the current directory does not
         fail.
         """
-        p = InterSphinxParser(doc_path=os.path.join(HERE))
+        p = InterSphinxParser(doc_path=SPHINX_DOCS)
+
         assert [] != list(p.parse())
 
     def test_inv_to_entries(self):
         """
         Inventory items are correctly converted.
         """
-        p = InterSphinxParser(doc_path=os.path.join(HERE))
+        p = InterSphinxParser(doc_path=SPHINX_DOCS)
         result = list(
             p._inv_to_entries(
                 {
@@ -83,7 +84,7 @@ class TestInterSphinxParser:
                     return
                 return super().convert_type(inv_type)
 
-        p = MyInterSphinxParser(doc_path=os.path.join(HERE))
+        p = MyInterSphinxParser(doc_path=SPHINX_DOCS)
         result = list(
             p._inv_to_entries(
                 {
@@ -119,7 +120,7 @@ class TestInterSphinxParser:
                     name=f"!{key}!", type=dash_type, path=path_str
                 )
 
-        p = MyInterSphinxParser(doc_path=os.path.join(HERE))
+        p = MyInterSphinxParser(doc_path=SPHINX_DOCS)
         result = list(
             p._inv_to_entries(
                 {"py:method": {"some_method": ("some_module.py", "-")}}
@@ -142,7 +143,7 @@ class TestInterSphinxParser:
                     return
                 return super().create_entry(dash_type, key, inv_entry)
 
-        p = MyInterSphinxParser(doc_path=os.path.join(HERE))
+        p = MyInterSphinxParser(doc_path=SPHINX_DOCS)
         result = list(
             p._inv_to_entries(
                 {
@@ -169,7 +170,7 @@ class TestInterSphinxParser:
 @pytest.fixture(name="soup")
 def _soup():
     return BeautifulSoup(
-        (pathlib.Path(HERE) / "function_example.html").read_text(),
+        (Path(HERE) / "function_example.html").read_text(),
         "html.parser",
     )
 

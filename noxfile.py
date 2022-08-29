@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import os
+import shutil
+
+from pathlib import Path
 
 import nox
 
@@ -36,6 +39,27 @@ def coverage_report(session: nox.Session) -> None:
 
     session.run("coverage", "combine")
     session.run("coverage", "report")
+
+
+@nox.session
+def rebuild_sample_docs(session: nox.Session) -> None:
+    session.install(".", "sphinx")
+    session.chdir(
+        Path("tests") / "parsers" / "intersphinx" / "example-sphinx-docs"
+    )
+
+    # Awkward name to avoid "_build" / "build" from .gitignore.
+    session.run("sphinx-build", "-M", "html", "source", "built_docs")
+
+    # CLean up stuff we don't need
+    built = Path("built_docs")
+    shutil.rmtree(built / "doctrees")
+
+    html = built / "html"
+    shutil.rmtree(html / "_sources")
+    shutil.rmtree(html / "_static")
+    os.remove(html / ".buildinfo")
+    os.remove(html / "searchindex.js")
 
 
 @nox.session(python="3.9")

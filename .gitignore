@@ -9,7 +9,7 @@
 .vscode
 *.docset
 *.pyc
-build
 dist
 site
 test_data
+build
