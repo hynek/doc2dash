@@ -6,6 +6,7 @@ import logging
 import logging.config
 import os
 import shutil
+import subprocess
 
 from importlib import metadata
 from pathlib import Path
@@ -209,7 +210,7 @@ def main(
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash.app...")
-        os.system(f'open -a dash "{dest}"')
+        subprocess.check_output(("open", "-a", "dash", dest))
 
 
 def deduct_name(parser: type[IParser], path: Path, name: str | None) -> str:

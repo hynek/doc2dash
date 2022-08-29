@@ -4,6 +4,7 @@ import errno
 import logging
 import os
 import sqlite3
+import subprocess
 import sys
 
 from pathlib import Path
@@ -219,8 +220,8 @@ Adding to Dash.app...
 
     # alternative 1: use --parser
     sys.modules["fake_module"] = fake_module
-    system_mock = MagicMock(spec_set=os.system)
-    monkeypatch.setattr(os, "system", system_mock)
+    run_mock = MagicMock(spec_set=subprocess.check_output)
+    monkeypatch.setattr(subprocess, "check_output", run_mock)
 
     result = runner.invoke(
         main.main,
@@ -239,11 +240,13 @@ Adding to Dash.app...
 
     assert expected.format(src=src, name="bah") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "bah.docset"',) == system_mock.call_args[0]
+    assert (("open", "-a", "dash", Path("bah.docset")),) == run_mock.call_args[
+        0
+    ]
 
     # alternative 2: patch doc2dash.parsers
     monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
-    system_mock.reset_mock()
+    run_mock.reset_mock()
 
     result = runner.invoke(
         main.main,
@@ -253,10 +256,12 @@ Adding to Dash.app...
 
     assert expected.format(src=src, name="bar") == result.output
     assert 0 == result.exit_code
-    assert ('open -a dash "bar.docset"',) == system_mock.call_args[0]
+    assert (("open", "-a", "dash", Path("bar.docset")),) == run_mock.call_args[
+        0
+    ]
 
     # Again, just without adding and icon.
-    system_mock.reset_mock()
+    run_mock.reset_mock()
     result = runner.invoke(
         main.main,
         ["foo", "-n", "baz"],
