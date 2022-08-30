@@ -131,7 +131,7 @@ class InterSphinxParser(IParser):
 
         This is a method to allow customization by inheritance.
         """
-        path_str = _inv_entry_to_path(inv_entry)
+        path_str = _clean_up_path(inv_entry[0])
         name = inv_entry[1] if inv_entry[1] != "-" else key
 
         return ParserEntry(name=name, type=dash_type, path=path_str)
@@ -170,15 +170,24 @@ def _find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
     return True
 
 
-def _inv_entry_to_path(data: InventoryEntry) -> str:
+def _clean_up_path(path: str) -> str:
     """
-    Determine the path from the intersphinx inventory entry
+    Clean up a path as it comes from an inventory.
 
     Discard the anchors between head and tail to make it
     compatible with situations where extra meta information is encoded.
-    """
-    path_tuple = data[0].split("#")
-    if len(path_tuple) > 1:
-        return "#".join((path_tuple[0], path_tuple[-1]))
 
-    return data[0]
+    If the path ends with an "/", append an index.html.
+    """
+    path_tuple = path.split("#")
+    if len(path_tuple) > 1:
+        return f"{_maybe_index(path_tuple[0])}#{path_tuple[-1]}"
+
+    return _maybe_index(path)
+
+
+def _maybe_index(path: str) -> str:
+    if path.endswith("/"):
+        return f"{path}index.html"
+
+    return path

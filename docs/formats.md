@@ -1,26 +1,26 @@
 # Supported Input Formats
 
 *doc2dash* supports two documentation formats:
-*Sphinx* and *pydoctor*
+`intersphinx`` and *pydoctor*
 
 I would **love** to add more formats!
 While *doc2dash* is implemented in Python, the scope for the supported documentation types is unlimited.
 Please reach out if you're interested helping!
 
 
-## Sphinx
+## `intersphinx`
 
-[*Sphinx*](https://www.sphinx-doc.org/) is a very common documentation framework in the Python world and beyond.
+`intersphinx` is not a format, but a way to store API metadata along with documentation that been an [extension to *Sphinx*](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html) for many years now.
 
-*doc2dash* uses the machine-readable `objects.inv` file (`intersphinx`) to determine the symbols and patches the documentation such that *Dash.app* can link to them.
 
----
+!!! Note
 
-The trickiest part of building *Sphinx* documentation for a project is figuring out the dependencies necessary.
-Be on the lookout for `docs` extras or files called like `docs-requirements.txt` et cetera.
+    You can recognize `intersphinx`-based docs by the `objects.inv` file at the root of the built documentation.
 
-Once that's set up, building *Sphinx* documentation is usually straight-forward:
-change into their documentation directory (usually `docs` or `doc`) and run `make html`.
+The most common documentation formats that support this are:
+
+- [*Sphinx*](https://www.sphinx-doc.org/) is a very common documentation framework in the Python world and beyond.
+- [*MkDocs*](https://www.mkdocs.org/), **if** used with the [*mkdocstrings*](https://mkdocstrings.github.io) extension.
 
 !!! Warning
 
@@ -30,9 +30,8 @@ change into their documentation directory (usually `docs` or `doc`) and run `mak
 
 ## pydoctor
 
-Unlike *Sphinx*, [*pydoctor*](https://github.com/twisted/pydoctor) is not a complete documentation format.
-Instead, it's focused on creating API documentation from Python docstrings.
+[*pydoctor*](https://github.com/twisted/pydoctor) is focused on creating API documentation from Python docstrings.
 The most popular project employing it being [Twisted](https://twistedmatrix.com/) and its ecosystem.
 
-Since *pydoctor* alas does not emit a machine-readable file, the `nameIndex.html` file is parsed.
-Fortunately, no theming is common in the *pydoctor* world, so the parsing is reliable nonetheless.
+Since *pydoctor* does not emit a machine-readable file, the `nameIndex.html` file is parsed.
+Fortunately, no theming is common in the *pydoctor* world, so the parsing is reliable nevertheless.
