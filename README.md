@@ -20,7 +20,7 @@ Currently it supports:
 - *intersphinx*-based documentation like [*Sphinx*](https://www.sphinx-doc.org/) or [*MkDocs*](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io))
 - [*pydoctor*](https://github.com/twisted/pydoctor)
 
-It's also fully extendable: **you** can write your own private parser!
+It's also fully extendable: [**you** can write your own parser](https://doc2dash.readthedocs.io/en/latest/extending/)!
 
 ![doc2dash Session](docs/doc2dash-session.png)
 

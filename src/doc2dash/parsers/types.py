@@ -12,7 +12,13 @@ from bs4 import BeautifulSoup
 
 class IParser(metaclass=abc.ABCMeta):
     """
-    A doc2dash documentation parser.
+    A *doc2dash* documentation parser.
+
+    Attributes:
+        name: The name of this parser. Used in user-facing output.
+
+        doc_path: The path the documentation that this parser is supposed to
+            parse. It's passed as the only argument when instantiating.
     """
 
     name: ClassVar[str] = NotImplemented
@@ -25,21 +31,37 @@ class IParser(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def detect(path: Path) -> bool:
         """
-        A static method that returns whether *path* can be parsed by us.
+        Check whether *path* can be parsed by this parser.
+
+        Args:
+            path: The path to the docset.
+
+        Returns:
+            `True`, if the path belongs to this parser.
         """
 
     @staticmethod
     @abc.abstractmethod
     def guess_name(path: Path) -> str | None:
         """
-        Try to guess an appropriate name for the docset.
+        Try to guess an appropriate name for a docset.
+
+        Args:
+            path: The path to the docset.
+
+        Returns:
+            A name, or `None` which means "no idea".
         """
 
     @abc.abstractmethod
     def parse(self) -> Generator[ParserEntry, None, None]:
         """
-        Parse `self.doc_path`, yield a :class:`ParserEntry` for each found
+        Parse `self.doc_path` and `yield` a
+        [`ParserEntry`][doc2dash.parsers.types.ParserEntry] for each found
         entry.
+
+        Returns:
+            A generator that yields `ParserEntry`s.
         """
 
     @abc.abstractmethod
@@ -47,26 +69,38 @@ class IParser(metaclass=abc.ABCMeta):
         self, soup: BeautifulSoup, name: str, type: str, anchor: str
     ) -> bool:
         """
-        Modify *soup* so Dash.app can generate TOCs on the fly.
+        Modify [*soup*](https://beautiful-soup-4.readthedocs.io/en/latest/) so
+        Dash.app can generate tables of contents on the fly.
 
-        :param soup: A soup to patch.
-        :param name: The name of the symbol.
-        :param type: One of `doc2dash.parsers.entry_types`.
-        :param anchor: The anchor (`#`) within the file.
+        Args:
+            soup: A soup of the file to patch.
+            name: The name of the symbol.
+            type: One of `doc2dash.parsers.entry_types`.
+            anchor: The anchor (`#`) within the file.
 
-        :returns: Whether an entry was found and patched.
+        Returns:
+            Whether an entry was found and patched.
         """
 
 
 @attrs.define(hash=True)
 class ParserEntry:
     """
-    A symbol as found by the parser that get yielded for further processing.
+    A symbol to be indexed, as found by `IParser`'s `parse()` method.
     """
 
     name: str
+    """
+    The full display name of the index entry.
+    """
     type: str
+    """
+    The type which is a value from `doc2dash.parsers.entry_types`.
+    """
     path: str
+    """
+    Full path including anchor (`#`). E.g. `api.rst#print`
+    """
 
     def as_tuple(self) -> tuple[str, str, str]:
         """

@@ -1,22 +1,9 @@
 # Writing Custom Parsers
 
-Adding your own parsers is easy!
-We'd prefer if you'd share your parsers with us, but you can always use your own parser.
-
-You have to implement the `doc2dash.parsers.types.IParser` interface which consists of three methods:
-
-- A static method `detect(path: str) -> bool` that takes a path and returns whether of not that path contains documentation is recognizes.
-- A static method `guess_name(path: str) -> str | None` that takes a path and returns a guess of the name of the project that *path* is documenting.
-  `None` is a valid return value and means "no idea".
-- A generator `parse(self) -> Generator[ParserEntry, None, None]` that yields `ParserEntry`s.
-- A regular method `find_and_patch_entry(self, soup: BeautifulSoup, ) -> bool`.
-
-  It returns whether it found and patched the entry.
+If you want to implement your own parser (and if you do: why don't you [share it with us](https://github.com/hynek/doc2dash/pulls)? :pleading_face:) you have to implement the [`IParser`][doc2dash.parsers.types.IParser] interface:
 
 
-## APIs
-
-### IParser
+## IParser
 
 ::: doc2dash.parsers.types.IParser
     options:
@@ -27,7 +14,7 @@ You have to implement the `doc2dash.parsers.types.IParser` interface which consi
         - find_and_patch_entry
 
 
-### ParserEntry
+## ParserEntry
 
 ::: doc2dash.parsers.types.ParserEntry
     options:

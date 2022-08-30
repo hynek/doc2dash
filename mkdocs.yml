@@ -3,6 +3,19 @@ site_name: doc2dash
 site_author: Hynek Schlawack
 copyright: Copyright &copy; 2012 Hynek Schlawack
 
+watch:
+  - README.md
+  - CHANGELOG.md
+  - src/doc2dash/parsers/types.py
+
+nav:
+  - About: index.md
+  - Installation: installation.md
+  - Supported Formats: formats.md
+  - Usage: usage.md
+  - Custom Formats: extending.md
+  - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md
+
 theme:
   name: material
   icon:
@@ -36,7 +49,7 @@ extra:
     - icon: fontawesome/brands/github-alt
       link: https://github.com/hynek
   version:
-    provider: mike  # liesssss
+    provider: mike # liesssss
 
 markdown_extensions:
   - admonition
@@ -44,15 +57,14 @@ markdown_extensions:
   - attr_list
   - mkdocs-click
   - pymdownx.smartsymbols
-
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 plugins:
   - include-markdown
-  - mkdocstrings
-
-nav:
-  - About: index.md
-  - Installation: installation.md
-  - Supported Formats: formats.md
-  - Usage: usage.md
-  - Custom Formats: extending.md
-  - Changelog: changelog.md
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          import:
+            - https://docs.python.org/3/objects.inv
