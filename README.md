@@ -24,6 +24,8 @@ It's also fully extendable: **you** can write your own private parser!
 
 ![doc2dash Session](docs/doc2dash-session.png)
 
+While *doc2dash* is a Python project, the support is not limited to Python-related formats and **stand-alone binaries** are provided with releases as of 3.0.
+
 
 ## Project Information
 

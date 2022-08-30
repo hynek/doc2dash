@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Stand-alone binaries! If your platform is supported, you can now download binaries from the release page without dealing with Python at all – courtesy of [*PyOxidizer*]().
 - *intersphinx*: documentation based on [*MkDocs*](https://www.mkdocs.org/) with [*mkdocstrings*](https://mkdocstrings.github.io/) metadata is now supported.
 - *intersphinx*: if no explicit name is passed, the docset name is derived von the documentation's metadata (and not the directory name, which is more often than not just `html`).
 - We use [*rich*](https://rich.readthedocs.io/) for output and progress bars now. This allows us more granular progress indication.
