@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 from doc2dash.parsers import entry_types
 from doc2dash.parsers.pydoctor import PyDoctorParser
-from doc2dash.parsers.types import ParserEntry, TOCEntry
+from doc2dash.parsers.types import ParserEntry
 
 
 HERE = os.path.dirname(__file__)
@@ -106,11 +106,9 @@ def test_patcher():
 
     assert p.find_and_patch_entry(
         soup,
-        TOCEntry(
-            name="twisted.application.app.ApplicationRunner.startReactor",
-            type="clm",
-            anchor="startReactor",
-        ),
+        name="twisted.application.app.ApplicationRunner.startReactor",
+        type="clm",
+        anchor="startReactor",
     )
     toc_link = soup(
         "a",
@@ -124,7 +122,7 @@ def test_patcher():
     assert next_tag.name == "a"
     assert next_tag["name"] == "startReactor"
     assert not p.find_and_patch_entry(
-        soup, TOCEntry(name="invented", type="cl", anchor="nonex")
+        soup, name="invented", type="cl", anchor="nonex"
     )
 
 

@@ -9,9 +9,34 @@ You have to implement the `doc2dash.parsers.types.IParser` interface which consi
 - A static method `guess_name(path: str) -> str | None` that takes a path and returns a guess of the name of the project that *path* is documenting.
   `None` is a valid return value and means "no idea".
 - A generator `parse(self) -> Generator[ParserEntry, None, None]` that yields `ParserEntry`s.
-- A regular method `find_and_patch_entry(self, soup: BeautifulSoup, entry: TOCEntry) -> bool`.
+- A regular method `find_and_patch_entry(self, soup: BeautifulSoup, ) -> bool`.
 
   It returns whether it found and patched the entry.
+
+
+## APIs
+
+### IParser
+
+::: doc2dash.parsers.types.IParser
+    options:
+      members:
+        - detect
+        - guess_name
+        - parse
+        - find_and_patch_entry
+
+
+### ParserEntry
+
+::: doc2dash.parsers.types.ParserEntry
+    options:
+      members:
+        - name
+        - type
+        - path
+
+---
 
 To help you, *doc2dash* comes with a few helpers.
 

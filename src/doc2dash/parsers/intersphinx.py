@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 from . import entry_types
 from .sphinx_inventory import InventoryEntry, load_inventory
-from .types import IParser, ParserEntry, TOCEntry
+from .types import IParser, ParserEntry
 from .utils import format_ref, has_file_with
 
 
@@ -87,9 +87,9 @@ class InterSphinxParser(IParser):
             yield from self._inv_to_entries(load_inventory(inv_f))
 
     def find_and_patch_entry(
-        self, soup: BeautifulSoup, entry: TOCEntry
+        self, soup: BeautifulSoup, name: str, type: str, anchor: str
     ) -> bool:
-        return _find_and_patch_entry(soup, entry)
+        return _find_and_patch_entry(soup, name, type, anchor)
 
     def _inv_to_entries(
         self, inv: Mapping[str, Mapping[str, InventoryEntry]]
@@ -137,25 +137,27 @@ class InterSphinxParser(IParser):
         return ParserEntry(name=name, type=dash_type, path=path_str)
 
 
-def _find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
+def _find_and_patch_entry(
+    soup: BeautifulSoup, name: str, type: str, anchor: str
+) -> bool:
     """
     Modify *soup* so Dash.app can generate TOCs on the fly.
     """
     pos = None
-    if entry.type == entry_types.WORD:
-        pos = soup.find("dt", id=entry.anchor)
-    elif entry.type == entry_types.SECTION:
-        pos = soup.find(id=entry.anchor)
-    elif entry.anchor.startswith("module-"):
+    if type == entry_types.WORD:
+        pos = soup.find("dt", id=anchor)
+    elif type == entry_types.SECTION:
+        pos = soup.find(id=anchor)
+    elif anchor.startswith("module-"):
         pos = soup.h1
 
     if not pos:
         pos = (
-            soup.find("a", {"class": "headerlink"}, href="#" + entry.anchor)
+            soup.find("a", {"class": "headerlink"}, href="#" + anchor)
             or soup.find(
-                "a", {"class": "reference internal"}, href="#" + entry.anchor
+                "a", {"class": "reference internal"}, href="#" + anchor
             )
-            or soup.find("span", id=entry.anchor)
+            or soup.find("span", id=anchor)
         )
 
     if not pos:
@@ -163,7 +165,7 @@ def _find_and_patch_entry(soup: BeautifulSoup, entry: TOCEntry) -> bool:
 
     tag = soup.new_tag("a")
     tag["class"] = "dashAnchor"
-    tag["name"] = format_ref(entry.type, entry.name)
+    tag["name"] = format_ref(type, name)
 
     pos.insert_before(tag)
 

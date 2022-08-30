@@ -11,7 +11,7 @@ import attrs
 
 from bs4 import BeautifulSoup
 
-from .types import IParser, ParserEntry, TOCEntry
+from .types import IParser, ParserEntry
 from .utils import format_ref, has_file_with
 
 
@@ -79,12 +79,12 @@ class PyDoctorParser(IParser):
                 )
 
     def find_and_patch_entry(
-        self, soup: BeautifulSoup, entry: TOCEntry
+        self, soup: BeautifulSoup, name: str, type: str, anchor: str
     ) -> bool:
-        link = soup.find("a", attrs={"name": entry.anchor})
+        link = soup.find("a", attrs={"name": anchor})
         if link:
             tag = soup.new_tag("a")
-            tag["name"] = format_ref(entry.type, entry.name)
+            tag["name"] = format_ref(type, name)
             link.insert_before(tag)
 
             return True

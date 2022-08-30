@@ -10,7 +10,7 @@ from doc2dash.parsers.intersphinx import (
     _clean_up_path,
     _find_and_patch_entry,
 )
-from doc2dash.parsers.types import ParserEntry, TOCEntry
+from doc2dash.parsers.types import ParserEntry
 
 
 HERE = Path(__file__).parent
@@ -181,11 +181,9 @@ class TestFindAndPatchEntry:
         """
         assert True is _find_and_patch_entry(
             soup,
-            TOCEntry(
-                name="pyramid.config.Configurator.add_route",
-                type="Method",
-                anchor="pyramid.config.Configurator.add_route",
-            ),
+            name="pyramid.config.Configurator.add_route",
+            type="Method",
+            anchor="pyramid.config.Configurator.add_route",
         )
 
         toc_link = soup(
@@ -206,11 +204,9 @@ class TestFindAndPatchEntry:
         soup = BeautifulSoup("<h1>Some Module</h1>", "html.parser")
         assert True is _find_and_patch_entry(
             soup,
-            TOCEntry(
-                name="some_module",
-                type="M\xc3\xb6dule",
-                anchor="module-some_module",
-            ),
+            name="some_module",
+            type="M\xc3\xb6dule",
+            anchor="module-some_module",
         )
         assert '<a class="dashAnchor" name="//apple_ref' in str(soup)
 
@@ -219,7 +215,7 @@ class TestFindAndPatchEntry:
         Return `False` if anchor can't be found
         """
         assert False is _find_and_patch_entry(
-            soup, TOCEntry(name="foo", type="Nothing", anchor="does-not-exist")
+            soup, name="foo", type="Nothing", anchor="does-not-exist"
         )
 
     def test_patch_term(self, soup):
@@ -228,11 +224,9 @@ class TestFindAndPatchEntry:
         """
         assert True is _find_and_patch_entry(
             soup,
-            TOCEntry(
-                name="Whatever",
-                type=entry_types.WORD,
-                anchor="term-dict-classes",
-            ),
+            name="Whatever",
+            type=entry_types.WORD,
+            anchor="term-dict-classes",
         )
         assert (
             '<a class="dashAnchor" name="//apple_ref/cpp/Word/Whatever"></a>'
@@ -244,8 +238,7 @@ class TestFindAndPatchEntry:
         Sections are found.
         """
         assert True is _find_and_patch_entry(
-            soup,
-            TOCEntry(name="Chains", type=entry_types.SECTION, anchor="chains"),
+            soup, name="Chains", type=entry_types.SECTION, anchor="chains"
         )
         assert (
             '<a class="dashAnchor" name="//apple_ref/cpp/Section/Chains"></a>'

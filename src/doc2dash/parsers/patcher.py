@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from rich.progress import Progress
 
 from ..output import console
-from .types import IParser, ParserEntry, TOCEntry
+from .types import IParser, ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -42,9 +42,7 @@ def patch_anchors(
             pentry = yield
             try:
                 fname, anchor = pentry.path.split("#")
-                files[fname].append(
-                    TOCEntry(name=pentry.name, type=pentry.type, anchor=anchor)
-                )
+                files[fname].append((pentry.name, pentry.type, anchor))
             except ValueError:
                 # pydoctor has no anchors for e.g. classes
                 pass
@@ -57,7 +55,7 @@ def patch_anchors(
 
 def _patch_files(
     parser: IParser,
-    files: dict[str, list[TOCEntry]],
+    files: dict[str, list[tuple[str, str, str]]],
     pbar: Progress,
 ) -> None:
     files_task = pbar.add_task("Patching files...", total=len(files))
@@ -85,17 +83,17 @@ def _patch_file(
     parser: IParser,
     fname: str,
     full_path: str,
-    entries: list[TOCEntry],
+    entries: list[tuple[str, str, str]],
 ) -> BeautifulSoup:
     task = pbar.add_task(f"Patching {fname}...", total=len(entries))
     with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
         soup = BeautifulSoup(fp, "html.parser")
-        for entry in entries:
-            if not parser.find_and_patch_entry(soup, entry):
+        for (name, type, anchor) in entries:
+            if not parser.find_and_patch_entry(soup, name, type, anchor):
                 log.debug(
                     "Can't find anchor '%s' (%s) in '%s'.",
-                    entry.anchor,
-                    entry.type,
+                    anchor,
+                    type,
                     fname,
                 )
             pbar.update(task, advance=1)
