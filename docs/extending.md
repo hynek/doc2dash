@@ -17,10 +17,11 @@ To help you, *doc2dash* comes with a few helpers.
 
 Finally, when calling *doc2dash*, you must pass the fully-qualified name using the `--parser` option.
 
----
+
+## Examples
 
 Often, it's the easiest to get started by looking at existing parsers.
 Conveniently, *doc2dash* ships two:
 
-- The [`intersphinx` parser](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/intersphinx.py) uses a machine-readable format to extract the necessary metadata.
-- The [*pydoctor*](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/pydoctor.py) parser actually parses the HTML of the pages.
+- The [*intersphinx* parser](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/intersphinx.py) uses a machine-readable format to extract the necessary metadata.
+- The [*pydoctor* parser](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/pydoctor.py) actually parses the HTML of the pages.

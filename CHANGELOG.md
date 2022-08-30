@@ -11,15 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- *Sphinx*: if no explicit name is passed, the docset name is derived von the docs's metadata (and not the directory name, which is more often than not just `html`).
+- *intersphinx*: documentation based on [*MkDocs*](https://www.mkdocs.org/) with [*mkdocstrings*](https://mkdocstrings.github.io/) metadata is now supported.
+- *intersphinx*: if no explicit name is passed, the docset name is derived von the documentation's metadata (and not the directory name, which is more often than not just `html`).
 - We use [*rich*](https://rich.readthedocs.io/) for output and progress bars now. This allows us more granular progress indication.
 
 
 ### Changed
 
-- *Sphinx*: The absence of `py-modindex.html` files is now tolerated. It can be useful to use *doc2dash* with non-Python *Sphinx* documentation, but it can be missing that file. [\#115](https://github.com/hynek/doc2dash/issues/115)
-- *Sphinx*: we now  parse `intersphinx` inventories on our own; *Sphinx* is not a dependency anymore.
-- *doc2dash* now checks if the index page passed via `--index-page` / `-I` exists and fails if it doesn't.
+- Tons of refactorings that probably broke your custom parsers. Sorry about that and let us know, if we can help you fixing them.
+- *intersphinx*: The absence of `py-modindex.html` files is now tolerated. It can be useful to use *doc2dash* with non-Python *Sphinx* documentation, but it can be missing that file. [\#115](https://github.com/hynek/doc2dash/issues/115)
+- *intersphinx*: we now parse `objects.inv` files on our own. *Sphinx* is not a dependency anymore.
+- We now check if the index page passed via `--index-page` / `-I` exists and fail if it doesn't.
 
 
 ## [2.4.1](https://github.com/hynek/doc2dash/compare/2.4.0...2.4.1) - 2022-01-21
@@ -39,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Better display names with Sphinx v2 inventories. [\#101](https://github.com/hynek/doc2dash/pull/101)
 
-- New `intersphinx` types:
+- *intersphinx*: new types:
 
   - `cmdoption` (deprecated alias for `option`)
   - `doc`

@@ -1,26 +1,21 @@
 # Supported Input Formats
 
-*doc2dash* supports two documentation formats:
-`intersphinx`` and *pydoctor*
-
-I would **love** to add more formats!
+Additionally to the formats below, I would **love** to add more formats!
 While *doc2dash* is implemented in Python, the scope for the supported documentation types is unlimited.
 Please reach out if you're interested helping!
 
 
-## `intersphinx`
+## intersphinx
 
-`intersphinx` is not a format, but a way to store API metadata along with documentation that been an [extension to *Sphinx*](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html) for many years now.
+*intersphinx* is not a format, but a way to store API metadata along with documentation.
+Originally conceived to ease inter-project API linking, it's been an [extension to *Sphinx*](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html) for many years now.
 
+You can recognize *intersphinx*-based docs by the `objects.inv` file at the root of the built documentation.
 
-!!! Note
+The most common documentation formats that support *intersphinx* are:
 
-    You can recognize `intersphinx`-based docs by the `objects.inv` file at the root of the built documentation.
-
-The most common documentation formats that support this are:
-
-- [*Sphinx*](https://www.sphinx-doc.org/) is a very common documentation framework in the Python world and beyond.
-- [*MkDocs*](https://www.mkdocs.org/), **if** used with the [*mkdocstrings*](https://mkdocstrings.github.io) extension.
+- [*Sphinx*](https://www.sphinx-doc.org/), a very common documentation framework in the Python world and beyond.
+- [*MkDocs*](https://www.mkdocs.org/), **if** used with the [*mkdocstrings*](https://mkdocstrings.github.io) plugin.
 
 !!! Warning
 

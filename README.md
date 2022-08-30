@@ -17,7 +17,7 @@ It takes your offline documentation and converts it into an indexed format that 
 
 Currently it supports:
 
-- `intersphinx`-based documentation like [*Sphinx*](https://www.sphinx-doc.org/) or [*MkDocs*](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io))
+- *intersphinx*-based documentation like [*Sphinx*](https://www.sphinx-doc.org/) or [*MkDocs*](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io))
 - [*pydoctor*](https://github.com/twisted/pydoctor)
 
 It's also fully extendable: **you** can write your own private parser!
