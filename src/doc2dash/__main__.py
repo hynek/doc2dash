@@ -183,14 +183,23 @@ def main(
         raise SystemExit(errno.ENOENT)
 
     if parser_type is None:
-        parser_type = parsers.get_doctype(source)
-        if parser_type is None:
+        parser_type, detected_name = parsers.get_doctype(source)
+        if not (detected_name and parser_type):
             log.error(
                 '"%s" does not contain a known documentation format.', source
             )
             raise SystemExit(errno.EINVAL)
+    else:
+        detected_name = parser_type.detect(source)
+        if not detected_name:
+            log.error(
+                "Supplied parser %r can't parse '%s'.", parser_type, source
+            )
+            raise SystemExit(errno.EINVAL)
 
-    name = deduct_name(parser_type, source, name)
+    if name is None:
+        name = detected_name
+
     dest = setup_destination(
         destination,
         name,
@@ -201,7 +210,7 @@ def main(
         source, dest, name, index_page, enable_js, online_redirect_url, icon
     )
 
-    parser = parser_type(source=docset.docs)
+    parser = parser_type(docset.docs)
 
     log.info(
         "Converting [b]%s[/b] docs from '%s' to '%s'.",
@@ -215,19 +224,6 @@ def main(
     if add_to_dash or add_to_global:
         log.info("Adding to Dash.app...")
         subprocess.check_output(("open", "-a", "dash", dest))
-
-
-def deduct_name(parser: type[Parser], path: Path, name: str | None) -> str:
-    # If the user supplied a name, respect it.
-    if name:
-        return name
-
-    guess = parser.guess_name(path)
-    if guess:
-        return guess
-
-    # Fall back to the name of the source directory.
-    return path.name
 
 
 def setup_destination(

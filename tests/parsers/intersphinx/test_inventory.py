@@ -1,4 +1,4 @@
-from doc2dash.parsers.sphinx_inventory import load_inventory
+from doc2dash.parsers.intersphinx_inventory import load_inventory
 
 
 def test_parse_example(objects_inv):

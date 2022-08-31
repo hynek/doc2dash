@@ -9,7 +9,7 @@ import sys
 
 from pathlib import Path
 from typing import ClassVar
-from unittest.mock import MagicMock, Mock
+from unittest.mock import Mock
 
 import attrs
 import pytest
@@ -20,7 +20,6 @@ import doc2dash
 
 from doc2dash import __main__ as main
 from doc2dash import docsets
-from doc2dash.parsers.intersphinx import InterSphinxParser
 from doc2dash.parsers.types import EntryType, ParserEntry
 
 
@@ -41,22 +40,22 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     """
     result = runner.invoke(
         main.main,
-        [str(sphinx_built), "-q", "-n", "SphinxDocs", "-d", str(tmp_path)],
+        [str(sphinx_built), "-q", "-d", str(tmp_path)],
         catch_exceptions=False,
     )
 
-    docset = tmp_path / "SphinxDocs.docset"
+    docset = tmp_path / "sphinx-example.docset"
     contents = docset / "Contents"
     resources = contents / "Resources"
 
     assert 0 == result.exit_code
     assert "\n" == result.stdout
     assert {
-        "CFBundleIdentifier": "SphinxDocs",
-        "CFBundleName": "SphinxDocs",
+        "CFBundleIdentifier": "sphinx-example",
+        "CFBundleName": "sphinx-example",
         "DashDocSetDeclaredInStyle": "originalName",
         "DashDocSetFamily": "python",
-        "DocSetPlatformFamily": "sphinxdocs",
+        "DocSetPlatformFamily": "sphinx-example",
         "isDashDocset": True,
         "isJavaScriptEnabled": False,
     } == docsets.read_plist(contents / "Info.plist")
@@ -155,6 +154,27 @@ class TestArguments:
         assert 1 == result.exit_code
         assert "makes no sense" in result.output
 
+    def test_fails_if_supplied_parser_fails(self, runner, sphinx_built):
+        """
+        If a parser is passed using --parser/-P and doesn't recognize the docs,
+        exit with EINVAL.
+        """
+        result = runner.invoke(
+            main.main,
+            [
+                "--parser",
+                "doc2dash.parsers.pydoctor.PyDoctorParser",
+                str(sphinx_built),
+            ],
+        )
+
+        assert errno.EINVAL == result.exit_code
+        assert (
+            "Supplied parser <class "
+            "'doc2dash.parsers.pydoctor.PyDoctorParser'> can't parse "
+            f"'{sphinx_built}'.\n" == result.output
+        )
+
 
 def test_normal_flow(monkeypatch, tmp_path, runner):
     """
@@ -189,10 +209,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
 
         @staticmethod
         def detect(path):
-            return True
-
-        def guess_name(self) -> str | None:
-            return None
+            return "bahh"
 
         def parse(self):
             yield ParserEntry(
@@ -208,14 +225,14 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     expected = """\
 Converting testtype docs from '{src}' to '{name}.docset'.
 Parsing documentation...
-Patching files for TOCs... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   0% -:--:--
 Added 1 index entries.
+Patching files for TOCs... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   0% -:--:--
 Adding to Dash.app...
 """  # noqa
 
     # alternative 1: use --parser
     sys.modules["fake_module"] = fake_module
-    run_mock = MagicMock(spec_set=subprocess.check_output)
+    run_mock = Mock(spec_set=subprocess.check_output)
     monkeypatch.setattr(subprocess, "check_output", run_mock)
 
     result = runner.invoke(
@@ -240,7 +257,9 @@ Adding to Dash.app...
     ]
 
     # alternative 2: patch doc2dash.parsers
-    monkeypatch.setattr(doc2dash.parsers, "get_doctype", lambda _: FakeParser)
+    monkeypatch.setattr(
+        doc2dash.parsers, "get_doctype", lambda _: (FakeParser, "baz")
+    )
     run_mock.reset_mock()
 
     result = runner.invoke(
@@ -358,30 +377,3 @@ class TestSetupPaths:
             add_to_global=False,
         )
         assert not os.path.lexists("foo.docset")
-
-
-class TestDeductName:
-    def test_supplied(self):
-        """
-        If the user passes a name, respect their choice.
-        """
-        assert "foo" == main.deduct_name(None, None, "foo")
-
-    def test_path_name(self, tmp_path):
-        """
-        If nothing is guessed or passed, use the source directory name.
-        """
-        p = tmp_path / "foo" / "bar/"
-        p.mkdir(parents=True)
-
-        assert "bar" == main.deduct_name(
-            Mock(guess_name=lambda p: None), p, None
-        )
-
-    def test_guess(self, sphinx_built):
-        """
-        If no name is passed, but the parser can guess a name: use it.
-        """
-        assert "sphinx-example" == main.deduct_name(
-            InterSphinxParser, sphinx_built, None
-        )

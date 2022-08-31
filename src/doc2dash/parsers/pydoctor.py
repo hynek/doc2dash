@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import codecs
+import errno
 import logging
 import os
 
@@ -12,7 +13,7 @@ import attrs
 from bs4 import BeautifulSoup
 
 from .types import EntryType, ParserEntry
-from .utils import format_ref, has_file_with
+from .utils import format_ref
 
 
 log = logging.getLogger(__name__)
@@ -41,15 +42,14 @@ class PyDoctorParser:
     source: Path
 
     @staticmethod
-    def detect(path: Path) -> bool:
-        return (
-            has_file_with(path, "index.html", PYDOCTOR_HEADER)
-            or has_file_with(path, "index.html", PYDOCTOR_HEADER_OLD)
-            or has_file_with(path, "index.html", PYDOCTOR_HEADER_REALLY_OLD)
-        )
+    def detect(path: Path) -> str | None:
+        if (
+            _has_file_with(path, "index.html", PYDOCTOR_HEADER)
+            or _has_file_with(path, "index.html", PYDOCTOR_HEADER_OLD)
+            or _has_file_with(path, "index.html", PYDOCTOR_HEADER_REALLY_OLD)
+        ):
+            return path.name
 
-    @staticmethod
-    def guess_name(path: Path) -> str | None:
         return None
 
     def parse(self) -> Generator[ParserEntry, None, None]:
@@ -90,3 +90,20 @@ class PyDoctorParser:
             return True
 
         return False
+
+
+def _has_file_with(path: Path, filename: str, content: bytes) -> bool:
+    """
+    Check whether *filename* in *path* contains the string *content*.
+
+    *content* is bytes so we can also introspect binary files -- like
+    objects.inv.
+    """
+    try:
+        with (path / filename).open("rb") as f:
+            return content in f.read()
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+            return False
+        else:
+            raise

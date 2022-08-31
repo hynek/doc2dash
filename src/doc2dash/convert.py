@@ -31,11 +31,12 @@ def convert_docs(
             )
             toc.send(entry)
 
-        toc.close()
-
         count = docset.db_conn.execute(
             "SELECT COUNT(1) FROM searchIndex"
         ).fetchone()[0]
 
     color = "green" if count > 0 else "red"
     log.info(f"Added [{color}]{count:,}[/{color}] index entries.")
+
+    # Now patch for TOCs.
+    toc.close()

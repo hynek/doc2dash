@@ -43,9 +43,6 @@ class FakeParser:
     def detect(path):
         return True
 
-    def guess_name(self) -> str | None:
-        return None
-
     def parse(self):
         pass
 

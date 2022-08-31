@@ -1,5 +1,5 @@
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
 
@@ -13,15 +13,22 @@ def _dt(request):
     return request.param
 
 
-def test_get_doctype(monkeypatch):
-    monkeypatch.setattr(doc2dash.parsers, "DOCTYPES", [])
+def test_get_doctype_no_match(tmp_path):
+    """
+    If nothing matches, return (None, None).
+    """
+    assert (None, None) == doc2dash.parsers.get_doctype(tmp_path)
 
-    assert doc2dash.parsers.get_doctype("foo") is None
 
-    dt = MagicMock("testtype", detect=lambda _: True)
+def test_get_doctype_first_match(monkeypatch):
+    """
+    A matching parser's name gets returned.
+    """
+    dt = Mock("testtype", detect=lambda _: "foo")
+
     monkeypatch.setattr(doc2dash.parsers, "DOCTYPES", [dt])
 
-    assert doc2dash.parsers.get_doctype("foo") is dt
+    assert (dt, "foo") == doc2dash.parsers.get_doctype("foo")
 
 
 class TestDetectors:

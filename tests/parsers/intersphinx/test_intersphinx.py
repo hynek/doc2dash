@@ -265,3 +265,35 @@ def test_cleanup_path(path, expected):
     Paths without an anchor are passed through.
     """
     assert expected == _clean_up_path(path)
+
+
+class TestIntersphinxDetect:
+    def test_does_not_exist(self, tmp_path):
+        """
+        Empty paths without an objects.inv return None.
+        """
+        assert None is InterSphinxParser.detect(tmp_path)
+
+    @pytest.mark.parametrize(
+        "obj",
+        [
+            "",
+            "# Sphinx inventory version 2",
+            "# Sphinx inventory version 2\n",
+            "# Sphinx inventory version 2\nFoo",
+            "# Sphinx inventory version 2\nProject",
+            "# Sphinx inventory version 2\nProject:",
+            "# Sphinx inventory version 2\nProject: ",
+        ],
+    )
+    def test_corrupt(self, tmp_path, caplog, obj):
+        """
+        Empty paths without an objects.inv return None.
+        """
+        (tmp_path / "objects.inv").write_text(obj)
+
+        assert None is InterSphinxParser.detect(tmp_path)
+        assert (
+            f"intersphinx: object.inv at {tmp_path} exists, but is corrupt."
+            == caplog.records[0].message
+        )

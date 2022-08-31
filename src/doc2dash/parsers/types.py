@@ -54,32 +54,23 @@ class Parser(Protocol):
         """
         Initialize parser.
 
+        If this parser's `detect()` static method indicates that *source*
+        belongs to it, *doc2dash* instantiates it as `parser_type(path)`.
+
         Args:
            source: The path to the documentation that will be parsed.
         """
 
     @staticmethod
-    def detect(path: Path) -> bool:
+    def detect(path: Path) -> str | None:
         """
         Check whether *path* can be parsed by this parser.
 
         Args:
-            path: The path to the docset.
+            path: The path to the documentation.
 
         Returns:
-            `True`, if the path belongs to this parser.
-        """
-
-    @staticmethod
-    def guess_name(path: Path) -> str | None:
-        """
-        Try to guess an appropriate name for a docset.
-
-        Args:
-            path: The path to the docset.
-
-        Returns:
-            A name, or `None` which means "no idea".
+            The name of the documentation or `None` if it's not ours.
         """
 
     def parse(self) -> Generator[ParserEntry, None, None]:

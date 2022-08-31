@@ -2,7 +2,7 @@ import shutil
 import sqlite3
 
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 from doc2dash import docsets
 
@@ -13,7 +13,7 @@ class TestPrepareDocset:
         All arguments should be reflected in the plist.
         """
         monkeypatch.chdir(tmp_path)
-        m_ct = MagicMock()
+        m_ct = Mock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
@@ -56,7 +56,7 @@ class TestPrepareDocset:
         If an index page is passed, it is added to the plist.
         """
         monkeypatch.chdir(tmp_path)
-        m_ct = MagicMock()
+        m_ct = Mock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
@@ -88,7 +88,7 @@ class TestPrepareDocset:
         If an index page is passed, it is added to the plist.
         """
         monkeypatch.chdir(tmp_path)
-        m_ct = MagicMock()
+        m_ct = Mock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
@@ -120,7 +120,7 @@ class TestPrepareDocset:
         If an index page is passed, it is added to the plist.
         """
         monkeypatch.chdir(tmp_path)
-        m_ct = MagicMock()
+        m_ct = Mock()
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 

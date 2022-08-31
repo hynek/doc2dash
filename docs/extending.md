@@ -2,7 +2,7 @@
 
 A *doc2dash* parser plugin has three jobs:
 
-1. Detect whether it can parse a directory.
+1. Detect whether it can parse a directory and extract a fitting name.
 2. Parse a directory and tell *doc2dash* about all entries that it wants indexed.
 3. Patch files such that *Dash.app* can [generate per-file tables of contents](https://kapeli.com/docsets#tableofcontents).
 
@@ -13,14 +13,13 @@ For that, it must implement the `Parser` protocol:
 ::: doc2dash.parsers.types.Parser
     options:
       members:
-        - __init__
         - detect
-        - guess_name
+        - __init__
         - parse
         - find_and_patch_entry
 
 
-## ParserEntry
+## `ParserEntry`
 
 ::: doc2dash.parsers.types.ParserEntry
     options:
@@ -33,9 +32,7 @@ For that, it must implement the `Parser` protocol:
 
 To help you, *doc2dash* comes with a few helpers:
 
-## has_file_with
-
-::: doc2dash.parsers.utils.has_file_with
+## `format_ref`
 
 ::: doc2dash.parsers.utils.format_ref
 

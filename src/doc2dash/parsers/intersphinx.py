@@ -9,9 +9,9 @@ import attrs
 
 from bs4 import BeautifulSoup
 
-from .sphinx_inventory import InventoryEntry, load_inventory
+from .intersphinx_inventory import InventoryEntry, load_inventory
 from .types import EntryType, ParserEntry
-from .utils import format_ref, has_file_with
+from .utils import format_ref
 
 
 log = logging.getLogger(__name__)
@@ -61,20 +61,29 @@ class InterSphinxParser:
     source: Path
 
     @staticmethod
-    def detect(path: Path) -> bool:
-        return has_file_with(
-            path, "objects.inv", b"# Sphinx inventory version 2"
-        )
+    def detect(path: Path) -> str | None:
+        try:
+            with (path / "objects.inv").open("rb") as f:
+                if f.readline() != b"# Sphinx inventory version 2\n":
+                    log.warning(
+                        "intersphinx: object.inv at %s exists, "
+                        "but is corrupt.",
+                        path,
+                    )
+                    return None
 
-    @staticmethod
-    def guess_name(path: Path) -> str | None:
-        with (path / "objects.inv").open("rb") as f:
-            f.readline()  # Sphinx inventory...
-            line = f.readline().decode().strip()
+                t = f.readline().split(b": ", 1)
+                if len(t) != 2 or t[0] != b"# Project":
+                    log.warning(
+                        "intersphinx: object.inv at %s exists, "
+                        "but is corrupt.",
+                        path,
+                    )
+                    return None
 
-        assert line.startswith("# Project: ")
-
-        return line[11:]
+                return t[1].strip().decode()
+        except FileNotFoundError:
+            return None
 
     def parse(self) -> Generator[ParserEntry, None, None]:
         """
