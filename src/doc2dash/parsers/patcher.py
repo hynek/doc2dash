@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-import codecs
 import logging
-import os
 import urllib
 
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Callable, Generator
 
 from bs4 import BeautifulSoup
 from rich.progress import Progress
 
 from ..output import console
-from .types import IParser, ParserEntry
+from .types import Parser, ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -30,7 +29,7 @@ def coroutine(func: Callable) -> Callable:  # type: ignore[type-arg]
 
 @coroutine
 def patch_anchors(
-    parser: IParser, show_progressbar: bool
+    parser: Parser, docs: Path, show_progressbar: bool
 ) -> Generator[None, ParserEntry, None]:
     """
     Consume ``ParseEntry``s then patch docs for TOCs by calling
@@ -50,11 +49,12 @@ def patch_anchors(
         pass
 
     with Progress(console=console, disable=not show_progressbar) as pbar:
-        _patch_files(parser, files, pbar)
+        _patch_files(parser, docs, files, pbar)
 
 
 def _patch_files(
-    parser: IParser,
+    parser: Parser,
+    docs: Path,
     files: dict[str, list[tuple[str, str, str]]],
     pbar: Progress,
 ) -> None:
@@ -62,7 +62,7 @@ def _patch_files(
 
     for fname, entries in files.items():
         fname = urllib.parse.unquote(fname)
-        full_path = os.path.join(parser.doc_path, fname)
+        full_path = docs / fname
         try:
             soup = _patch_file(pbar, parser, fname, full_path, entries)
         except FileNotFoundError:
@@ -80,13 +80,13 @@ def _patch_files(
 
 def _patch_file(
     pbar: Progress,
-    parser: IParser,
+    parser: Parser,
     fname: str,
-    full_path: str,
+    full_path: Path,
     entries: list[tuple[str, str, str]],
 ) -> BeautifulSoup:
     task = pbar.add_task(f"Patching {fname}...", total=len(entries))
-    with codecs.open(full_path, mode="r", encoding="utf-8") as fp:
+    with full_path.open(encoding="utf-8") as fp:
         soup = BeautifulSoup(fp, "html.parser")
         for (name, type, anchor) in entries:
             if not parser.find_and_patch_entry(soup, name, type, anchor):

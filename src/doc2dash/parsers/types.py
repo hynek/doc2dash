@@ -1,34 +1,33 @@
 from __future__ import annotations
 
-import abc
-
 from pathlib import Path
-from typing import ClassVar, Generator
+from typing import ClassVar, Generator, Protocol
 
 import attrs
 
 from bs4 import BeautifulSoup
 
 
-class IParser(metaclass=abc.ABCMeta):
+class Parser(Protocol):
     """
     A *doc2dash* documentation parser.
 
     Attributes:
         name: The name of this parser. Used in user-facing output.
 
-        doc_path: The path the documentation that this parser is supposed to
-            parse. It's passed as the only argument when instantiating.
     """
 
     name: ClassVar[str] = NotImplemented
-    doc_path: Path = NotImplemented
 
-    def __init__(self, doc_path: Path):
-        self.doc_path = doc_path
+    def __init__(self, source: Path):
+        """
+        Initialize parser.
+
+        Args:
+           source: The path to the documentation that will be parsed.
+        """
 
     @staticmethod
-    @abc.abstractmethod
     def detect(path: Path) -> bool:
         """
         Check whether *path* can be parsed by this parser.
@@ -41,7 +40,6 @@ class IParser(metaclass=abc.ABCMeta):
         """
 
     @staticmethod
-    @abc.abstractmethod
     def guess_name(path: Path) -> str | None:
         """
         Try to guess an appropriate name for a docset.
@@ -53,18 +51,16 @@ class IParser(metaclass=abc.ABCMeta):
             A name, or `None` which means "no idea".
         """
 
-    @abc.abstractmethod
     def parse(self) -> Generator[ParserEntry, None, None]:
         """
-        Parse `self.doc_path` and `yield` a
-        [`ParserEntry`][doc2dash.parsers.types.ParserEntry] for each found
-        entry.
+        Parse the path that this parser was initialized with and `yield` a
+        [`ParserEntry`][doc2dash.parsers.types.ParserEntry] for each
+        entry it finds.
 
         Returns:
             A generator that yields `ParserEntry`s.
         """
 
-    @abc.abstractmethod
     def find_and_patch_entry(
         self, soup: BeautifulSoup, name: str, type: str, anchor: str
     ) -> bool:
@@ -83,10 +79,10 @@ class IParser(metaclass=abc.ABCMeta):
         """
 
 
-@attrs.define(hash=True)
+@attrs.frozen
 class ParserEntry:
     """
-    A symbol to be indexed, as found by `IParser`'s `parse()` method.
+    A symbol to be indexed, as found by `Parser`'s `parse()` method.
     """
 
     name: str

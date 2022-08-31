@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 from . import entry_types
 from .sphinx_inventory import InventoryEntry, load_inventory
-from .types import IParser, ParserEntry
+from .types import ParserEntry
 from .utils import format_ref, has_file_with
 
 
@@ -51,15 +51,15 @@ INV_TO_TYPE = {
 }
 
 
-@attrs.define(init=False)
-class InterSphinxParser(IParser):
+@attrs.define
+class InterSphinxParser:
     """
     Parser for Sphinx-base documentation that generates an objects.inv file for
     the intersphinx extension.
     """
 
     name: ClassVar[str] = "intersphinx"
-    doc_path: Path
+    source: Path
 
     @staticmethod
     def detect(path: Path) -> bool:
@@ -79,11 +79,11 @@ class InterSphinxParser(IParser):
 
     def parse(self) -> Generator[ParserEntry, None, None]:
         """
-        Parse sphinx docs at self.doc_path.
+        Parse sphinx docs at self.source
 
         yield `ParserEntry`s.
         """
-        with (self.doc_path / "objects.inv").open("rb") as inv_f:
+        with (self.source / "objects.inv").open("rb") as inv_f:
             yield from self._inv_to_entries(load_inventory(inv_f))
 
     def find_and_patch_entry(

@@ -21,7 +21,7 @@ import doc2dash
 from doc2dash import __main__ as main
 from doc2dash import docsets
 from doc2dash.parsers.intersphinx import InterSphinxParser
-from doc2dash.parsers.types import IParser, ParserEntry
+from doc2dash.parsers.types import ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -183,9 +183,9 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     monkeypatch.setattr(docsets, "prepare_docset", fake_prepare)
 
     @attrs.define
-    class FakeParser(IParser):
+    class FakeParser:
         name: ClassVar[str] = "testtype"
-        doc_path: str
+        source: str
 
         @staticmethod
         def detect(path):

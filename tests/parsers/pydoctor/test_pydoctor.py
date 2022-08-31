@@ -92,13 +92,12 @@ def test_parse():
         create=True,
     ):
         assert (
-            list(PyDoctorParser(doc_path="foo").parse())
-            == EXAMPLE_PARSE_RESULT
+            list(PyDoctorParser(source="foo").parse()) == EXAMPLE_PARSE_RESULT
         )
 
 
 def test_patcher():
-    p = PyDoctorParser(doc_path="foo")
+    p = PyDoctorParser(source="foo")
     with codecs.open(
         os.path.join(HERE, "function_example.html"), mode="r", encoding="utf-8"
     ) as fp:

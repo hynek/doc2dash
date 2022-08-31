@@ -22,7 +22,7 @@ class TestInterSphinxParser:
         Parsing of the example objects.inv in the current directory does not
         fail.
         """
-        p = InterSphinxParser(doc_path=sphinx_built)
+        p = InterSphinxParser(source=sphinx_built)
 
         assert [] != list(p.parse())
 
@@ -30,7 +30,7 @@ class TestInterSphinxParser:
         """
         Inventory items are correctly converted.
         """
-        p = InterSphinxParser(doc_path=sphinx_built)
+        p = InterSphinxParser(source=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {
@@ -83,7 +83,7 @@ class TestInterSphinxParser:
                     return
                 return super().convert_type(inv_type)
 
-        p = MyInterSphinxParser(doc_path=sphinx_built)
+        p = MyInterSphinxParser(source=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {
@@ -119,7 +119,7 @@ class TestInterSphinxParser:
                     name=f"!{key}!", type=dash_type, path=path_str
                 )
 
-        p = MyInterSphinxParser(doc_path=sphinx_built)
+        p = MyInterSphinxParser(source=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {"py:method": {"some_method": ("some_module.py", "-")}}
@@ -142,7 +142,7 @@ class TestInterSphinxParser:
                     return
                 return super().create_entry(dash_type, key, inv_entry)
 
-        p = MyInterSphinxParser(doc_path=sphinx_built)
+        p = MyInterSphinxParser(source=sphinx_built)
         result = list(
             p._inv_to_entries(
                 {

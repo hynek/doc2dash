@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from doc2dash.parsers.types import IParser
+from doc2dash.parsers.types import Parser
 
 from .docsets import DocSet
 from .parsers.patcher import patch_anchors
@@ -13,13 +13,16 @@ log = logging.getLogger(__name__)
 
 def convert_docs(
     *,
-    parser: IParser,
+    parser: Parser,
     docset: DocSet,
     quiet: bool,
 ) -> None:
+    """
+    User *parser* to parse, index, and patch *docset*.
+    """
     log.info("Parsing documentation...")
     with docset.db_conn:
-        toc = patch_anchors(parser, show_progressbar=not quiet)
+        toc = patch_anchors(parser, docset.docs, show_progressbar=not quiet)
 
         for entry in parser.parse():
             docset.db_conn.execute(

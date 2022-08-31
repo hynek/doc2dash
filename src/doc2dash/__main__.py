@@ -19,7 +19,7 @@ from doc2dash.convert import convert_docs
 
 from . import parsers
 from .output import create_log_config, error_console
-from .parsers.types import IParser
+from .parsers.types import Parser
 
 
 log = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 class ImportableType(click.ParamType):
     name = "importable"
 
-    def convert(self, value: str, param: Any, ctx: Any) -> IParser:
+    def convert(self, value: str, param: Any, ctx: Any) -> Parser:
         path, dot, name = value.rpartition(".")
 
         if not dot:
@@ -150,7 +150,7 @@ def main(
     index_page: Path | None,
     enable_js: bool,
     online_redirect_url: str | None,
-    parser_type: type[IParser] | None,
+    parser_type: type[Parser] | None,
 ) -> None:
     """
     Convert docs from SOURCE to Dash.app's docset format.
@@ -201,7 +201,7 @@ def main(
         source, dest, name, index_page, enable_js, online_redirect_url, icon
     )
 
-    parser = parser_type(doc_path=docset.docs)
+    parser = parser_type(source=docset.docs)
 
     log.info(
         "Converting [b]%s[/b] docs from '%s' to '%s'.",
@@ -217,7 +217,7 @@ def main(
         subprocess.check_output(("open", "-a", "dash", dest))
 
 
-def deduct_name(parser: type[IParser], path: Path, name: str | None) -> str:
+def deduct_name(parser: type[Parser], path: Path, name: str | None) -> str:
     # If the user supplied a name, respect it.
     if name:
         return name

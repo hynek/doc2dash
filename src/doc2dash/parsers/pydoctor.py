@@ -11,7 +11,7 @@ import attrs
 
 from bs4 import BeautifulSoup
 
-from .types import IParser, ParserEntry
+from .types import ParserEntry
 from .utils import format_ref, has_file_with
 
 
@@ -31,14 +31,14 @@ PYDOCTOR_HEADER_REALLY_OLD = b"""\
       <a href="http://codespeak.net/~mwh/pydoctor/">pydoctor</a>"""
 
 
-@attrs.define(init=False)
-class PyDoctorParser(IParser):
+@attrs.define
+class PyDoctorParser:
     """
     Parser for pydoctor-based documentation: mainly Twisted.
     """
 
     name: ClassVar[str] = "pydoctor"
-    doc_path: Path
+    source: Path
 
     @staticmethod
     def detect(path: Path) -> bool:
@@ -54,13 +54,13 @@ class PyDoctorParser(IParser):
 
     def parse(self) -> Generator[ParserEntry, None, None]:
         """
-        Parse pydoctor docs at *doc_path*.
+        Parse pydoctor docs at *source*.
 
         yield `ParserEntry`s
         """
         soup = BeautifulSoup(
             codecs.open(
-                os.path.join(self.doc_path, "nameIndex.html"),
+                os.path.join(self.source, "nameIndex.html"),
                 mode="r",
                 encoding="utf-8",
             ),

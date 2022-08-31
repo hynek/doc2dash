@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import logging
 
+from pathlib import Path
 from typing import ClassVar
 
 import attrs
 import pytest
 
 from doc2dash.parsers.patcher import patch_anchors
-from doc2dash.parsers.types import IParser, ParserEntry
+from doc2dash.parsers.types import ParserEntry
 
 
 @pytest.fixture(name="doc_entries")
@@ -31,8 +32,8 @@ def _doc_entries(tmp_path):
 
 
 @attrs.define
-class FakeParser(IParser):
-    doc_path: str
+class FakeParser:
+    source: str
     _succeed_patching: bool = True
     _patched_entries: list = attrs.Factory(list)
 
@@ -63,8 +64,8 @@ class TestPatchTOCAnchors:
         """
         Adding no entries does not cause an error.
         """
-        parser = FakeParser(doc_path="foo")
-        toc = patch_anchors(parser, show_progressbar=progressbar)
+        parser = FakeParser(source="foo")
+        toc = patch_anchors(parser, Path("foo"), show_progressbar=progressbar)
         toc.close()
 
     def test_single_entry(self, doc_entries):
@@ -72,9 +73,9 @@ class TestPatchTOCAnchors:
         Only entries with URL anchors get patched.
         """
         path, entries = doc_entries
-        parser = FakeParser(doc_path=str(path))
+        parser = FakeParser(source=path)
 
-        toc = patch_anchors(parser, show_progressbar=False)
+        toc = patch_anchors(parser, path, show_progressbar=False)
         for e in entries:
             toc.send(e)
         toc.close()
@@ -90,8 +91,8 @@ class TestPatchTOCAnchors:
 
         Cf. https://github.com/hynek/doc2dash/issues/115
         """
-        parser = FakeParser(doc_path="foo")
-        toc = patch_anchors(parser, show_progressbar=False)
+        parser = FakeParser(source="foo")
+        toc = patch_anchors(parser, Path("foo"), show_progressbar=False)
 
         toc.send(ParserEntry("Module Index", "label", "py-modindex.html#"))
 
@@ -106,8 +107,8 @@ class TestPatchTOCAnchors:
         If a file is missing that is NOT py-modindex.html, an exception is
         raised.
         """
-        parser = FakeParser(doc_path="foo")
-        toc = patch_anchors(parser, show_progressbar=False)
+        parser = FakeParser(source="foo")
+        toc = patch_anchors(parser, Path("foo"), show_progressbar=False)
 
         toc.send(ParserEntry("Foo", "label", "FooBarQux.html#"))
 
@@ -125,8 +126,8 @@ class TestPatchTOCAnchors:
 
         path, entries = doc_entries
 
-        parser = FakeParser(doc_path=str(path), succeed_patching=False)
-        toc = patch_anchors(parser, show_progressbar=False)
+        parser = FakeParser(source=str(path), succeed_patching=False)
+        toc = patch_anchors(parser, path, show_progressbar=False)
         for e in entries:
             toc.send(e)
 

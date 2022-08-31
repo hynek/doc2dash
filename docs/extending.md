@@ -1,13 +1,19 @@
 # Writing Custom Parsers
 
-If you want to implement your own parser (and if you do: why don't you [share it with us](https://github.com/hynek/doc2dash/pulls)? :pleading_face:) you have to implement the [`IParser`][doc2dash.parsers.types.IParser] interface:
+A *doc2dash* parser has three jobs:
 
+1. Detect whether it can parse a directory.
+2. Parse a directory and tell *doc2dash* about all entries that it wants indexed.
+3. Patch files such that *Dash.app* can generate per-file tables of contents.
 
-## IParser
+For that is must implement the `Parser` protocol:
 
-::: doc2dash.parsers.types.IParser
+## `Parser`
+
+::: doc2dash.parsers.types.Parser
     options:
       members:
+        - __init__
         - detect
         - guess_name
         - parse
@@ -25,9 +31,17 @@ If you want to implement your own parser (and if you do: why don't you [share it
 
 ---
 
-To help you, *doc2dash* comes with a few helpers.
+To help you, *doc2dash* comes with a few helpers:
 
-Finally, when calling *doc2dash*, you must pass the fully-qualified name using the `--parser` option.
+## has_file_with
+
+::: doc2dash.parsers.utils.has_file_with
+
+::: doc2dash.parsers.utils.format_ref
+
+---
+
+To use your custom parser, you have to invoke *doc2dash* with the `--parser` option and specify the importable path to it.
 
 
 ## Examples

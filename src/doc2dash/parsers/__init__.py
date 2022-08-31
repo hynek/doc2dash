@@ -5,10 +5,13 @@ from pathlib import Path
 from . import intersphinx, pydoctor, types
 
 
-DOCTYPES = [pydoctor.PyDoctorParser, intersphinx.InterSphinxParser]
+DOCTYPES: list[type[types.Parser]] = [
+    pydoctor.PyDoctorParser,
+    intersphinx.InterSphinxParser,
+]
 
 
-def get_doctype(path: Path) -> type[types.IParser] | None:
+def get_doctype(path: Path) -> type[types.Parser] | None:
     """
     Gets the apropriate doctype for *path*.
     """
