@@ -7,7 +7,7 @@ Please reach out if you're interested helping!
 
 ## intersphinx
 
-*intersphinx* is not a format, but a way to store API metadata along with documentation.
+*intersphinx* is not a format, but a way to store API metadata along with any type of HTML documentation.
 Originally conceived to ease inter-project API linking, it's been an [extension to *Sphinx*](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html) for many years now.
 
 You can recognize *intersphinx*-based docs by the `objects.inv` file at the root of the built documentation.

@@ -1,12 +1,12 @@
-# Writing Custom Parsers
+# Writing Custom Parser Plugins
 
-A *doc2dash* parser has three jobs:
+A *doc2dash* parser plugin has three jobs:
 
 1. Detect whether it can parse a directory.
 2. Parse a directory and tell *doc2dash* about all entries that it wants indexed.
 3. Patch files such that *Dash.app* can [generate per-file tables of contents](https://kapeli.com/docsets#tableofcontents).
 
-For that is must implement the `Parser` protocol:
+For that, it must implement the `Parser` protocol:
 
 ## `Parser`
 

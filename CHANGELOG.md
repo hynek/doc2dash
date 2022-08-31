@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *intersphinx*: documentation based on [*MkDocs*](https://www.mkdocs.org/) with [*mkdocstrings*](https://mkdocstrings.github.io/) metadata is now supported.
 - *intersphinx*: if no explicit name is passed, the docset name is derived von the documentation's metadata (and not the directory name, which is more often than not just `html`).
 - We use [*rich*](https://rich.readthedocs.io/) for output and progress bars now. This allows us more granular progress indication.
+- Documentation on writing your own parser plugins.
 
 
 ### Changed
