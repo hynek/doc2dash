@@ -32,7 +32,7 @@ While *doc2dash* is a Python project, the support is not limited to Python-relat
 - **License**: [MIT](https://github.com/hynek/doc2dash/blob/main/LICENSE)
 - **PyPI**: <https://pypi.org/project/doc2dash/>
 - **Source Code**: <https://github.com/hynek/doc2dash>
-- **Documentation**: <https://doc2dash.readthedocs.io/>
+- **Documentation**: <https://doc2dash.rtfd.io/>
 - **Changelog**: <https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md>
 - **Supported Python Versions**: 3.8 and later (check the changelog for past releases that support _much_ older Python versions)
 - **Platforms**: Both Linux and macOS are tested; Windows should work too.
