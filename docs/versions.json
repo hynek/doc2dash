@@ -1,7 +1,7 @@
 [
   {
     "title": "2.4.1",
-    "version": "en/2.4.1",
+    "version": "2.4.1",
     "aliases": [
       "Latest Stable Release"
     ]
@@ -12,46 +12,46 @@
       "main",
       "latest"
     ],
-    "version": "en/latest"
+    "version": "latest"
   },
   {
     "title": "2.4.0",
-    "version": "en/2.4.0",
+    "version": "2.4.0",
     "aliases": []
   },
   {
     "title": "2.3.0.post1",
-    "version": "en/2.3.0.post1",
+    "version": "2.3.0.post1",
     "aliases": []
   },
   {
     "title": "2.3.0",
-    "version": "en/2.3.0",
+    "version": "2.3.0",
     "aliases": []
   },
   {
     "title": "2.2.0",
-    "version": "en/2.2.0",
+    "version": "2.2.0",
     "aliases": []
   },
   {
     "title": "2.1.0",
-    "version": "en/2.1.0",
+    "version": "2.1.0",
     "aliases": []
   },
   {
     "title": "2.0.2",
-    "version": "en/2.0.2",
+    "version": "2.0.2",
     "aliases": []
   },
   {
     "title": "2.0.1",
-    "version": "en/2.0.1",
+    "version": "2.0.1",
     "aliases": []
   },
   {
     "title": "2.0.0",
-    "version": "en/2.0.0",
+    "version": "2.0.0",
     "aliases": []
   }
 ]
