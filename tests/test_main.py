@@ -206,10 +206,10 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     expected = """\
 Converting testtype docs from '{src}' to '{name}.docset'.
 Parsing documentation...
-Patching files... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   0% -:--:--
+Patching files for TOCs... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   0% -:--:--
 Added 1 index entries.
 Adding to Dash.app...
-"""
+"""  # noqa
 
     # alternative 1: use --parser
     sys.modules["fake_module"] = fake_module

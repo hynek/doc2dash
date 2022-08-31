@@ -58,7 +58,7 @@ def _patch_files(
     files: dict[str, list[tuple[str, str, str]]],
     pbar: Progress,
 ) -> None:
-    files_task = pbar.add_task("Patching files...", total=len(files))
+    files_task = pbar.add_task("Patching files for TOCs...", total=len(files))
 
     for fname, entries in files.items():
         fname = urllib.parse.unquote(fname)
