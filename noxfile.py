@@ -87,21 +87,6 @@ def update_rtd_versions(session: nox.Session) -> None:
 
 
 @nox.session
-def pin_for_oxidizer(session: nox.Session) -> None:
-    session.install("pip-tools>=6.8.0")
-
-    session.run(
-        "pip-compile",
-        "--resolver",
-        "backtracking",
-        "--output-file",
-        "requirements/pyoxidizer.txt",
-        "--no-emit-index-url",
-        "pyproject.toml",
-    )
-
-
-@nox.session
 def pin_docs(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 

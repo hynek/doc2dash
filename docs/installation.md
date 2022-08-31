@@ -1,11 +1,6 @@
 # Requirements and Installation
 
-As of version 3.0, the [releases](https://github.com/hynek/doc2dash/releases) come with compiled stand-alone binaries that you can drop and run.
-Please let us know if there's any problems with the binaries!
-
----
-
-If your platform is not supported yet (or doesn't work), the latest stable version can be always found on [PyPI](https://pypi.org/project/doc2dash/).
+The latest stable version can be always found on [PyPI](https://pypi.org/project/doc2dash/).
 
 A good way to run it without ruining your Python installation is [*pipx*](https://pipxproject.github.io/pipx/).
 Either by installing it first, or just by running it directly:
