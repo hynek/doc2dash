@@ -6,9 +6,8 @@ from unittest.mock import mock_open, patch
 
 from bs4 import BeautifulSoup
 
-from doc2dash.parsers import entry_types
 from doc2dash.parsers.pydoctor import PyDoctorParser
-from doc2dash.parsers.types import ParserEntry
+from doc2dash.parsers.types import EntryType, ParserEntry
 
 
 HERE = os.path.dirname(__file__)
@@ -19,58 +18,58 @@ EXAMPLE_PARSE_RESULT = [
         (
             "twisted.conch.insults.insults.ServerProtocol"
             ".ControlSequenceParser.A",
-            entry_types.METHOD,
+            EntryType.METHOD,
             "twisted.conch.insults.insults.ServerProtocol"
             ".ControlSequenceParser.html#A",
         ),
         (
             "twisted.test.myrebuilder1.A",
-            entry_types.CLASS,
+            EntryType.CLASS,
             "twisted.test.myrebuilder1.A.html",
         ),
         (
             "twisted.test.myrebuilder2.A",
-            entry_types.CLASS,
+            EntryType.CLASS,
             "twisted.test.myrebuilder2.A.html",
         ),
         (
             "twisted.test.test_jelly.A",
-            entry_types.CLASS,
+            EntryType.CLASS,
             "twisted.test.test_jelly.A.html",
         ),
         (
             "twisted.test.test_persisted.A",
-            entry_types.CLASS,
+            EntryType.CLASS,
             "twisted.test.test_persisted.A.html",
         ),
         (
             "twisted.internet.task.LoopingCall.a",
-            entry_types.VARIABLE,
+            EntryType.VARIABLE,
             "twisted.internet.task.LoopingCall.html#a",
         ),
         (
             "twisted.test.myrebuilder1.A.a",
-            entry_types.METHOD,
+            EntryType.METHOD,
             "twisted.test.myrebuilder1.A.html#a",
         ),
         (
             "twisted.test.myrebuilder1.Inherit.a",
-            entry_types.METHOD,
+            EntryType.METHOD,
             "twisted.test.myrebuilder1.Inherit.html#a",
         ),
         (
             "twisted.test.myrebuilder2.A.a",
-            entry_types.METHOD,
+            EntryType.METHOD,
             "twisted.test.myrebuilder2.A.html#a",
         ),
         (
             "twisted.test.myrebuilder2.Inherit.a",
-            entry_types.METHOD,
+            EntryType.METHOD,
             "twisted.test.myrebuilder2.Inherit.html#a",
         ),
         (
             "twisted.web._newclient.HTTP11ClientProtocol.abort",
-            entry_types.METHOD,
+            EntryType.METHOD,
             "twisted.web._newclient.HTTP11ClientProtocol.html#abort",
         ),
     ]
@@ -106,22 +105,26 @@ def test_patcher():
     assert p.find_and_patch_entry(
         soup,
         name="twisted.application.app.ApplicationRunner.startReactor",
-        type="clm",
+        type=EntryType.METHOD,
         anchor="startReactor",
     )
+
     toc_link = soup(
         "a",
         attrs={
-            "name": "//apple_ref/cpp/clm/twisted.application.app."
+            "name": "//apple_ref/cpp/Method/twisted.application.app."
             "ApplicationRunner.startReactor"
         },
     )
+
     assert toc_link
+
     next_tag = toc_link[0].next_sibling
+
     assert next_tag.name == "a"
     assert next_tag["name"] == "startReactor"
     assert not p.find_and_patch_entry(
-        soup, name="invented", type="cl", anchor="nonex"
+        soup, name="invented", type=EntryType.CLASS, anchor="nonex"
     )
 
 

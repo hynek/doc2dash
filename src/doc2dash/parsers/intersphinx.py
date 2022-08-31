@@ -9,9 +9,8 @@ import attrs
 
 from bs4 import BeautifulSoup
 
-from . import entry_types
 from .sphinx_inventory import InventoryEntry, load_inventory
-from .types import ParserEntry
+from .types import EntryType, ParserEntry
 from .utils import format_ref, has_file_with
 
 
@@ -22,32 +21,32 @@ log = logging.getLogger(__name__)
 # ->
 # https://kapeli.com/docsets#supportedentrytypes
 INV_TO_TYPE = {
-    "attribute": entry_types.ATTRIBUTE,
-    "class": entry_types.CLASS,
-    "classmethod": entry_types.METHOD,
-    "cmdoption": entry_types.OPTION,
-    "constant": entry_types.CONSTANT,
-    "data": entry_types.VALUE,
-    "doc": entry_types.GUIDE,
-    "envvar": entry_types.ENV,
-    "exception": entry_types.EXCEPTION,
-    "function": entry_types.FUNCTION,
-    "interface": entry_types.INTERFACE,
-    "label": entry_types.SECTION,
-    "macro": entry_types.MACRO,
-    "member": entry_types.ATTRIBUTE,
-    "method": entry_types.METHOD,
-    "module": entry_types.PACKAGE,
-    "opcode": entry_types.OPCODE,
-    "option": entry_types.OPTION,
-    "property": entry_types.PROPERTY,
-    "protocol": entry_types.PROTOCOL,
-    "setting": entry_types.SETTING,
-    "staticmethod": entry_types.METHOD,
-    "term": entry_types.WORD,
-    "type": entry_types.TYPE,
-    "variable": entry_types.VARIABLE,
-    "var": entry_types.VARIABLE,
+    "attribute": EntryType.ATTRIBUTE,
+    "class": EntryType.CLASS,
+    "classmethod": EntryType.METHOD,
+    "cmdoption": EntryType.OPTION,
+    "constant": EntryType.CONSTANT,
+    "data": EntryType.VALUE,
+    "doc": EntryType.GUIDE,
+    "envvar": EntryType.ENV,
+    "exception": EntryType.EXCEPTION,
+    "function": EntryType.FUNCTION,
+    "interface": EntryType.INTERFACE,
+    "label": EntryType.SECTION,
+    "macro": EntryType.MACRO,
+    "member": EntryType.ATTRIBUTE,
+    "method": EntryType.METHOD,
+    "module": EntryType.PACKAGE,
+    "opcode": EntryType.OPCODE,
+    "option": EntryType.OPTION,
+    "property": EntryType.PROPERTY,
+    "protocol": EntryType.PROTOCOL,
+    "setting": EntryType.SETTING,
+    "staticmethod": EntryType.METHOD,
+    "term": EntryType.WORD,
+    "type": EntryType.TYPE,
+    "variable": EntryType.VARIABLE,
+    "var": EntryType.VARIABLE,
 }
 
 
@@ -87,7 +86,7 @@ class InterSphinxParser:
             yield from self._inv_to_entries(load_inventory(inv_f))
 
     def find_and_patch_entry(
-        self, soup: BeautifulSoup, name: str, type: str, anchor: str
+        self, soup: BeautifulSoup, name: str, type: EntryType, anchor: str
     ) -> bool:
         return _find_and_patch_entry(soup, name, type, anchor)
 
@@ -108,7 +107,7 @@ class InterSphinxParser:
                 if entry is not None:
                     yield entry
 
-    def convert_type(self, inv_type: str) -> str | None:
+    def convert_type(self, inv_type: str) -> EntryType | None:
         """
         Map an intersphinx type to a Dash type.
 
@@ -122,7 +121,7 @@ class InterSphinxParser:
             return None
 
     def create_entry(
-        self, dash_type: str, key: str, inv_entry: InventoryEntry
+        self, dash_type: EntryType, key: str, inv_entry: InventoryEntry
     ) -> ParserEntry:
         """
         Create a ParserEntry (or None) given inventory details
@@ -138,15 +137,15 @@ class InterSphinxParser:
 
 
 def _find_and_patch_entry(
-    soup: BeautifulSoup, name: str, type: str, anchor: str
+    soup: BeautifulSoup, name: str, type: EntryType, anchor: str
 ) -> bool:
     """
     Modify *soup* so Dash.app can generate TOCs on the fly.
     """
     pos = None
-    if type == entry_types.WORD:
+    if type == EntryType.WORD:
         pos = soup.find("dt", id=anchor)
-    elif type == entry_types.SECTION:
+    elif type == EntryType.SECTION:
         pos = soup.find(id=anchor)
     elif anchor.startswith("module-"):
         pos = soup.h1

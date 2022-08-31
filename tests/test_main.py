@@ -21,7 +21,7 @@ import doc2dash
 from doc2dash import __main__ as main
 from doc2dash import docsets
 from doc2dash.parsers.intersphinx import InterSphinxParser
-from doc2dash.parsers.types import ParserEntry
+from doc2dash.parsers.types import EntryType, ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -195,7 +195,9 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
             return None
 
         def parse(self):
-            yield ParserEntry(name="testmethod", type="cm", path="testpath")
+            yield ParserEntry(
+                name="testmethod", type=EntryType.METHOD, path="testpath"
+            )
 
         def find_and_patch_entry(self, soup, entry):
             pass

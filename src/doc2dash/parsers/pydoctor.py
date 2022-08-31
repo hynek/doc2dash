@@ -11,7 +11,7 @@ import attrs
 
 from bs4 import BeautifulSoup
 
-from .types import ParserEntry
+from .types import EntryType, ParserEntry
 from .utils import format_ref, has_file_with
 
 
@@ -74,12 +74,12 @@ class PyDoctorParser:
 
                 yield ParserEntry(
                     name=name,
-                    type=data_type.replace("Instance ", ""),
+                    type=EntryType(data_type.replace("Instance ", "")),
                     path=str(path),
                 )
 
     def find_and_patch_entry(
-        self, soup: BeautifulSoup, name: str, type: str, anchor: str
+        self, soup: BeautifulSoup, name: str, type: EntryType, anchor: str
     ) -> bool:
         link = soup.find("a", attrs={"name": anchor})
         if link:

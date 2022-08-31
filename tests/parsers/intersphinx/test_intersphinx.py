@@ -4,13 +4,12 @@ import pytest
 
 from bs4 import BeautifulSoup
 
-from doc2dash.parsers import entry_types
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
     _clean_up_path,
     _find_and_patch_entry,
 )
-from doc2dash.parsers.types import ParserEntry
+from doc2dash.parsers.types import EntryType, ParserEntry
 
 
 HERE = Path(__file__).parent
@@ -54,17 +53,17 @@ class TestInterSphinxParser:
         assert {
             ParserEntry(
                 name="some_method",
-                type="Method",
+                type=EntryType.METHOD,
                 path="some_module.py",
             ),
             ParserEntry(
                 name="--destination",
-                type="Option",
+                type=EntryType.OPTION,
                 path="index.html#cmdoption--destination",
             ),
             ParserEntry(
                 name="SomeConstant",
-                type="Constant",
+                type=EntryType.CONSTANT,
                 path="some_other_module.py",
             ),
         } == set(result)
@@ -100,7 +99,7 @@ class TestInterSphinxParser:
         assert [
             ParserEntry(
                 name="SomeConstant",
-                type="Constant",
+                type=EntryType.CONSTANT,
                 path="some_other_module.py",
             )
         ] == result
@@ -127,7 +126,9 @@ class TestInterSphinxParser:
         )
         assert [
             ParserEntry(
-                name="!some_method!", type="Method", path="some_module.py"
+                name="!some_method!",
+                type=EntryType.METHOD,
+                path="some_module.py",
             )
         ] == result
 
@@ -138,7 +139,7 @@ class TestInterSphinxParser:
 
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
-                if dash_type == "Option":
+                if dash_type == EntryType.OPTION:
                     return
                 return super().create_entry(dash_type, key, inv_entry)
 
@@ -161,7 +162,9 @@ class TestInterSphinxParser:
         )
         assert [
             ParserEntry(
-                name="some_method", type="Method", path="some_module.py"
+                name="some_method",
+                type=EntryType.METHOD,
+                path="some_module.py",
             )
         ] == result
 
@@ -182,7 +185,7 @@ class TestFindAndPatchEntry:
         assert True is _find_and_patch_entry(
             soup,
             name="pyramid.config.Configurator.add_route",
-            type="Method",
+            type=EntryType.METHOD,
             anchor="pyramid.config.Configurator.add_route",
         )
 
@@ -198,14 +201,14 @@ class TestFindAndPatchEntry:
 
     def test_patch_modules(self):
         """
-        Patching a module adds the TOC entry into the next <h1>.  Non-ASCII
-        works.
+        Patching a module adds the TOC entry into the next <h1>.
         """
         soup = BeautifulSoup("<h1>Some Module</h1>", "html.parser")
+
         assert True is _find_and_patch_entry(
             soup,
             name="some_module",
-            type="M\xc3\xb6dule",
+            type=EntryType.PACKAGE,
             anchor="module-some_module",
         )
         assert '<a class="dashAnchor" name="//apple_ref' in str(soup)
@@ -225,7 +228,7 @@ class TestFindAndPatchEntry:
         assert True is _find_and_patch_entry(
             soup,
             name="Whatever",
-            type=entry_types.WORD,
+            type=EntryType.WORD,
             anchor="term-dict-classes",
         )
         assert (
@@ -238,7 +241,7 @@ class TestFindAndPatchEntry:
         Sections are found.
         """
         assert True is _find_and_patch_entry(
-            soup, name="Chains", type=entry_types.SECTION, anchor="chains"
+            soup, name="Chains", type=EntryType.SECTION, anchor="chains"
         )
         assert (
             '<a class="dashAnchor" name="//apple_ref/cpp/Section/Chains"></a>'

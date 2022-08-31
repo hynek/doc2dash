@@ -1,11 +1,42 @@
 from __future__ import annotations
 
+from enum import Enum
 from pathlib import Path
 from typing import ClassVar, Generator, Protocol
 
 import attrs
 
 from bs4 import BeautifulSoup
+
+
+class EntryType(Enum):
+    """
+    Possible types for entries.
+
+    Pick from https://kapeli.com/docsets#supportedentrytypes
+    """
+
+    ATTRIBUTE = "Attribute"
+    CLASS = "Class"
+    CONSTANT = "Constant"
+    ENV = "Environment"
+    EXCEPTION = "Exception"
+    FUNCTION = "Function"
+    GUIDE = "Guide"
+    INTERFACE = "Interface"
+    MACRO = "Macro"
+    METHOD = "Method"
+    OPCODE = "Operator"
+    OPTION = "Option"
+    PACKAGE = "Module"
+    PROPERTY = "Property"
+    PROTOCOL = "Protocol"
+    SECTION = "Section"
+    SETTING = "Setting"
+    TYPE = "Type"
+    VALUE = "Value"
+    VARIABLE = "Variable"
+    WORD = "Word"
 
 
 class Parser(Protocol):
@@ -62,7 +93,7 @@ class Parser(Protocol):
         """
 
     def find_and_patch_entry(
-        self, soup: BeautifulSoup, name: str, type: str, anchor: str
+        self, soup: BeautifulSoup, name: str, type: EntryType, anchor: str
     ) -> bool:
         """
         Modify [*soup*](https://beautiful-soup-4.readthedocs.io/en/latest/) so
@@ -71,7 +102,7 @@ class Parser(Protocol):
         Args:
             soup: A soup of the file to patch.
             name: The name of the symbol.
-            type: One of `doc2dash.parsers.entry_types`.
+            type: The type of the entry.
             anchor: The anchor (`#`) within the file.
 
         Returns:
@@ -89,9 +120,9 @@ class ParserEntry:
     """
     The full display name of the index entry.
     """
-    type: str
+    type: EntryType
     """
-    The type which is a value from `doc2dash.parsers.entry_types`.
+    The type of the entry.
     """
     path: str
     """
@@ -102,4 +133,4 @@ class ParserEntry:
         """
         Return a tuple of the data for SQL generation.
         """
-        return self.name, self.type, self.path
+        return self.name, self.type.value, self.path

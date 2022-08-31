@@ -4,12 +4,14 @@ import errno
 
 from pathlib import Path
 
+from doc2dash.parsers.types import EntryType
 
-def format_ref(type: str, entry: str) -> str:
+
+def format_ref(type: EntryType, entry: str) -> str:
     """
     Format a reference anchor for *entry* of *type*.
     """
-    return f"//apple_ref/cpp/{type}/{entry}"
+    return f"//apple_ref/cpp/{type.value}/{entry}"
 
 
 def has_file_with(path: Path, filename: str, content: bytes) -> bool:

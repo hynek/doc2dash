@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from rich.progress import Progress
 
 from ..output import console
-from .types import Parser, ParserEntry
+from .types import EntryType, Parser, ParserEntry
 
 
 log = logging.getLogger(__name__)
@@ -55,7 +55,7 @@ def patch_anchors(
 def _patch_files(
     parser: Parser,
     docs: Path,
-    files: dict[str, list[tuple[str, str, str]]],
+    files: dict[str, list[tuple[str, EntryType, str]]],
     pbar: Progress,
 ) -> None:
     files_task = pbar.add_task("Patching files for TOCs...", total=len(files))
@@ -83,7 +83,7 @@ def _patch_file(
     parser: Parser,
     fname: str,
     full_path: Path,
-    entries: list[tuple[str, str, str]],
+    entries: list[tuple[str, EntryType, str]],
 ) -> BeautifulSoup:
     task = pbar.add_task(f"Patching {fname}...", total=len(entries))
     with full_path.open(encoding="utf-8") as fp:
