@@ -17,7 +17,7 @@ It takes your offline documentation and converts it into an indexed format that 
 
 Currently it supports all known *intersphinx*-based documentation like [*Sphinx*](https://www.sphinx-doc.org/), [*pydoctor*](https://github.com/twisted/pydoctor), or [*MkDocs*](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io)).
 
-It's also fully extendable: [**you** can write your own parser](https://doc2dash.readthedocs.io/en/latest/extending/)!
+It's also extendable: [**you** can write your own parser](https://doc2dash.readthedocs.io/en/latest/extending/)!
 
 ![doc2dash Session](docs/doc2dash-session.png)
 
