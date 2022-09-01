@@ -107,8 +107,8 @@ class InterSphinxParser:
         self, inv: Mapping[str, Mapping[str, InventoryEntry]]
     ) -> Generator[ParserEntry, None, None]:
         """
-        Iterate over a dictionary as returned from Sphinx's object.inv parser
-        and yield `ParserEntry`s.
+        Iterate over a dictionary as returned by our load_inventory object.inv
+        parser and yield `ParserEntry`s.
         """
         for type_key, inv_entries in inv.items():
             dash_type = self.convert_type(type_key)
