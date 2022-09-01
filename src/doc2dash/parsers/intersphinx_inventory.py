@@ -26,6 +26,7 @@ e.g.:
 
 from __future__ import annotations
 
+import re
 import zlib
 
 from collections import defaultdict
@@ -47,15 +48,15 @@ def load_inventory(
 
     key, value = fp.readline().split(b": ", 1)
     assert b"# Project" == key
-    # project = value.strip().decode()
 
-    key, value = fp.readline().split(b": ", 1)
+    key = fp.readline().split(b": ")[0]
     assert b"# Version" == key
-    # version = value.strip().decode()
 
-    assert (
-        b"# The remainder of this file is compressed using zlib.\n"
-        == fp.readline()
+    line = fp.readline()
+    assert re.fullmatch(
+        b"# The (remainder|rest) of this file is compressed (using|with) "
+        b"zlib.\n",
+        line,
     )
 
     rv: Mapping[str, dict[str, tuple[str, str]]] = defaultdict(dict)

@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from . import intersphinx, pydoctor, types
+from . import intersphinx, types
 
 
 DOCTYPES: list[type[types.Parser]] = [
-    pydoctor.PyDoctorParser,
     intersphinx.InterSphinxParser,
 ]
 

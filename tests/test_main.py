@@ -154,7 +154,7 @@ class TestArguments:
         assert 1 == result.exit_code
         assert "makes no sense" in result.output
 
-    def test_fails_if_supplied_parser_fails(self, runner, sphinx_built):
+    def test_fails_if_supplied_parser_fails(self, runner, tmp_path):
         """
         If a parser is passed using --parser/-P and doesn't recognize the docs,
         exit with EINVAL.
@@ -163,16 +163,16 @@ class TestArguments:
             main.main,
             [
                 "--parser",
-                "doc2dash.parsers.pydoctor.PyDoctorParser",
-                str(sphinx_built),
+                "doc2dash.parsers.intersphinx.InterSphinxParser",
+                str(tmp_path),
             ],
         )
 
         assert errno.EINVAL == result.exit_code
         assert (
             "Supplied parser <class "
-            "'doc2dash.parsers.pydoctor.PyDoctorParser'> can't parse "
-            f"'{sphinx_built}'.\n" == result.output
+            "'doc2dash.parsers.intersphinx.InterSphinxParser'> can't parse "
+            f"'{tmp_path}'.\n" == result.output
         )
 
 

@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/hynek/doc2dash/compare/2.4.1...HEAD)
 
+### Removed
+
+- Since *pydoctor* added support for *intersphinx* in version 21.2.0, the dedicated HTML-parsing parser has been removed. If you need to parse legacy *pydoctor* docs, please use *doc2dash* 2.4.1.
+
+
 ### Added
 
 - *intersphinx*: documentation based on [*MkDocs*](https://www.mkdocs.org/) with [*mkdocstrings*](https://mkdocstrings.github.io/) metadata is now supported.
