@@ -13,7 +13,7 @@ class EntryType(Enum):
     """
     Possible types for entries.
 
-    Pick from https://kapeli.com/docsets#supportedentrytypes
+    Pick from <https://kapeli.com/docsets#supportedentrytypes>.
     """
 
     ATTRIBUTE = "Attribute"
@@ -83,18 +83,25 @@ class Parser(Protocol):
             A generator that yields `ParserEntry`s.
         """
 
-    def find_and_patch_entry(
-        self, soup: BeautifulSoup, name: str, type: EntryType, anchor: str
+    def find_entry_and_add_ref(
+        self,
+        soup: BeautifulSoup,
+        name: str,
+        type: EntryType,
+        anchor: str,
+        ref: str,
     ) -> bool:
         """
-        Modify [*soup*](https://beautiful-soup-4.readthedocs.io/en/latest/) so
-        Dash.app can generate tables of contents on the fly.
+        Add *ref* next to *anchor* that points to an entry *name* of *type* in
+        *soup*.
 
         Args:
-            soup: A soup of the file to patch.
-            name: The name of the symbol.
+            soup: A [soup](https://beautiful-soup-4.readthedocs.io/) of the
+                file to patch.
+            name: The name of the entry.
             type: The type of the entry.
             anchor: The anchor (`#`) within the file.
+            ref: The ref string to be added to the anchor.
 
         Returns:
             Whether an entry was found and patched.

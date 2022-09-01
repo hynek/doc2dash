@@ -9,7 +9,7 @@ import attrs
 import pytest
 
 from doc2dash.parsers.patcher import patch_anchors
-from doc2dash.parsers.types import ParserEntry
+from doc2dash.parsers.types import EntryType, ParserEntry
 
 
 @pytest.fixture(name="doc_entries")
@@ -23,10 +23,14 @@ def _doc_entries(tmp_path):
     (test_dir / "foo bar.html").write_text("docs too!")
 
     return test_dir, [
-        ParserEntry(name="foo", type="Method", path="bar.html#anchor-1"),
-        ParserEntry(name="qux", type="Class", path="bar.html"),
         ParserEntry(
-            name="foo-url", type="Method", path="foo%20bar.html#anchor-2"
+            name="foo", type=EntryType.METHOD, path="bar.html#anchor-1"
+        ),
+        ParserEntry(name="qux", type=EntryType.CLASS, path="bar.html"),
+        ParserEntry(
+            name="foo-url",
+            type=EntryType.METHOD,
+            path="foo%20bar.html#anchor-2",
         ),
     ]
 
@@ -46,7 +50,7 @@ class FakeParser:
     def parse(self):
         pass
 
-    def find_and_patch_entry(self, soup, name, type, anchor):
+    def find_entry_and_add_ref(self, soup, name, type, anchor, ref):
         if self._patched_entries is None:
             self._patched_entries = []
 
@@ -78,8 +82,8 @@ class TestPatchTOCAnchors:
         toc.close()
 
         assert [
-            ("foo", "Method", "anchor-1"),
-            ("foo-url", "Method", "anchor-2"),
+            ("foo", EntryType.METHOD, "anchor-1"),
+            ("foo-url", EntryType.METHOD, "anchor-2"),
         ] == parser._patched_entries
 
     def test_missing_py_modindex_html(self, caplog):
@@ -131,8 +135,9 @@ class TestPatchTOCAnchors:
         toc.close()
 
         assert [
-            "Can't find anchor 'anchor-1' (Method) in 'bar.html'.",
-            "Can't find anchor 'anchor-2' (Method) in 'foo bar.html'.",
+            "Can't find anchor 'anchor-1' (EntryType.METHOD) in 'bar.html'.",
+            "Can't find anchor 'anchor-2' (EntryType.METHOD) in 'foo bar.html'"
+            ".",  # lol
         ] == caplog.messages
 
         log.setLevel(old_level)

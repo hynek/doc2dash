@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 
 from .intersphinx_inventory import InventoryEntry, load_inventory
 from .types import EntryType, ParserEntry
-from .utils import format_ref
 
 
 log = logging.getLogger(__name__)
@@ -94,10 +93,15 @@ class InterSphinxParser:
         with (self.source / "objects.inv").open("rb") as inv_f:
             yield from self._inv_to_entries(load_inventory(inv_f))
 
-    def find_and_patch_entry(
-        self, soup: BeautifulSoup, name: str, type: EntryType, anchor: str
+    def find_entry_and_add_ref(
+        self,
+        soup: BeautifulSoup,
+        name: str,
+        type: EntryType,
+        anchor: str,
+        ref: str,
     ) -> bool:
-        return _find_and_patch_entry(soup, name, type, anchor)
+        return _find_entry_and_add_ref(soup, name, type, anchor, ref)
 
     def _inv_to_entries(
         self, inv: Mapping[str, Mapping[str, InventoryEntry]]
@@ -145,8 +149,8 @@ class InterSphinxParser:
         return ParserEntry(name=name, type=dash_type, path=path_str)
 
 
-def _find_and_patch_entry(
-    soup: BeautifulSoup, name: str, type: EntryType, anchor: str
+def _find_entry_and_add_ref(
+    soup: BeautifulSoup, name: str, type: EntryType, anchor: str, ref: str
 ) -> bool:
     """
     Modify *soup* so Dash.app can generate TOCs on the fly.
@@ -173,7 +177,7 @@ def _find_and_patch_entry(
 
     tag = soup.new_tag("a")
     tag["class"] = "dashAnchor"
-    tag["name"] = format_ref(type, name)
+    tag["name"] = ref
 
     pos.insert_before(tag)
 

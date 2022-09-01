@@ -16,7 +16,7 @@ For that, it must implement the `Parser` protocol:
         - detect
         - __init__
         - parse
-        - find_and_patch_entry
+        - find_entry_and_add_ref
 
 
 ## `ParserEntry`
@@ -28,23 +28,19 @@ For that, it must implement the `Parser` protocol:
         - type
         - path
 
----
+## `EntryType`
 
-To help you, *doc2dash* comes with a few helpers:
+::: doc2dash.parsers.types.EntryType
 
-## `format_ref`
-
-::: doc2dash.parsers.utils.format_ref
 
 ---
 
 To use your custom parser, you have to invoke *doc2dash* with the `--parser` option and specify the importable path to it.
 
 
-## Examples
+## Example
 
 Often, it's the easiest to get started by looking at existing parsers.
-Conveniently, *doc2dash* ships two:
+Conveniently, *doc2dash* ships one:
 
-- The [*intersphinx* parser](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/intersphinx.py) uses a machine-readable format to extract the necessary metadata.
-- The [*pydoctor* parser](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/pydoctor.py) actually parses the HTML of the pages.
+The [*intersphinx* parser](https://github.com/hynek/doc2dash/blob/main/src/doc2dash/parsers/intersphinx.py) uses a machine-readable format to extract the necessary metadata.

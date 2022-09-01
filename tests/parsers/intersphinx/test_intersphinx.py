@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
     _clean_up_path,
-    _find_and_patch_entry,
+    _find_entry_and_add_ref,
 )
 from doc2dash.parsers.types import EntryType, ParserEntry
 
@@ -182,11 +182,12 @@ class TestFindAndPatchEntry:
         """
         Patching a method adds a TOC entry.
         """
-        assert True is _find_and_patch_entry(
+        assert True is _find_entry_and_add_ref(
             soup,
             name="pyramid.config.Configurator.add_route",
             type=EntryType.METHOD,
             anchor="pyramid.config.Configurator.add_route",
+            ref="//apple_ref/cpp/Method/pyramid.config.Configurator.add_route",
         )
 
         toc_link = soup(
@@ -205,11 +206,12 @@ class TestFindAndPatchEntry:
         """
         soup = BeautifulSoup("<h1>Some Module</h1>", "html.parser")
 
-        assert True is _find_and_patch_entry(
+        assert True is _find_entry_and_add_ref(
             soup,
             name="some_module",
             type=EntryType.PACKAGE,
             anchor="module-some_module",
+            ref="//apple_ref/cpp/Module/pyramid.security",
         )
         assert '<a class="dashAnchor" name="//apple_ref' in str(soup)
 
@@ -217,22 +219,29 @@ class TestFindAndPatchEntry:
         """
         Return `False` if anchor can't be found
         """
-        assert False is _find_and_patch_entry(
-            soup, name="foo", type="Nothing", anchor="does-not-exist"
+        assert False is _find_entry_and_add_ref(
+            soup,
+            name="foo",
+            type="Nothing",
+            anchor="does-not-exist",
+            ref="does-not-matter",
         )
 
     def test_patch_term(self, soup):
         """
         :term: and glossaries are found.
         """
-        assert True is _find_and_patch_entry(
+        ref = "//apple_ref/cpp/Word/Whatever"
+
+        assert True is _find_entry_and_add_ref(
             soup,
             name="Whatever",
             type=EntryType.WORD,
             anchor="term-dict-classes",
+            ref=ref,
         )
         assert (
-            '<a class="dashAnchor" name="//apple_ref/cpp/Word/Whatever"></a>'
+            f'<a class="dashAnchor" name="{ref}"></a>'
             '<dt id="term-dict-classes">' in str(soup)
         )
 
@@ -240,11 +249,17 @@ class TestFindAndPatchEntry:
         """
         Sections are found.
         """
-        assert True is _find_and_patch_entry(
-            soup, name="Chains", type=EntryType.SECTION, anchor="chains"
+        ref = "//apple_ref/cpp/Section/Chains"
+
+        assert True is _find_entry_and_add_ref(
+            soup,
+            name="Chains",
+            type=EntryType.SECTION,
+            anchor="chains",
+            ref=ref,
         )
         assert (
-            '<a class="dashAnchor" name="//apple_ref/cpp/Section/Chains"></a>'
+            f'<a class="dashAnchor" name="{ref}"></a>'
             '<section id="chains">' in str(soup)
         )
 

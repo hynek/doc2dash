@@ -216,7 +216,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
                 name="testmethod", type=EntryType.METHOD, path="testpath"
             )
 
-        def find_and_patch_entry(self, soup, entry):
+        def find_entry_and_add_ref(self, soup, name, type, anchor, ref):
             pass
 
     class fake_module:

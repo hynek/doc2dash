@@ -33,7 +33,7 @@ def patch_anchors(
 ) -> Generator[None, ParserEntry, None]:
     """
     Consume ``ParseEntry``s then patch docs for TOCs by calling
-    *parser*'s ``find_and_patch_entry``.
+    *parser*'s ``find_entry_and_add_ref``.
     """
     files = defaultdict(list)
     try:
@@ -89,7 +89,13 @@ def _patch_file(
     with full_path.open(encoding="utf-8") as fp:
         soup = BeautifulSoup(fp, "html.parser")
         for (name, type, anchor) in entries:
-            if not parser.find_and_patch_entry(soup, name, type, anchor):
+            if not parser.find_entry_and_add_ref(
+                soup,
+                name,
+                type,
+                anchor,
+                f"//apple_ref/cpp/{type.value}/{name}",
+            ):
                 log.debug(
                     "Can't find anchor '%s' (%s) in '%s'.",
                     anchor,
