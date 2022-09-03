@@ -198,7 +198,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     png_file = tmp_path / "icon.png"
     png_file.write_bytes(main.PNG_HEADER)
 
-    src = Path("foo").resolve()
+    src = Path("foo").absolute()
     src.mkdir()
     monkeypatch.setattr(docsets, "prepare_docset", fake_prepare)
 
@@ -223,12 +223,12 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         Parser = FakeParser
 
     expected = """\
-Converting testtype docs from '{src}' to '{name}.docset'.
+Converting testtype docs from '%s' to '{name}.docset'.
 Parsing documentation...
 Added 1 index entries.
-Patching files for TOCs... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   0% -:--:--
-Adding to Dash.app...
-"""  # noqa
+""" % (
+        src,
+    )
 
     # alternative 1: use --parser
     sys.modules["fake_module"] = fake_module
@@ -250,7 +250,10 @@ Adding to Dash.app...
         catch_exceptions=False,
     )
 
-    assert expected.format(src=src, name="bah") == result.output
+    assert (
+        expected.format(name="bah")
+        == result.output.split("Patching files for TOCs...")[0]
+    ), result.output.split("Patching files for TOCs...")[0]
     assert 0 == result.exit_code
     assert (("open", "-a", "dash", Path("bah.docset")),) == run_mock.call_args[
         0
@@ -268,7 +271,10 @@ Adding to Dash.app...
         catch_exceptions=False,
     )
 
-    assert expected.format(src=src, name="bar") == result.output
+    assert (
+        expected.format(name="bar")
+        == result.output.split("Patching files for TOCs...")[0]
+    )
     assert 0 == result.exit_code
     assert (("open", "-a", "dash", Path("bar.docset")),) == run_mock.call_args[
         0
@@ -292,7 +298,10 @@ Adding to Dash.app...
         catch_exceptions=False,
     )
 
-    assert "'no_dot' is not an import path" in result.output
+    assert (
+        "'no_dot' is not an import path"
+        in result.output.split("Patching files for TOCs...")[0]
+    )
     assert 2 == result.exit_code
 
     result = runner.invoke(

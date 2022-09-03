@@ -32,4 +32,4 @@ While *doc2dash* is a Python project, the support is not limited to Python-relat
 - **Documentation**: <https://doc2dash.rtfd.io/>
 - **Changelog**: <https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md>
 - **Supported Python Versions**: 3.8 and later (check the changelog for past releases that support _much_ older Python versions)
-- **Platforms**: Both Linux and macOS are tested; Windows should work too.
+- **Platforms**: tested on Linux, macOS, and Windows

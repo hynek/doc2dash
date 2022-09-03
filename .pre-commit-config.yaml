@@ -16,7 +16,7 @@ repos:
     rev: v2.37.3
     hooks:
       - id: pyupgrade
-        args: [--py38-plus]
+        args: [--py38-plus, --keep-percent-format]
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1

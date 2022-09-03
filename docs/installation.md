@@ -13,7 +13,6 @@ As of version 2.4, *doc2dash* only supports Python 3.8 and later.
 If you need to run it on an older Python version, use one of the 2.x releases that are available on [PyPI](https://pypi.org/project/doc2dash/).
 
 All platforms that run Python are supported.
-*doc2dash* comes with a few *Dash.app*-specific features that naturally only work on macOS.
 
 
 ## Viewer

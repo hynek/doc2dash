@@ -17,11 +17,12 @@ env:
 
 jobs:
   tests:
-    name: nox on ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    name: nox on ${{ matrix.runs-on }} / ${{ matrix.python-version }}
+    runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11.0-beta - 3.11"]
+        runs-on: [ubuntu-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -31,7 +32,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -xe
           python -VV
           python -m site
           python -m pip install --upgrade wheel virtualenv nox
@@ -44,6 +44,7 @@ jobs:
           name: coverage-data
           path: .coverage.*
           if-no-files-found: ignore
+        if: runner.os == 'Linux'
 
   coverage:
     name: Combine & check coverage.
