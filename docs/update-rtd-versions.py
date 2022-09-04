@@ -43,7 +43,7 @@ def sieve_versions(vers: list[dict[str, Any]]) -> list[Version]:
         if vn == "stable" or not v["active"]:
             continue
 
-        path = f"{v['slug']}"
+        path = v["slug"]
         if vn == "latest":
             latest = {
                 "title": "Unreleased",
