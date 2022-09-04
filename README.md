@@ -15,13 +15,12 @@ The most common ones – [*Dash.app*](https://kapeli.com/dash) (macOS) and [*Zea
 This is where *doc2dash* comes in:
 It takes your offline documentation and converts it into an indexed format that API browsers can read and search (very fast!).
 
-Currently it supports all known *intersphinx*-based documentation like [*Sphinx*](https://www.sphinx-doc.org/), [*pydoctor*](https://github.com/twisted/pydoctor), or [*MkDocs*](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io)).
+Currently it supports all known *intersphinx*-based documentation systems like [*Sphinx*](https://www.sphinx-doc.org/), [*pydoctor*](https://github.com/twisted/pydoctor), or [*MkDocs*](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io)).
+While *doc2dash* is a Python project, the support is **not** limited to Python-related formats.
 
 It's also extendable: [**you** can write your own parser](https://doc2dash.readthedocs.io/en/latest/extending/)!
 
 ![doc2dash Session](docs/doc2dash-session.png)
-
-While *doc2dash* is a Python project, the support is not limited to Python-related formats.
 
 
 ## Project Information
