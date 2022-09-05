@@ -16,7 +16,12 @@ For that, it must implement the `Parser` protocol:
         - detect
         - __init__
         - parse
-        - find_entry_and_add_ref
+        - make_patcher_for_file
+
+
+## `Patcher`
+
+::: doc2dash.parsers.types.Patcher
 
 
 ## `ParserEntry`
@@ -27,6 +32,7 @@ For that, it must implement the `Parser` protocol:
         - name
         - type
         - path
+
 
 ## `EntryType`
 

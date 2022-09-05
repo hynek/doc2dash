@@ -23,6 +23,7 @@ def convert_docs(
     log.info("Parsing documentation...")
     with docset.db_conn:
         toc = patch_anchors(parser, docset.docs, show_progressbar=not quiet)
+        next(toc)
 
         for entry in parser.parse():
             docset.db_conn.execute(

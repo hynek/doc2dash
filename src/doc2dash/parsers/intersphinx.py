@@ -2,15 +2,16 @@ from __future__ import annotations
 
 import logging
 
+from contextlib import contextmanager
 from pathlib import Path
-from typing import ClassVar, Generator, Mapping
+from typing import ClassVar, Generator, Iterator, Mapping
 
 import attrs
 
 from bs4 import BeautifulSoup
 
 from .intersphinx_inventory import InventoryEntry, load_inventory
-from .types import EntryType, ParserEntry
+from .types import EntryType, ParserEntry, Patcher
 
 
 log = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ log = logging.getLogger(__name__)
 # https://kapeli.com/docsets#supportedentrytypes
 INV_TO_TYPE = {
     "attribute": EntryType.ATTRIBUTE,
+    "attr": EntryType.ATTRIBUTE,  # mkdocstrings
     "class": EntryType.CLASS,
     "classmethod": EntryType.METHOD,
     "cmdoption": EntryType.OPTION,
@@ -92,15 +94,18 @@ class InterSphinxParser:
         """
         yield from self._inv_to_entries(load_inventory(self.source))
 
-    def find_entry_and_add_ref(
-        self,
-        soup: BeautifulSoup,
-        name: str,
-        type: EntryType,
-        anchor: str,
-        ref: str,
-    ) -> bool:
-        return _find_entry_and_add_ref(soup, name, type, anchor, ref)
+    @contextmanager
+    def make_patcher_for_file(self, path: Path) -> Iterator[Patcher]:
+        with path.open(encoding="utf-8") as f:
+            soup = BeautifulSoup(f, "html.parser")
+
+        def patch(name: str, type: EntryType, anchor: str, ref: str) -> bool:
+            return _find_entry_and_add_ref(soup, name, type, anchor, ref)
+
+        yield patch
+
+        with path.open(mode="wb") as fb:
+            fb.write(soup.encode("utf-8"))
 
     def _inv_to_entries(
         self, inv: Mapping[str, Mapping[str, InventoryEntry]]

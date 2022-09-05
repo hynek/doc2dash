@@ -219,7 +219,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
                 name="testmethod", type=EntryType.METHOD, path="testpath"
             )
 
-        def find_entry_and_add_ref(self, soup, name, type, anchor, ref):
+        def make_patcher_for_file(self, path):
             pass
 
     class fake_module:
@@ -255,8 +255,8 @@ Added 1 index entries.
 
     assert (
         expected.format(name="bah")
-        == result.output.split("Patching files for TOCs...")[0]
-    ), result.output.split("Patching files for TOCs...")[0]
+        == result.output.split("Patching for TOCs...")[0]
+    ), result.output.split("Patching for TOCs...")[0]
     assert 0 == result.exit_code
     assert (("open", "-a", "dash", Path("bah.docset")),) == run_mock.call_args[
         0
@@ -276,7 +276,7 @@ Added 1 index entries.
 
     assert (
         expected.format(name="bar")
-        == result.output.split("Patching files for TOCs...")[0]
+        == result.output.split("Patching for TOCs...")[0]
     )
     assert 0 == result.exit_code
     assert (("open", "-a", "dash", Path("bar.docset")),) == run_mock.call_args[

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 
+from contextlib import contextmanager
 from pathlib import Path
 from typing import ClassVar
 
@@ -40,6 +41,7 @@ class FakeParser:
     source: str
     _succeed_patching: bool = True
     _patched_entries: list = attrs.Factory(list)
+    _patcher_closed: bool = False
 
     name: ClassVar[str] = "FakeParser"
 
@@ -50,13 +52,22 @@ class FakeParser:
     def parse(self):
         pass
 
-    def find_entry_and_add_ref(self, soup, name, type, anchor, ref):
-        if self._patched_entries is None:
-            self._patched_entries = []
+    @contextmanager
+    def make_patcher_for_file(self, path):
+        if not path.exists():
+            raise FileNotFoundError
 
-        self._patched_entries.append((name, type, anchor))
+        def patch(name, type, anchor, ref):
+            if self._patched_entries is None:
+                self._patched_entries = []
 
-        return self._succeed_patching
+            self._patched_entries.append((name, type, anchor))
+
+            return self._succeed_patching
+
+        yield patch
+
+        self._patcher_closed = True
 
 
 class TestPatchTOCAnchors:
@@ -67,6 +78,7 @@ class TestPatchTOCAnchors:
         """
         parser = FakeParser(source="foo")
         toc = patch_anchors(parser, Path("foo"), show_progressbar=progressbar)
+        next(toc)
         toc.close()
 
     def test_single_entry(self, doc_entries):
@@ -77,6 +89,8 @@ class TestPatchTOCAnchors:
         parser = FakeParser(source=path)
 
         toc = patch_anchors(parser, path, show_progressbar=False)
+        next(toc)
+
         for e in entries:
             toc.send(e)
         toc.close()
@@ -93,8 +107,9 @@ class TestPatchTOCAnchors:
         """
         parser = FakeParser(source="foo")
         toc = patch_anchors(parser, Path("foo"), show_progressbar=False)
+        next(toc)
 
-        toc.send(ParserEntry("Foo", "label", "FooBarQux.html#"))
+        toc.send(ParserEntry("Foo", EntryType.SECTION, "FooBarQux.html#"))
 
         with pytest.raises(FileNotFoundError):
             toc.close()
@@ -112,6 +127,8 @@ class TestPatchTOCAnchors:
 
         parser = FakeParser(source=str(path), succeed_patching=False)
         toc = patch_anchors(parser, path, show_progressbar=False)
+        next(toc)
+
         for e in entries:
             toc.send(e)
 
@@ -121,6 +138,7 @@ class TestPatchTOCAnchors:
             "Can't find anchor 'anchor-1' (EntryType.METHOD) in 'bar.html'.",
             "Can't find anchor 'anchor-2' (EntryType.METHOD) in 'foo bar.html'"
             ".",  # lol
+            "Failed to add anchors for 2 TOC entries.",
         ] == caplog.messages
 
         log.setLevel(old_level)

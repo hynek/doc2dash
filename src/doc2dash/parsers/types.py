@@ -1,12 +1,11 @@
 from __future__ import annotations
 
+from contextlib import contextmanager
 from enum import Enum
 from pathlib import Path
-from typing import ClassVar, Generator, Protocol
+from typing import ClassVar, Generator, Iterator, Protocol
 
 import attrs
-
-from bs4 import BeautifulSoup
 
 
 class EntryType(Enum):
@@ -83,28 +82,38 @@ class Parser(Protocol):
             A generator that yields `ParserEntry`s.
         """
 
-    def find_entry_and_add_ref(
-        self,
-        soup: BeautifulSoup,
-        name: str,
-        type: EntryType,
-        anchor: str,
-        ref: str,
-    ) -> bool:
+    @contextmanager
+    def make_patcher_for_file(self, path: Path) -> Iterator[Patcher]:
         """
-        Add *ref* next to *anchor* that points to an entry *name* of *type* in
-        *soup*.
+        A context manager that prepares for patching *path* and returns a
+        `Patcher` callable.
 
         Args:
-            soup: A [soup](https://beautiful-soup-4.readthedocs.io/) of the
-                file to patch.
-            name: The name of the entry.
-            type: The type of the entry.
-            anchor: The anchor (`#`) within the file.
-            ref: The ref string to be added to the anchor.
+            path: path to file to patch
+
+        Yields:
+            A patch function.
+        """
+
+
+class Patcher(Protocol):
+    """
+    A callable that patches the file that it belongs to and returns whether it
+    did.
+    """
+
+    def __call__(
+        self, name: str, type: EntryType, anchor: str, ref: str
+    ) -> bool:
+        """
+        Args:
+            name: name of the entry
+            type: the type of the entry
+            anchor: the place to add *ref*
+            ref: the reference to add before *anchor*
 
         Returns:
-            Whether an entry was found and patched.
+            Whether it found the anchor and did anything.
         """
 
 

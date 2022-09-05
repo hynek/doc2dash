@@ -20,7 +20,7 @@ class RichEchoHandler(logging.Handler):
     _level_to_fg = {logging.ERROR: "red", logging.WARN: "yellow"}
 
     def emit(self, record: logging.LogRecord) -> None:
-        if record.levelno >= logging.WARN:
+        if record.levelno > logging.WARN:
             print = error_console.print
         else:
             print = console.print
