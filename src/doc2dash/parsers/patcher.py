@@ -63,17 +63,9 @@ def _patch_files(
     for fname, entries in files.items():
         fname = urllib.parse.unquote(fname)
         full_path = docs / fname
-        try:
-            soup = _patch_file(pbar, parser, fname, full_path, entries)
-        except FileNotFoundError:
-            # This can happen in non-Python Sphinx docs.
-            if fname == "py-modindex.html":
-                log.warning("Can't open file '%s'. Skipping.", full_path)
-            else:
-                raise
-        else:
-            with open(full_path, mode="wb") as fp:
-                fp.write(soup.encode("utf-8"))
+        soup = _patch_file(pbar, parser, fname, full_path, entries)
+        with open(full_path, mode="wb") as fp:
+            fp.write(soup.encode("utf-8"))
 
         pbar.update(files_task, advance=1)
 

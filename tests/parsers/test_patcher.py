@@ -86,23 +86,6 @@ class TestPatchTOCAnchors:
             ("foo-url", EntryType.METHOD, "anchor-2"),
         ] == parser._patched_entries
 
-    def test_missing_py_modindex_html(self, caplog):
-        """
-        If py-modindex.html is missing, warn about it but keep going.
-
-        Cf. https://github.com/hynek/doc2dash/issues/115
-        """
-        parser = FakeParser(source="foo")
-        toc = patch_anchors(parser, Path("foo"), show_progressbar=False)
-
-        toc.send(ParserEntry("Module Index", "label", "py-modindex.html#"))
-
-        toc.close()
-
-        assert [
-            f"Can't open file '{Path('foo/py-modindex.html')}'. Skipping."
-        ] == caplog.messages
-
     def test_missing_other_files_explode(self):
         """
         If a file is missing that is NOT py-modindex.html, an exception is

@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 
 from doc2dash.parsers.intersphinx import (
     InterSphinxParser,
-    _clean_up_path,
     _find_entry_and_add_ref,
 )
 from doc2dash.parsers.types import EntryType, ParserEntry
@@ -36,8 +35,7 @@ class TestInterSphinxParser:
                     "py:method": {"some_method": ("some_module.py", "-")},
                     "std:option": {
                         "--destination": (
-                            "index.html#document-usage#cmdoption--"
-                            "destination",
+                            "index.html#cmdoption--destination",
                             "-",
                         )
                     },
@@ -113,7 +111,7 @@ class TestInterSphinxParser:
 
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
-                path_str = _clean_up_path(inv_entry[0])
+                path_str = inv_entry[0]
                 return ParserEntry(
                     name=f"!{key}!", type=dash_type, path=path_str
                 )
@@ -262,24 +260,6 @@ class TestFindAndPatchEntry:
             f'<a class="dashAnchor" name="{ref}"></a>'
             '<section id="chains">' in str(soup)
         )
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("docs.html", "docs.html"),
-        ("docs/", "docs/index.html"),
-        ("docs.html#api", "docs.html#api"),
-        ("docs/#api", "docs/index.html#api"),
-        ("docs.html#foo#api", "docs.html#api"),
-        ("docs/#foo#api", "docs/index.html#api"),
-    ],
-)
-def test_cleanup_path(path, expected):
-    """
-    Paths without an anchor are passed through.
-    """
-    assert expected == _clean_up_path(path)
 
 
 class TestIntersphinxDetect:

@@ -90,8 +90,7 @@ class InterSphinxParser:
 
         yield `ParserEntry`s.
         """
-        with (self.source / "objects.inv").open("rb") as inv_f:
-            yield from self._inv_to_entries(load_inventory(inv_f))
+        yield from self._inv_to_entries(load_inventory(self.source))
 
     def find_entry_and_add_ref(
         self,
@@ -135,7 +134,7 @@ class InterSphinxParser:
 
     def create_entry(
         self, dash_type: EntryType, key: str, inv_entry: InventoryEntry
-    ) -> ParserEntry:
+    ) -> ParserEntry | None:
         """
         Create a ParserEntry (or None) given inventory details
 
@@ -143,7 +142,7 @@ class InterSphinxParser:
 
         This is a method to allow customization by inheritance.
         """
-        path_str = _clean_up_path(inv_entry[0])
+        path_str = inv_entry[0]
         name = inv_entry[1] if inv_entry[1] != "-" else key
 
         return ParserEntry(name=name, type=dash_type, path=path_str)
@@ -182,26 +181,3 @@ def _find_entry_and_add_ref(
     pos.insert_before(tag)
 
     return True
-
-
-def _clean_up_path(path: str) -> str:
-    """
-    Clean up a path as it comes from an inventory.
-
-    Discard the anchors between head and tail to make it
-    compatible with situations where extra meta information is encoded.
-
-    If the path ends with an "/", append an index.html.
-    """
-    path_tuple = path.split("#")
-    if len(path_tuple) > 1:
-        return f"{_maybe_index(path_tuple[0])}#{path_tuple[-1]}"
-
-    return _maybe_index(path)
-
-
-def _maybe_index(path: str) -> str:
-    if path.endswith("/"):
-        return f"{path}index.html"
-
-    return path

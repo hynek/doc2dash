@@ -69,7 +69,10 @@ def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     assert {
         ("--foo", "Option", "index.html#cmdoption-foo"),
         ("ENV_VARIABLE", "Environment", "index.html#envvar-ENV_VARIABLE"),
-        ("Foobar", "Word", "index.html#term-Foobar"),
+        ("Foobar", "Word", "glossary.html#term-Foobar"),
+        ("A Glossary", "Guide", "glossary.html"),
+        ("mwt", "Word", "glossary.html#term-mwt"),
+        ("multi-word term", "Word", "glossary.html#term-multi-word-term"),
         ("Index", "Section", "genindex.html"),
         (
             "Let’s define some symbols and see if doc2dash can handle them!",

@@ -22,13 +22,13 @@ Let's define some symbols and see if doc2dash can handle them!
 .. envvar:: ENV_VARIABLE
 
 
-.. glossary::
-
-   Foobar
-      Explanation of Foobar.
-
-
 This is a Section
 -----------------
 
 This is text.
+This is a reference to a :term:`multi-word term`.
+This is a reference to its alias :term:`mwt`.
+
+.. toctree::
+
+   glossary

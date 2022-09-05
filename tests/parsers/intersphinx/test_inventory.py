@@ -1,12 +1,21 @@
-from doc2dash.parsers.intersphinx_inventory import load_inventory
+from unittest.mock import Mock
+
+import pytest
+
+from doc2dash.parsers import intersphinx_inventory
+from doc2dash.parsers.intersphinx_inventory import (
+    CachedFileExists,
+    _clean_up_path,
+    _lines_to_tuples,
+    load_inventory,
+)
 
 
-def test_parse_example(objects_inv):
+def test_parse_example(sphinx_built):
     """
     Parses our example objects.inv correctly.
     """
-    with objects_inv.open("rb") as f:
-        entries = dict(load_inventory(f))
+    entries = dict(load_inventory(sphinx_built))
 
     assert {
         "py:attribute": {
@@ -46,7 +55,8 @@ def test_parse_example(objects_inv):
                 "index.html",
                 "Let’s define some symbols and see if doc2dash can handle "
                 "them!",
-            )
+            ),
+            "glossary": ("glossary.html", "A Glossary"),
         },
         "std:envvar": {
             "ENV_VARIABLE": ("index.html#envvar-ENV_VARIABLE", "-")
@@ -57,5 +67,86 @@ def test_parse_example(objects_inv):
             "py-modindex": ("py-modindex.html", "Python Module Index"),
             "search": ("search.html", "Search Page"),
         },
-        "std:term": {"Foobar": ("index.html#term-Foobar", "-")},
+        "std:term": {
+            "Foobar": ("glossary.html#term-Foobar", "-"),
+            "multi-word term": ("glossary.html#term-multi-word-term", "-"),
+            "mwt": ("glossary.html#term-mwt", "-"),
+        },
     } == entries
+
+
+def test_missing_file(caplog):
+    """
+    If a file is missing, warn about it and don't add it to the index.
+    """
+    assert {} == _lines_to_tuples(
+        lambda _: False, ["name role 1 path.html#anchor -"]
+    )
+    assert [
+        "intersphinx: path 'path.html' is in objects.inv, but does not exist. "
+        "Skipping."
+    ] == caplog.messages
+
+
+def test_bad_format(caplog):
+    """
+    If a line is malformed, warn about it and don't add it to the index.
+    """
+    assert {} == _lines_to_tuples(lambda _: True, ["yolo"])
+
+
+@pytest.mark.parametrize(
+    "path,expected",
+    [
+        ("docs.html", ("docs.html", "docs.html")),
+        ("docs/", ("docs/index.html", "docs/index.html")),
+        ("docs.html#api", ("docs.html", "docs.html#api")),
+        ("docs/#api", ("docs/index.html", "docs/index.html#api")),
+        ("docs.html#foo#api", ("docs.html", "docs.html#api")),
+        ("docs/#foo#api", ("docs/index.html", "docs/index.html#api")),
+    ],
+)
+def test_cleanup_path(path, expected):
+    """
+    Paths without an anchor are passed through.
+    """
+    assert expected == _clean_up_path(path)
+
+
+class TestCachedFileExists:
+    def test_detects_exists_and_caches(self, tmp_path, monkeypatch):
+        """
+        Existing files are detected as such and their existence is cached.
+        """
+        cfe = CachedFileExists(tmp_path)
+
+        (tmp_path / "exists").write_text("i exist!")
+
+        assert cfe("exists")
+        assert {"exists"} == cfe._exists
+        assert set() == cfe._missing
+
+        # Should use cache
+        m = Mock()
+        monkeypatch.setattr(intersphinx_inventory, "Path", m)
+
+        assert cfe("exists")
+        m.assert_not_called()
+
+    def test_detects_missing_and_caches(self, tmp_path, monkeypatch):
+        """
+        Missing files are detected as such and their lack of existence is
+        cached.
+        """
+        cfe = CachedFileExists(tmp_path)
+
+        assert not cfe("missing")
+        assert set() == cfe._exists
+        assert {"missing"} == cfe._missing
+
+        # Should use cache
+        m = Mock()
+        monkeypatch.setattr(intersphinx_inventory, "Path", m)
+
+        assert not cfe("missing")
+        m.assert_not_called()
