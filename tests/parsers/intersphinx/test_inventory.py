@@ -77,15 +77,11 @@ def test_parse_example(sphinx_built):
 
 def test_missing_file(caplog):
     """
-    If a file is missing, warn about it and don't add it to the index.
+    If a file is missing, don't add it to the index.
     """
     assert {} == _lines_to_tuples(
         lambda _: False, ["name role 1 path.html#anchor -"]
     )
-    assert [
-        "intersphinx: path 'path.html' is in objects.inv, but does not exist. "
-        "Skipping."
-    ] == caplog.messages
 
 
 def test_bad_format(caplog):
@@ -93,6 +89,7 @@ def test_bad_format(caplog):
     If a line is malformed, warn about it and don't add it to the index.
     """
     assert {} == _lines_to_tuples(lambda _: True, ["yolo"])
+    assert ["intersphinx: invalid line: 'yolo'. Skipping."] == caplog.messages
 
 
 @pytest.mark.parametrize(
@@ -133,10 +130,10 @@ class TestCachedFileExists:
         assert cfe("exists")
         m.assert_not_called()
 
-    def test_detects_missing_and_caches(self, tmp_path, monkeypatch):
+    def test_detects_missing_and_caches(self, tmp_path, monkeypatch, caplog):
         """
         Missing files are detected as such and their lack of existence is
-        cached.
+        cached. Exactly one log warning is emitted per file.
         """
         cfe = CachedFileExists(tmp_path)
 
@@ -150,3 +147,8 @@ class TestCachedFileExists:
 
         assert not cfe("missing")
         m.assert_not_called()
+
+        assert [
+            "intersphinx: path 'missing' is in objects.inv, but does not "
+            "exist. Skipping."
+        ] == caplog.messages
