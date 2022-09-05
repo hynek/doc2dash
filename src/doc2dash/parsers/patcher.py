@@ -74,26 +74,28 @@ def _patch_file(
     pbar: Progress,
     parser: Parser,
     fname: str,
-    full_path: Path,
+    path: Path,
     entries: list[tuple[str, EntryType, str]],
 ) -> BeautifulSoup:
     task = pbar.add_task(f"Patching {fname}...", total=len(entries))
-    with full_path.open(encoding="utf-8") as fp:
+
+    with path.open(encoding="utf-8") as fp:
         soup = BeautifulSoup(fp, "html.parser")
-        for (name, type, anchor) in entries:
-            if not parser.find_entry_and_add_ref(
-                soup,
-                name,
-                type,
+
+    for (name, type, anchor) in entries:
+        if not parser.find_entry_and_add_ref(
+            soup,
+            name,
+            type,
+            anchor,
+            f"//apple_ref/cpp/{type.value}/{name}",
+        ):
+            log.debug(
+                "Can't find anchor '%s' (%s) in '%s'.",
                 anchor,
-                f"//apple_ref/cpp/{type.value}/{name}",
-            ):
-                log.debug(
-                    "Can't find anchor '%s' (%s) in '%s'.",
-                    anchor,
-                    type,
-                    fname,
-                )
-            pbar.update(task, advance=1)
+                type,
+                fname,
+            )
+        pbar.update(task, advance=1)
 
     return soup
