@@ -111,7 +111,11 @@ def oxidize(session: nox.Session) -> None:
     """
     env = os.environ.copy()
     env["PIP_REQUIRE_VIRTUALENV"] = "0"
-    session.run("pyoxidizer", "build", "--release", external=True, env=env)
+
+    session.install("pyoxidizer")
+
+    session.run("pyoxidizer", "-V")
+    session.run("pyoxidizer", "build", "--release", env=env)
 
 
 @nox.session
