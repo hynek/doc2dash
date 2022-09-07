@@ -13,6 +13,7 @@ jobs:
     name: Build binary for ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
+      fail-fast: false
       matrix:
         runs-on: [ubuntu-latest, windows-latest, macos-latest]
 
@@ -24,6 +25,20 @@ jobs:
 
       - run: pip install nox
       - run: nox -e oxidize
+
+      - name: check binary
+        shell: bash
+        run: |
+          cd build/*/release/install/
+          ./doc2dash --version
+        if: runner.os != 'Windows'
+
+      - name: check windows binary
+        shell: bash
+        run: |
+          cd build/*/release/install/
+          doc2dash.exe --version
+        if: runner.os == 'Windows'
 
       - uses: actions/upload-artifact@v2
         with:
