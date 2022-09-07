@@ -87,6 +87,34 @@ def update_rtd_versions(session: nox.Session) -> None:
 
 
 @nox.session
+def pin_for_oxidizer(session: nox.Session) -> None:
+    """
+    Pin the Python dependencies that are used for vendoring by pyoxidizer.
+    """
+    session.install("pip-tools>=6.8.0")
+
+    session.run(
+        "pip-compile",
+        "--resolver",
+        "backtracking",
+        "--output-file",
+        "requirements/pyoxidizer.txt",
+        "--no-emit-index-url",
+        "pyproject.toml",
+    )
+
+
+@nox.session
+def oxidize(session: nox.Session) -> None:
+    """
+    Build a doc2dash binary with pyoxidizer.
+    """
+    env = os.environ.copy()
+    env["PIP_REQUIRE_VIRTUALENV"] = "0"
+    session.run("pyoxidizer", "build", "--release", external=True, env=env)
+
+
+@nox.session
 def pin_docs(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
