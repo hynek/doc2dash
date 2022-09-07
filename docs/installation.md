@@ -1,7 +1,6 @@
 # Requirements and Installation
 
-As of version 3.0, the [releases](https://github.com/hynek/doc2dash/releases) come with compiled stand-alone binaries that you can drop and run.
-Please let us know if there's any problems with the binaries!
+As of version 3.0, the [releases](https://github.com/hynek/doc2dash/releases) come with **pre-compiled binaries** for Linux, macOS, and Windows on Intel x64 that you can simply download and run *without* any other dependencies.
 
 ---
 
