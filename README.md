@@ -31,4 +31,4 @@ It's also extendable: [**you** can write your own parser](https://doc2dash.readt
 - **Documentation**: <https://doc2dash.rtfd.io/>
 - **Changelog**: <https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md>
 - **Supported Python Versions**: 3.8 and later (check the changelog for past releases that support _much_ older Python versions)
-- **Platforms**: shipping pre-compiled binaries for **Linux**, **macOS**, and **Windows**; runs on eveything that runs Python
+- **Platforms**: pre-compiled **binaries** for **Linux**, **macOS**, and **Windows** available; also runs on everything that runs Python
