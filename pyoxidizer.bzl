@@ -14,7 +14,6 @@ def make_exe():
     policy.resources_location_fallback = "filesystem-relative:prefix"
 
     python_config = dist.make_python_interpreter_config()
-    python_config.allocator_backend = "jemalloc"
 
     # Evaluate a string as Python code when the interpreter starts.
     python_config.run_command = "from doc2dash.__main__ import main; main()"
@@ -29,7 +28,7 @@ def make_exe():
     )
 
     # Install pinned dependencies, then ourselves.
-    exe.add_python_resources(exe.pip_install(["-r", "requirements/pyoxidizer.txt"]))
+    exe.add_python_resources(exe.pip_install(["-r", "requirements/pyoxidizer-%s.txt" % VARS["platform"]]))
     exe.add_python_resources(exe.pip_install(["."]))
 
     return exe

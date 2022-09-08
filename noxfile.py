@@ -72,7 +72,9 @@ def rebuild_sample_docs(session: nox.Session) -> None:
 
 @nox.session(python="3.9")
 def docs(session: nox.Session) -> None:
-    session.install("-r", "requirements/docs.txt", "-e", ".")
+    # Needs to be separate when using hashes.
+    session.install("-r", "requirements/docs.txt")
+    session.install("-e", ".")
 
     if session.posargs:
         session.run("mkdocs", *session.posargs)
@@ -126,7 +128,16 @@ def oxidize(session: nox.Session) -> None:
 
     session.run("pyoxidizer", "-V")
     session.run(
-        "pyoxidizer", "build", "--release", "--var", "flavor", flavor, env=env
+        "pyoxidizer",
+        "build",
+        "--release",
+        "--var",
+        "flavor",
+        flavor,
+        "--var",
+        "platform",
+        sys.platform,
+        env=env,
     )
 
 
@@ -145,6 +156,6 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
         "--resolver",
         "backtracking",
         "--output-file",
-        "requirements/pyoxidizer.txt",
+        f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
     )
