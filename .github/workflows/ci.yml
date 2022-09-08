@@ -37,6 +37,10 @@ jobs:
           python -m pip install --upgrade wheel virtualenv nox
 
       - run: nox --python ${{ matrix.python-version }}
+        if: runner.os == 'Linux'
+
+      - run: nox --python ${{ matrix.python-version }} -e tests_cov
+        if: runner.os == 'Windows'
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v2
