@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import shutil
+import sys
 
 from pathlib import Path
 
@@ -112,10 +113,17 @@ def oxidize(session: nox.Session) -> None:
     env = os.environ.copy()
     env["PIP_REQUIRE_VIRTUALENV"] = "0"
 
+    if sys.platform == "win32":
+        flavor = "standalone_static"
+    else:
+        flavor = "standalone"
+
     session.install("pyoxidizer")
 
     session.run("pyoxidizer", "-V")
-    session.run("pyoxidizer", "build", "--release", env=env)
+    session.run(
+        "pyoxidizer", "build", "--release", "--var", "flavor", flavor, env=env
+    )
 
 
 @nox.session
