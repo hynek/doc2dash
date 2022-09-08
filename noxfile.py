@@ -145,6 +145,6 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
         "--resolver",
         "backtracking",
         "--output-file",
-        "requirements/pyoxidizer.txt",
+        f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
     )
