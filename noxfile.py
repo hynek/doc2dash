@@ -42,6 +42,13 @@ def coverage_report(session: nox.Session) -> None:
     session.run("coverage", "report")
 
 
+@nox.session(python=DEFAULT_PYTHON)
+def mypy(session: nox.Session) -> None:
+    session.install(".[typing]")
+
+    session.run("mypy", "src", "docs/update-rtd-versions.py", "noxfile.py")
+
+
 @nox.session
 def rebuild_sample_docs(session: nox.Session) -> None:
     session.install(".", "sphinx")
@@ -73,11 +80,23 @@ def docs(session: nox.Session) -> None:
         session.run("mkdocs", "build", "--clean", "--strict")
 
 
-@nox.session(python=DEFAULT_PYTHON)
-def mypy(session: nox.Session) -> None:
-    session.install(".[typing]")
+@nox.session
+def pin_docs(session: nox.Session) -> None:
+    session.install("pip-tools>=6.8.0")
 
-    session.run("mypy", "src", "docs/update-rtd-versions.py", "noxfile.py")
+    session.run(
+        "pip-compile",
+        "--extra",
+        "docs",
+        "--index-url",
+        "https://pypi.org/simple",
+        "--generate-hashes",
+        "--resolver",
+        "backtracking",
+        "--output-file",
+        "requirements/docs.txt",
+        "pyproject.toml",
+    )
 
 
 @nox.session
@@ -85,24 +104,6 @@ def update_rtd_versions(session: nox.Session) -> None:
     session.install("urllib3")
 
     session.run("python", "docs/update-rtd-versions.py", "doc2dash")
-
-
-@nox.session
-def pin_for_pyoxidizer(session: nox.Session) -> None:
-    """
-    Pin the Python dependencies that are used for vendoring by PyOxidizer.
-    """
-    session.install("pip-tools>=6.8.0")
-
-    session.run(
-        "pip-compile",
-        "--resolver",
-        "backtracking",
-        "--output-file",
-        "requirements/pyoxidizer.txt",
-        "--no-emit-index-url",
-        "pyproject.toml",
-    )
 
 
 @nox.session
@@ -130,17 +131,20 @@ def oxidize(session: nox.Session) -> None:
 
 
 @nox.session
-def pin_docs(session: nox.Session) -> None:
+def pin_for_pyoxidizer(session: nox.Session) -> None:
+    """
+    Pin the Python dependencies that are used for vendoring by PyOxidizer.
+    """
     session.install("pip-tools>=6.8.0")
 
     session.run(
         "pip-compile",
-        "--extra",
-        "docs",
+        "--index-url",
+        "https://pypi.org/simple",
+        "--generate-hashes",
         "--resolver",
         "backtracking",
         "--output-file",
-        "requirements/docs.txt",
-        "--no-emit-index-url",
+        "requirements/pyoxidizer.txt",
         "pyproject.toml",
     )
