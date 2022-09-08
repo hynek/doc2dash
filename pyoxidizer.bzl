@@ -19,7 +19,6 @@ def make_exe():
     # Evaluate a string as Python code when the interpreter starts.
     python_config.run_command = "from doc2dash.__main__ import main; main()"
 
-
     # Produce a PythonExecutable from a Python distribution, embedded
     # resources, and other options. The returned object represents the
     # standalone executable that will be built.
