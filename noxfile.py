@@ -90,7 +90,7 @@ def update_rtd_versions(session: nox.Session) -> None:
 @nox.session
 def pin_for_oxidizer(session: nox.Session) -> None:
     """
-    Pin the Python dependencies that are used for vendoring by pyoxidizer.
+    Pin the Python dependencies that are used for vendoring by PyOxidizer.
     """
     session.install("pip-tools>=6.8.0")
 
@@ -108,11 +108,14 @@ def pin_for_oxidizer(session: nox.Session) -> None:
 @nox.session
 def oxidize(session: nox.Session) -> None:
     """
-    Build a doc2dash binary with pyoxidizer.
+    Build a doc2dash binary with PyOxidizer.
     """
     env = os.environ.copy()
     env["PIP_REQUIRE_VIRTUALENV"] = "0"
 
+    # standalone_static doesn't work on macOS and gives us musl builds on
+    # Linux. Since -- unlike on Windows -- you get one binary on both, dynamic
+    # standalone ~should be fine~.
     if sys.platform == "win32":
         flavor = "standalone_static"
     else:
