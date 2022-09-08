@@ -1,0 +1,59 @@
+---
+name: Pin dependencies for oxidization.
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  pin:
+    name: Pinning for ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-latest, windows-latest, macos-latest]
+
+    env:
+      BRANCH_NAME: auto-dependency-upgrades-${{ matrix.runs-on }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - run: pip install nox
+      - run: nox -e pin_for_pyoxidizer
+
+      - name: Detect changes
+        id: changes
+        shell: bash
+        run:
+          # This output boolean tells us if the dependencies have actually changed
+          echo "::set-output name=count::$(git status --porcelain=v1 2>/dev/null | wc -l)"
+      - name: Commit & push changes
+        # Only push if changes exist
+        if: steps.changes.outputs.count > 0
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Automated dependency upgrades for ${{ matrix.runs-on}}"
+          git push -f origin ${{ github.ref_name }}:${{ env.BRANCH_NAME }}
+      - name: Open pull request if needed
+        if: steps.changes.outputs.count > 0
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Only open a PR if the branch is not attached to an existing one
+        run: |
+          PR=$(gh pr list --head ${{ env.BRANCH_NAME }} --json number -q '.[0].number')
+          if [ -z $PR ]; then
+            gh pr create \
+            --head ${{ env.BRANCH_NAME }} \
+            --title "Automated dependency upgrades for ${{ matrix.runs-on}}" \
+            --body "Full log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          else
+            echo "Pull request already exists, won't create a new one."
+          fi
