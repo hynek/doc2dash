@@ -45,7 +45,7 @@ class ImportableType(click.ParamType):
             self.fail(f"Could not import module {path!r}")
 
         try:
-            return getattr(mod, name)
+            return getattr(mod, name)  # type: ignore[no-any-return]
         except AttributeError:
             self.fail(f"Failed to get attribute {name!r} from module {path!r}")
 

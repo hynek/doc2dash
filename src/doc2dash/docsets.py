@@ -79,7 +79,7 @@ def prepare_docset(
 
 def read_plist(full_path: Path) -> dict[str, str | bool]:
     with full_path.open("rb") as fp:
-        return plistlib.load(fp)
+        return plistlib.load(fp)  # type: ignore[no-any-return]
 
 
 def write_plist(plist: dict[str, str | bool], full_path: Path) -> None:

@@ -95,25 +95,10 @@ exclude_lines = [
 
 [tool.mypy]
 show_error_codes = true
-
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_subclassing_any = true
-disallow_untyped_calls = true
-# disallow_untyped_decorators = true
-disallow_untyped_defs = true
+enable_error_code = ["ignore-without-code"]
 follow_imports = "normal"
-ignore_missing_imports = true
-implicit_reexport = false
-no_implicit_optional = true
-strict_equality = true
-warn_no_return = true
-warn_redundant_casts = true
-# warn_return_any = true
-warn_unused_ignores = true
+strict = true
 
-allow_redefinition = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"
@@ -122,6 +107,19 @@ ignore_errors = true
 [[tool.mypy.overrides]]
 module = "conftest.*"
 ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "bs4.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "nox.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "noxfile"
+disallow_untyped_decorators = false
+
 
 
 [tool.black]
