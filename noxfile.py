@@ -88,7 +88,7 @@ def update_rtd_versions(session: nox.Session) -> None:
 
 
 @nox.session
-def pin_for_oxidizer(session: nox.Session) -> None:
+def pin_for_pyoxidizer(session: nox.Session) -> None:
     """
     Pin the Python dependencies that are used for vendoring by PyOxidizer.
     """
