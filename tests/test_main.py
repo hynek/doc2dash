@@ -36,20 +36,23 @@ def _runner():
 
 def test_intersphinx(runner: CliRunner, tmp_path: Path, sphinx_built: Path):
     """
-    Convert our test project and look at the result
+    Convert our test project and look at the result.
+
+    Use verbose mode to catch warnings about missing TOCs anchors.
     """
     result = runner.invoke(
         main.main,
-        [str(sphinx_built), "-q", "-d", str(tmp_path)],
+        [str(sphinx_built), "-v", "-d", str(tmp_path)],
         catch_exceptions=False,
     )
+
+    assert "Can't find anchor" not in result.output
 
     docset = tmp_path / "sphinx-example.docset"
     contents = docset / "Contents"
     resources = contents / "Resources"
 
     assert 0 == result.exit_code
-    assert "\n" == result.stdout
     assert {
         "CFBundleIdentifier": "sphinx-example",
         "CFBundleName": "sphinx-example",
