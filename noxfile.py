@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 import sys
+import tempfile
 
 from pathlib import Path
 
@@ -159,3 +160,62 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
         f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
     )
+
+
+@nox.session
+def download_and_package_binaries(session: nox.Session) -> None:
+    """
+    Download latest binaries and package them up for release upload.
+    """
+    shutil.rmtree("binaries", ignore_errors=True)
+
+    with tempfile.TemporaryFile(mode="w+") as out:
+        session.run(
+            "git",
+            "describe",
+            "--abbrev=0",
+            "--tags",
+            external=True,
+            stdout=out,
+        )
+        out.seek(0)
+        tag = out.read().strip()
+
+    print("Downloading for git tag", tag)
+
+    with tempfile.TemporaryFile(mode="w+") as out:
+        session.run(
+            "gh",
+            "run",
+            "list",
+            "-w",
+            "Build binaries using pyOxidizer",
+            "--branch",
+            tag,
+            "--json",
+            "databaseId",
+            "--jq",
+            ".[0].databaseId",
+            external=True,
+            stdout=out,
+        )
+
+        out.seek(0)
+        run_id = out.read().strip()
+
+    session.run("gh", "run", "download", run_id, external=True)
+
+    for arch_path in Path("binaries").glob("*"):
+        arch = arch_path.name
+        with session.chdir(arch_path / "release/install"):
+            d = Path("doc2dash")
+            if d.exists():  # i.e. not Windows
+                d.chmod(0o755)
+            session.run(
+                "zip",
+                f"../../../doc2dash.{arch}.zip",
+                "COPYING.txt",
+                "doc2dash",
+                "doc2dash.exe",
+                external=True,
+            )
