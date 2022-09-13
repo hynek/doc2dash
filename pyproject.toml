@@ -29,12 +29,7 @@ classifiers = [
     "Topic :: Software Development",
     "Topic :: Text Processing",
 ]
-dependencies = [
-    "attrs>=21.3",
-    "beautifulsoup4",
-    "click",
-    "rich",
-]
+dependencies = ["attrs>=21.3", "beautifulsoup4", "click", "rich"]
 
 [project.optional-dependencies]
 tests = ["coverage[toml]", "pytest"]
@@ -53,7 +48,7 @@ doc2dash = "doc2dash.__main__:main"
 
 [project.urls]
 Documentation = "https://doc2dash.readthedocs.io/"
-Changelog = "https://doc2dash.readthedocs.io/en/stable/changelog.html"
+Changelog = "https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md"
 "Source Code" = "https://github.com/hynek/doc2dash"
 Funding = "https://github.com/sponsors/hynek"
 Ko-fi = "https://ko-fi.com/the_hynek"
@@ -93,12 +88,13 @@ exclude_lines = [
     "-> ['\"]?NoReturn['\"]?:",
 ]
 
+
 [tool.mypy]
 show_error_codes = true
 enable_error_code = ["ignore-without-code"]
 follow_imports = "normal"
 strict = true
-
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"
@@ -109,17 +105,8 @@ module = "conftest.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
-module = "bs4.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "nox.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
 module = "noxfile"
 disallow_untyped_decorators = false
-
 
 
 [tool.black]
@@ -162,3 +149,7 @@ text = "\n## Credits\n"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "AUTHORS.md"
 start-after = "# Authors\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.png)\)'
+replacement = '[\1](https://raw.githubusercontent.com/hynek/doc2dash/main/\g<2>)'
