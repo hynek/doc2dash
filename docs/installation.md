@@ -2,6 +2,10 @@
 
 As of version 3.0, the [releases](https://github.com/hynek/doc2dash/releases) come with **pre-compiled binaries** for Linux, macOS, and Windows on Intel x64 that you can simply download and run *without* any other dependencies.
 
+!!! Warning
+    On macOS, you may get a warning about an unsigned binary.
+    To get rid of that you'll have to open it once in Finder using right-click and it should work as expected from the terminal from then on.
+
 ---
 
 If your platform is not supported yet (or doesn't work), the latest stable version can be always found on [PyPI](https://pypi.org/project/doc2dash/).
