@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 [project]
 dynamic = ["version", "readme"]
 name = "doc2dash"
+description = "Convert docs to the docset format."
 authors = [{ name = "Hynek Schlawack", email = "hs@ox.cx" }]
 requires-python = ">=3.8"
 license = { text = "MIT" }
