@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Tons of refactorings that probably broke your custom parsers. Sorry about that and let us know, if we can help you fixing them.
 - *intersphinx*: We now parse `objects.inv` files on our own. *Sphinx* is not a dependency anymore.
-- *intersphinx*: Files that are indexed by *intersphinx*, but don't exist aren't added to the docset anymore. Common example is `py-modindex.html`. [#115](https://github.com/hynek/doc2dash/issues/113) [#113](https://github.com/hynek/doc2dash/issues/115)
+- *intersphinx*: Files that are indexed by *intersphinx*, but don't exist aren't added to the docset anymore. Common example is `py-modindex.html`. [#113](https://github.com/hynek/doc2dash/issues/113) [#115](https://github.com/hynek/doc2dash/issues/115)
 - We now check if the index page passed via `--index-page` / `-I` exists and fail if it doesn't.
 
 
