@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 import shutil
 import sys
-import tempfile
 
 from pathlib import Path
 
@@ -169,39 +168,27 @@ def download_and_package_binaries(session: nox.Session) -> None:
     """
     shutil.rmtree("binaries", ignore_errors=True)
 
-    with tempfile.TemporaryFile(mode="w+") as out:
-        session.run(
-            "git",
-            "describe",
-            "--abbrev=0",
-            "--tags",
-            external=True,
-            stdout=out,
-        )
-        out.seek(0)
-        tag = out.read().strip()
+    tag = session.run(
+        "git", "describe", "--abbrev=0", "--tags", external=True, silent=True
+    ).strip()
 
     print("Downloading for git tag", tag)
 
-    with tempfile.TemporaryFile(mode="w+") as out:
-        session.run(
-            "gh",
-            "run",
-            "list",
-            "-w",
-            "Build binaries using pyOxidizer",
-            "--branch",
-            tag,
-            "--json",
-            "databaseId",
-            "--jq",
-            ".[0].databaseId",
-            external=True,
-            stdout=out,
-        )
-
-        out.seek(0)
-        run_id = out.read().strip()
+    run_id = session.run(
+        "gh",
+        "run",
+        "list",
+        "-w",
+        "Build binaries using pyOxidizer",
+        "--branch",
+        tag,
+        "--json",
+        "databaseId",
+        "--jq",
+        ".[0].databaseId",
+        external=True,
+        silent=True,
+    ).strip()
 
     session.run("gh", "run", "download", run_id, external=True)
 
