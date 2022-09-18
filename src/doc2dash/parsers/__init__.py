@@ -14,7 +14,7 @@ def get_doctype(
     path: Path,
 ) -> tuple[type[types.Parser], str] | tuple[None, None]:
     """
-    Gets the apropriate doctype for *path*.
+    Gets the appropriate doctype for *path*.
 
     Returns:
         Tuple of parser type and the name of the documentation.
