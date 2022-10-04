@@ -11,7 +11,7 @@ import nox
 
 DEFAULT_PYTHON = "3.10"
 
-nox.options.sessions = ["pre_commit", "tests_cov", "docs", "mypy"]
+nox.options.sessions = ["pre_commit", "tests", "docs", "mypy"]
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
 
@@ -24,7 +24,7 @@ def pre_commit(session: nox.Session) -> None:
 
 
 @nox.session(python=["pypy3.8", "3.8", "3.9", "3.10", "3.11"])
-def tests_cov(session: nox.Session) -> None:
+def tests(session: nox.Session) -> None:
     session.install(".[tests]")
 
     session.run("coverage", "run", "-m", "pytest", *session.posargs)
