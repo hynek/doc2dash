@@ -27,7 +27,10 @@ def pre_commit(session: nox.Session) -> None:
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
 
-    session.run("coverage", "run", "-m", "pytest", *session.posargs)
+    # Ensure that rich doesn't add format sequences.
+    env = {"TERM": "dumb"}
+
+    session.run("coverage", "run", "-m", "pytest", *session.posargs, env=env)
     session.run("coverage", "run", "-m", "doc2dash", "--version")
 
     if os.environ.get("CI") != "true":
