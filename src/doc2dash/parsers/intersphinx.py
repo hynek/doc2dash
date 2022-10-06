@@ -176,6 +176,8 @@ def _find_entry_and_add_ref(
             or soup.find("span", id=anchor)
             # mkdocs / mkdocstrings
             or soup.find("a", {"class": "md-nav__link"}, href="#" + anchor)
+            # pydoctor
+            or soup.find("a", {"name": name})
         )
 
     if not pos:

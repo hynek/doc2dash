@@ -170,7 +170,15 @@ class TestInterSphinxParser:
 @pytest.fixture(name="soup")
 def _soup():
     return BeautifulSoup(
-        (Path(HERE) / "function_example.html").read_text(),
+        (Path(HERE) / "function_example.html").read_text(encoding="utf-8"),
+        "html.parser",
+    )
+
+
+@pytest.fixture(name="pydoctor_soup")
+def _pydoctor_soup():
+    return BeautifulSoup(
+        (Path(HERE) / "pydoctor_example.html").read_text(encoding="utf-8"),
         "html.parser",
     )
 
@@ -259,6 +267,27 @@ class TestFindAndPatchEntry:
         assert (
             f'<a class="dashAnchor" name="{ref}"></a>'
             '<section id="chains">' in str(soup)
+        )
+
+    def test_pydoctor_class(self, pydoctor_soup):
+        """
+        Pydoctor classes are found.
+        """
+        ref = "//apple_ref/cpp/Word/twisted._threads._convenience.Quit.isSet"
+
+        patched = _find_entry_and_add_ref(
+            pydoctor_soup,
+            name="twisted._threads._convenience.Quit.isSet",
+            type=EntryType.WORD,
+            anchor="isSet",
+            ref=ref,
+        )
+
+        assert patched
+        assert (
+            f'<a class="dashAnchor" name="{ref}"></a>'
+            '<a name="twisted._threads._convenience.Quit.isSet">'
+            in str(pydoctor_soup)
         )
 
 
