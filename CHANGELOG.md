@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/hynek/doc2dash/compare/3.0.0...HEAD)
 
+### Fixed
+
+- The table of contents-generation for *pydoctor*-based documentation has been restored. [#133](https://github.com/hynek/doc2dash/pull/133)
+
 
 ## [3.0.0](https://github.com/hynek/doc2dash/compare/2.4.1...3.0.0) - 2022-09-13
 

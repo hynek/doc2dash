@@ -175,6 +175,14 @@ def _soup():
     )
 
 
+@pytest.fixture(name="pydoctor_soup")
+def _pydoctor_soup():
+    return BeautifulSoup(
+        (Path(HERE) / "pydoctor_example.html").read_text(),
+        "html.parser",
+    )
+
+
 class TestFindAndPatchEntry:
     def test_patch_method(self, soup):
         """
@@ -259,6 +267,24 @@ class TestFindAndPatchEntry:
         assert (
             f'<a class="dashAnchor" name="{ref}"></a>'
             '<section id="chains">' in str(soup)
+        )
+
+    def test_pydoctor_class(self, pydoctor_soup):
+        """
+        Pydoctor classes are found.
+        """
+        ref = "//apple_ref/cpp/Word/Whatever"
+
+        assert True is _find_entry_and_add_ref(
+            pydoctor_soup,
+            name="Whatever",
+            type=EntryType.WORD,
+            anchor="isSet",
+            ref=ref,
+        )
+        assert (
+            f'<a class="dashAnchor" name="{ref}"></a>'
+            '<a class="internal-link" href="#isSet"' in str(pydoctor_soup)
         )
 
 
