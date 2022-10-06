@@ -91,18 +91,15 @@ exclude_lines = [
 
 
 [tool.mypy]
+strict = true
+
 show_error_codes = true
 enable_error_code = ["ignore-without-code"]
-follow_imports = "normal"
-strict = true
+
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"
-ignore_errors = true
-
-[[tool.mypy.overrides]]
-module = "conftest.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
