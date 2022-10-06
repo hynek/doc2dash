@@ -170,7 +170,7 @@ class TestInterSphinxParser:
 @pytest.fixture(name="soup")
 def _soup():
     return BeautifulSoup(
-        (Path(HERE) / "function_example.html").read_text(),
+        (Path(HERE) / "function_example.html").read_text(encoding="utf-8"),
         "html.parser",
     )
 
@@ -178,7 +178,7 @@ def _soup():
 @pytest.fixture(name="pydoctor_soup")
 def _pydoctor_soup():
     return BeautifulSoup(
-        (Path(HERE) / "pydoctor_example.html").read_text(),
+        (Path(HERE) / "pydoctor_example.html").read_text(encoding="utf-8"),
         "html.parser",
     )
 
