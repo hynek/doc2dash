@@ -273,18 +273,21 @@ class TestFindAndPatchEntry:
         """
         Pydoctor classes are found.
         """
-        ref = "//apple_ref/cpp/Word/Whatever"
+        ref = "//apple_ref/cpp/Word/twisted._threads._convenience.Quit.isSet"
 
-        assert True is _find_entry_and_add_ref(
+        patched = _find_entry_and_add_ref(
             pydoctor_soup,
-            name="Whatever",
+            name="twisted._threads._convenience.Quit.isSet",
             type=EntryType.WORD,
             anchor="isSet",
             ref=ref,
         )
+
+        assert patched
         assert (
             f'<a class="dashAnchor" name="{ref}"></a>'
-            '<a class="internal-link" href="#isSet"' in str(pydoctor_soup)
+            '<a name="twisted._threads._convenience.Quit.isSet">'
+            in str(pydoctor_soup)
         )
 
 
