@@ -73,7 +73,7 @@ branch = true
 source = ["doc2dash"]
 
 [tool.coverage.paths]
-source = ["src", ".nox/*/site-packages"]
+source = ["src", ".nox/tests-*/**/site-packages"]
 
 [tool.coverage.report]
 show_missing = true
