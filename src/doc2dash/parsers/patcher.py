@@ -55,7 +55,7 @@ def _patch_files(
     num_failed = 0
     for fname, entries in files.items():
         with parser.make_patcher_for_file(docs / fname) as patch:
-            for (name, type, anchor) in entries:
+            for name, type, anchor in entries:
                 if not patch(
                     name, type, anchor, f"//apple_ref/cpp/{type.value}/{name}"
                 ):
