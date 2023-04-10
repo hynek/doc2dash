@@ -17,7 +17,7 @@ env:
 
 jobs:
   tests:
-    name: nox on ${{ matrix.runs-on }} / ${{ matrix.python-version }}
+    name: Nox on ${{ matrix.runs-on }} / ${{ matrix.python-version }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           # Use latest Python, so it understands all syntax.
-          python-version: ${{env.PYTHON_LATEST}}
+          python-version: ${{ env.PYTHON_LATEST }}
 
       - run: python -Im pip install --upgrade coverage[toml]
 
@@ -90,7 +90,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: ${{env.PYTHON_LATEST}}
+          python-version: ${{ env.PYTHON_LATEST }}
       - run: python -Im pip install -e .[dev]
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
       - run: python -Im doc2dash --version
