@@ -9,7 +9,7 @@ name = "doc2dash"
 description = "Convert docs to the docset format."
 authors = [{ name = "Hynek Schlawack", email = "hs@ox.cx" }]
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
