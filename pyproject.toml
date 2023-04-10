@@ -13,20 +13,12 @@ license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
-    "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python",
-    "Topic :: Documentation",
     "Topic :: Software Development :: Documentation",
-    "Topic :: Software Development",
-    "Topic :: Text Processing",
 ]
 dependencies = ["attrs>=21.3", "beautifulsoup4", "click", "rich"]
 
