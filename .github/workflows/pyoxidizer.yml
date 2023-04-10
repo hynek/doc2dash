@@ -44,7 +44,7 @@ jobs:
           ./doc2dash.exe --version
         if: runner.os == 'Windows'
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: binaries
           path: build/*
