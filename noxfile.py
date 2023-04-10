@@ -98,17 +98,16 @@ def pin_docs(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
     session.run(
+        # fmt: off
         "pip-compile",
-        "--extra",
-        "docs",
-        "--index-url",
-        "https://pypi.org/simple",
+        "--upgrade",
+        "--extra", "docs",
+        "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
-        "--resolver",
-        "backtracking",
-        "--output-file",
-        "requirements/docs.txt",
+        "--resolver", "backtracking",
+        "--output-file", "requirements/docs.txt",
         "pyproject.toml",
+        # fmt: on
     )
 
 
