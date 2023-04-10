@@ -55,3 +55,12 @@ That’s it – you can add it to *Dash.app* or *Zeal*!
 - **Documentation**: <https://doc2dash.rtfd.io/>
 - **Changelog**: <https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md>
 - **Platforms**: pre-compiled **binaries** for **Linux**, **macOS**, and **Windows** available; also runs on everything that runs Python
+
+
+## Credits
+
+*doc2dash* is written and maintained by Hynek Schlawack.
+
+The development is kindly supported by my employer [Variomedia AG](https://www.variomedia.de/) and all my amazing [GitHub Sponsors](https://github.com/sponsors/hynek).
+
+A full list of contributors can be found on [GitHub's overview](https://github.com/hynek/doc2dash/graphs/contributors).
