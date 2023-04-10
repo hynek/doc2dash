@@ -13,7 +13,7 @@ env:
   SETUPTOOLS_SCM_PRETEND_VERSION: "1.0" # avoid warnings about shallow checkout
   PIP_DISABLE_PIP_VERSION_CHECK: 1
   PIP_NO_PYTHON_VERSION_WARNING: 1
-  PYTHON_LATEST: "3.10"
+  PYTHON_LATEST: "3.11"
 
 jobs:
   tests:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        python-version: ["pypy3.8", "3.8", "3.9", "3.10", "3.11.0-beta - 3.11"]
+        python-version: ["pypy3.8", "3.8", "3.9", "3.10", "3.11"]
         runs-on: [ubuntu-latest, windows-latest]
 
     steps:
