@@ -42,7 +42,6 @@ Documentation = "https://doc2dash.readthedocs.io/"
 Changelog = "https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md"
 "Source Code" = "https://github.com/hynek/doc2dash"
 Funding = "https://github.com/sponsors/hynek"
-Ko-fi = "https://ko-fi.com/the_hynek"
 
 
 [tool.hatch.version]
