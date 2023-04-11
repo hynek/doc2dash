@@ -97,21 +97,20 @@ IMPORTABLE = ImportableType()
     metavar="FILENAME",
     type=click.Path(path_type=Path),
     help="Set the file that is shown when the docset is clicked within "
-    "Dash.app relative to the root of SOURCE.",
+    "Dash relative to the root of SOURCE.",
 )
 @click.option(
     "--add-to-dash",
     "-a",
     is_flag=True,
-    help="Automatically add resulting docset to Dash.app (works only on "
-    "macOS).",
+    help="Automatically add resulting docset to Dash (works only on macOS).",
 )
 @click.option(
     "--add-to-global",
     "-A",
     is_flag=True,
     help="Create docset in doc2dash's default global directory "
-    f"[{DEFAULT_DOCSET_PATH}] and add it to Dash.app (works only on macOS).",
+    f"[{DEFAULT_DOCSET_PATH}] and add it to Dash (works only on macOS).",
 )
 @click.option(
     "--quiet", "-q", is_flag=True, help="Limit output to errors and warnings."
@@ -153,7 +152,7 @@ def main(
     parser_type: type[Parser] | None,
 ) -> None:
     """
-    Convert docs from SOURCE to Dash.app's docset format.
+    Convert docs from SOURCE to Dash's docset format.
     """
     if verbose and quiet:
         error_console.print(
@@ -222,7 +221,7 @@ def main(
     convert_docs(parser=parser, docset=docset, quiet=quiet)
 
     if add_to_dash or add_to_global:
-        log.info("Adding to Dash.app...")
+        log.info("Adding to Dash...")
         subprocess.check_output(("open", "-a", "dash", dest))
 
 
