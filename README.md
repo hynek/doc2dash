@@ -48,13 +48,14 @@ That’s it – you can add it to *Dash.app* or *Zeal*!
 
 ## Project Information
 
+- [**Homebrew Tap**](https://github.com/hynek/homebrew-tap)
+- [**PyPI**](https://pypi.org/project/doc2dash/)
+- [**Source Code**](https://github.com/hynek/doc2dash)
+- [**Documentation**](https://doc2dash.rtfd.io/)
+- [**Changelog**](https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md)
 - **License**: [MIT](https://github.com/hynek/doc2dash/blob/main/LICENSE)
-- **Homebrew**: <https://github.com/hynek/homebrew-tap>
-- **PyPI**: <https://pypi.org/project/doc2dash/>
-- **Source Code**: <https://github.com/hynek/doc2dash>
-- **Documentation**: <https://doc2dash.rtfd.io/>
-- **Changelog**: <https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md>
-- **Platforms**: pre-compiled **binaries** for **Linux**, **macOS**, and **Windows** available; also runs on everything that runs Python
+- **Platforms**: pre-compiled **binaries** for **Linux**, **macOS**, and **Windows** available.
+  Also runs on everything that runs Python.
 
 
 ## Credits
