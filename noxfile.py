@@ -28,7 +28,7 @@ for line in Path(".readthedocs.yaml").read_text().splitlines():
 def pre_commit(session: nox.Session) -> None:
     session.install("pre-commit")
 
-    session.run("pre-commit", "run", "--all-files", "--show-diff-on-failure")
+    session.run("pre-commit", "run", "--all-files")
 
 
 @nox.session(python=["pypy3.8", "3.8", "3.9", "3.10", "3.11"])
@@ -161,7 +161,7 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
         "pip-compile",
         "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
-        "--resolver" "backtracking",
+        "--resolver", "backtracking",
         "--output-file", f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
         # fmt: on
