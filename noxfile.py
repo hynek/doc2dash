@@ -138,15 +138,13 @@ def oxidize(session: nox.Session) -> None:
 
     session.run("pyoxidizer", "-V")
     session.run(
+        # fmt: off
         "pyoxidizer",
         "build",
         "--release",
-        "--var",
-        "flavor",
-        flavor,
-        "--var",
-        "platform",
-        sys.platform,
+        "--var", "flavor", flavor,
+        "--var", "platform", sys.platform,
+        # fmt: on
         env=env,
     )
 
@@ -159,15 +157,14 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
     session.run(
+        # fmt: off
         "pip-compile",
-        "--index-url",
-        "https://pypi.org/simple",
+        "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
-        "--resolver",
-        "backtracking",
-        "--output-file",
-        f"requirements/pyoxidizer-{sys.platform}.txt",
+        "--resolver" "backtracking",
+        "--output-file", f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
+        # fmt: on
     )
 
 
@@ -185,17 +182,13 @@ def download_and_package_binaries(session: nox.Session) -> None:
     print("Downloading for git tag", tag)
 
     run_id = session.run(
-        "gh",
-        "run",
-        "list",
-        "-w",
-        "Build binaries using pyOxidizer",
-        "--branch",
-        tag,
-        "--json",
-        "databaseId",
-        "--jq",
-        ".[0].databaseId",
+        # fmt: off
+        "gh", "run", "list",
+        "--workflow", "Build binaries using pyOxidizer",
+        "--branch", tag,
+        "--json", "databaseId",
+        "--jq", ".[0].databaseId",
+        # fmt: on
         external=True,
         silent=True,
     ).strip()
