@@ -222,7 +222,7 @@ def main(
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash...")
-        subprocess.check_output(("open", "-a", "dash", dest))
+        subprocess.check_output(("open", "-a", "dash", dest))  # noqa: S603
 
 
 def setup_destination(
