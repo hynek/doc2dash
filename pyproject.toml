@@ -158,7 +158,6 @@ ignore = [
     "RUF001", # leave my smart characters alone
     "S101",   # assert
     "SIM300", # Yoda rocks in asserts
-
 ]
 
 [tool.ruff.isort]
