@@ -23,8 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          # Keep in-sync with ./pyoxidizer.yml
+          python-version: "3.10"
 
-      - run: pip install nox
+      - run: python -Im pip install nox
       - run: nox -e pin_for_pyoxidizer
 
       - name: Detect changes

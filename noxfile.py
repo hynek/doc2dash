@@ -127,8 +127,8 @@ def oxidize(session: nox.Session) -> None:
     env["PIP_REQUIRE_VIRTUALENV"] = "0"
 
     # standalone_static doesn't work on macOS and gives us musl builds on
-    # Linux. Since -- unlike on Windows -- you get one binary on both, dynamic
-    # standalone ~should be fine~.
+    # Linux. Since you get one binary on both, dynamic standalone ~should be
+    # fine~.
     if sys.platform == "win32":
         flavor = "standalone_static"
     else:
