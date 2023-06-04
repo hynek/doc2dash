@@ -31,7 +31,7 @@ def pre_commit(session: nox.Session) -> None:
     session.run("pre-commit", "run", "--all-files")
 
 
-@nox.session(python=["pypy3.8", "3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["pypy3.8", "3.8", "3.9", "3.10", "3.11", "3.12"])
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
 
