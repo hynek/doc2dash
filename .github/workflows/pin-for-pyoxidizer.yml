@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run:
           # This output boolean tells us if the dependencies have actually changed
-          echo "::set-output name=count::$(git status --porcelain=v1 2>/dev/null | wc -l)"
+          echo "count=$(git status --porcelain=v1 2>/dev/null | wc -l)" >>$GITHUB_OUTPUT
       - name: Commit & push changes
         # Only push if changes exist
         if: steps.changes.outputs.count > 0
