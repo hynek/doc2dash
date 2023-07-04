@@ -44,6 +44,8 @@ extra:
   social:
     - icon: fontawesome/solid/person-circle-question
       link: https://hynek.me/
+    - icon: fontawesome/brands/mastodon
+      link: https://mastodon.social/@hynek
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/hynek
     - icon: fontawesome/brands/github-alt
