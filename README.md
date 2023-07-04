@@ -53,7 +53,6 @@ That’s it – you can add it to Dash or Zeal!
 - [**Source Code**](https://github.com/hynek/doc2dash)
 - [**Documentation**](https://doc2dash.rtfd.io/)
 - [**Changelog**](https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md)
-- **License**: [MIT](https://github.com/hynek/doc2dash/blob/main/LICENSE)
 - **Platforms**: pre-compiled **binaries** for **Linux**, **macOS**, and **Windows** available.
   Also runs on everything that runs Python.
 
