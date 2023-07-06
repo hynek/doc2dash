@@ -1,6 +1,6 @@
 # Create Docsets for Dash and Friends
 
-[![Documentation](https://img.shields.io/badge/Docs-Read%20The%20Docs-black)](https://doc2dash.readthedocs.io/)
+[![Documentation](https://img.shields.io/badge/Docs-Read%20The%20Docs-black)](https://doc2dash.hynek.me/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-C06524)](https://github.com/hynek/doc2dash/blob/main/LICENSE)
 [![Homebrew Tap](https://img.shields.io/badge/Homebrew-tap-brown)](https://github.com/hynek/homebrew-tap)
 [![Current PyPI release](https://img.shields.io/pypi/v/doc2dash)](https://pypi.org/project/doc2dash/)
@@ -18,7 +18,7 @@ It takes your offline documentation and converts it into an indexed format that 
 Currently it supports all known *intersphinx*-based documentation systems like [Sphinx](https://www.sphinx-doc.org/), [*pydoctor*](https://github.com/twisted/pydoctor), or [MkDocs](https://www.mkdocs.org) (with [*mkdocstrings*](https://mkdocstrings.github.io)).
 While *doc2dash* is a Python project, the support is **not** limited to Python-related formats.
 
-It’s also extendable: [**you** can write your own parser](https://doc2dash.readthedocs.io/en/latest/extending/)!
+It’s also extendable: [**you** can write your own parser](https://doc2dash.hynek.me/en/latest/extending/)!
 
 ![doc2dash Session](docs/doc2dash-session.png)
 
@@ -32,9 +32,9 @@ $ brew install hynek/tap/doc2dash
 ```
 
 > **Note**
-> If you can’t – or won’t – use [Homebrew](https://brew.sh), check out our [installation instructions](https://doc2dash.readthedocs.io/en/latest/installation/) for alternatives.
+> If you can’t – or won’t – use [Homebrew](https://brew.sh), check out our [installation instructions](https://doc2dash.hynek.me/en/latest/installation/) for alternatives.
 
-Then point *doc2dash* at a directory containing **built** [*intersphinx*-compatible](https://doc2dash.readthedocs.io/en/stable/formats/) documentation:
+Then point *doc2dash* at a directory containing **built** [*intersphinx*-compatible](https://doc2dash.hynek.me/en/stable/formats/) documentation:
 
 ```shell
 $ doc2dash directory/to/documentation
@@ -43,7 +43,7 @@ $ doc2dash directory/to/documentation
 You should see an output like in the screenshot above and find an appropriately named *docset* in the current directory.
 That’s it – you can add it to Dash or Zeal!
 
-*doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.readthedocs.io/en/stable/usage/) for more details.
+*doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.hynek.me/en/stable/usage/) for more details.
 
 
 ## Project Information

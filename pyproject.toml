@@ -39,7 +39,7 @@ dev = ["doc2dash[tests,typing]"]
 doc2dash = "doc2dash.__main__:main"
 
 [project.urls]
-Documentation = "https://doc2dash.readthedocs.io/"
+Documentation = "https://doc2dash.hynek.me/"
 Changelog = "https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md"
 "Source Code" = "https://github.com/hynek/doc2dash"
 Funding = "https://github.com/sponsors/hynek"
