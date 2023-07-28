@@ -228,13 +228,11 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     class fake_module:  # noqa: N801
         Parser = FakeParser
 
-    expected = """\
-Converting testtype docs from '{}' to '{{name}}.docset'.
+    expected = f"""\
+Converting testtype docs from '{src}' to '{{name}}.docset'.
 Parsing documentation...
 Added 1 index entries.
-""".format(
-        src
-    )
+"""
 
     # alternative 1: use --parser
     sys.modules["fake_module"] = fake_module
