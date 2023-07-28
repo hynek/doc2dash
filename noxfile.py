@@ -104,7 +104,6 @@ def pin_docs(session: nox.Session) -> None:
         "--extra", "docs",
         "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
-        "--resolver", "backtracking",
         "--output-file", "requirements/docs.txt",
         "pyproject.toml",
         # fmt: on
