@@ -46,15 +46,14 @@ That’s it – you can add it to Dash or Zeal!
 *doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.hynek.me/en/stable/usage/) for more details.
 
 
-## Project Information
+## Project Links
 
 - [**Homebrew Tap**](https://github.com/hynek/homebrew-tap)
+- [**Pre-Compiled Binaries**](https://github.com/hynek/doc2dash/releases)
 - [**PyPI**](https://pypi.org/project/doc2dash/)
-- [**Source Code**](https://github.com/hynek/doc2dash)
-- [**Documentation**](https://doc2dash.rtfd.io/)
 - [**Changelog**](https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md)
-- **Platforms**: pre-compiled **binaries** for **Linux**, **macOS**, and **Windows** available.
-  Also runs on everything that runs Python.
+- [**Documentation**](https://doc2dash.hynek.me/)
+- [**Source Code**](https://github.com/hynek/doc2dash)
 
 
 ## Credits

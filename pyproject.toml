@@ -123,12 +123,9 @@ start-after = "<!-- begin-short -->\n"
 text = """
 
 
-## Release Information for """
+## Release Information
 
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-path = "CHANGELOG.md"
-start-after = "<!-- changelog follows -->"
-pattern = "## ([^\n]+?\n\n)###"
+"""
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "CHANGELOG.md"
