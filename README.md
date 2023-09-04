@@ -20,7 +20,7 @@ While *doc2dash* is a Python project, the support is **not** limited to Python-r
 
 It’s also extendable: [**you** can write your own parser](https://doc2dash.hynek.me/en/latest/extending/)!
 
-![doc2dash Session](docs/doc2dash-session.png)
+![doc2dash Session](docs/doc2dash-session.gif)
 
 
 ## Quickstart
