@@ -136,7 +136,7 @@ start-after = "<!-- changelog follows -->"
 pattern = "\n(###.+?\n)## "
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
-pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.png)\)'
+pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.(png|gif))\)'
 replacement = '[\1](https://raw.githubusercontent.com/hynek/doc2dash/main/\g<2>)'
 
 
