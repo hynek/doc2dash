@@ -18,6 +18,7 @@ nav:
 
 theme:
   name: material
+  font: false
   icon:
     repo: fontawesome/brands/github
   palette:
