@@ -10,7 +10,7 @@ from pathlib import Path
 import nox
 
 
-DEFAULT_PYTHON = Path(".python-version").read_text().strip()
+DEFAULT_PYTHON = Path(".python-version-default").read_text().strip()
 
 nox.options.sessions = ["pre_commit", "tests", "docs", "mypy"]
 nox.options.reuse_existing_virtualenvs = True

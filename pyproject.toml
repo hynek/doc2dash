@@ -41,8 +41,10 @@ doc2dash = "doc2dash.__main__:main"
 [project.urls]
 Documentation = "https://doc2dash.hynek.me/"
 Changelog = "https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md"
-"Source Code" = "https://github.com/hynek/doc2dash"
+GitHub = "https://github.com/hynek/doc2dash"
 Funding = "https://github.com/sponsors/hynek"
+Mastodon = "https://mastodon.social/@hynek"
+Twitter = "https://twitter.com/hynek"
 
 
 [tool.hatch.version]

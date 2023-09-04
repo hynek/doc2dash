@@ -36,6 +36,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+          cache: pip
 
       - name: Install dependencies
         run: python -Im pip install --upgrade wheel nox
@@ -62,6 +63,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version-file: .python-version-default
+          cache: pip
 
       - run: python -Im pip install --upgrade coverage[toml]
 
@@ -93,6 +97,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version-file: .python-version-default
+          cache: pip
 
       - run: python -Im pip install -e .[dev]
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
