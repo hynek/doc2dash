@@ -37,6 +37,9 @@ theme:
         icon: material/weather-sunny
         name: Switch to dark mode
 
+extra_css:
+  - stylesheets/extra.css
+
 repo_url: https://github.com/hynek/doc2dash
 repo_name: hynek/doc2dash
 edit_uri: blob/main/docs
