@@ -49,11 +49,12 @@ That’s it – you can add it to Dash or Zeal!
 ## Project Links
 
 - [**Homebrew Tap**](https://github.com/hynek/homebrew-tap)
-- [**Pre-Compiled Binaries**](https://github.com/hynek/doc2dash/releases)
+- [**Pre-compiled Binaries**](https://github.com/hynek/doc2dash/releases)
 - [**PyPI**](https://pypi.org/project/doc2dash/)
 - [**Changelog**](https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md)
 - [**Documentation**](https://doc2dash.hynek.me/)
 - [**Source Code**](https://github.com/hynek/doc2dash)
+- [**Funding**](https://hynek.me/say-thanks/)
 
 
 ## Credits
