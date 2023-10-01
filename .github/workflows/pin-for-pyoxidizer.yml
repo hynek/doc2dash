@@ -21,7 +21,7 @@ jobs:
       BRANCH_NAME: auto-dependency-upgrades-${{ matrix.runs-on }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           # Keep in-sync with ./pyoxidizer.yml
