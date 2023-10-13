@@ -17,7 +17,10 @@ As of version 3.0, the [releases](https://github.com/hynek/doc2dash/releases) co
 
 !!! Warning
     On macOS, you may get a warning about an unsigned binary.
-    To get rid of that you'll have to open it once in Finder using right-click and it should work as expected from the terminal from then on.
+    To get rid of that you have two options:
+
+    1. Run `xattr -d com.apple.quarantine ~/Downloads/doc2dash/doc2dash` after unpacking the downloaded archive inside your Downloads folder.
+    1. Open the binary in Finder once using right-click.
 
 
 ## PyPI
