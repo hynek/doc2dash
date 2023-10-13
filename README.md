@@ -40,7 +40,7 @@ Then point *doc2dash* at a directory containing **built** [*intersphinx*-compati
 $ doc2dash directory/to/documentation
 ```
 
-You should see an output like in the screenshot above and find an appropriately named *docset* in the current directory.
+You should see an output like in the video above and find an appropriately named *docset* in the current directory.
 That’s it – you can add it to Dash or Zeal!
 
 *doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.hynek.me/en/stable/usage/) for more details.
