@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 env:
-  PIP_DISABLE_PIP_VERSION_CHECK: 1
-  PIP_NO_PYTHON_VERSION_WARNING: 1
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PIP_NO_PYTHON_VERSION_WARNING: "1"
 
 jobs:
   build:
@@ -25,9 +25,11 @@ jobs:
           fetch-depth: 0 # get correct version
       - uses: actions/setup-python@v4
         with:
+          # Double-check latest version supported by PyOxidizer:
+          # https://github.com/indygreg/PyOxidizer/releases/
           python-version: "3.10"
 
-      - run: pip install nox
+      - run: python -Im pip install nox
       - run: nox -e oxidize
 
       - name: check binary
@@ -44,7 +46,7 @@ jobs:
           ./doc2dash.exe --version
         if: runner.os == 'Windows'
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: binaries
           path: build/*

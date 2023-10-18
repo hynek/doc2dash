@@ -77,7 +77,7 @@ class TestInterSphinxParser:
             def convert_type(self, inv_type):
                 if inv_type == "py:method":
                     # hide method entries
-                    return
+                    return None
                 return super().convert_type(inv_type)
 
         p = MyInterSphinxParser(source=sphinx_built)
@@ -138,7 +138,7 @@ class TestInterSphinxParser:
         class MyInterSphinxParser(InterSphinxParser):
             def create_entry(self, dash_type, key, inv_entry):
                 if dash_type == EntryType.OPTION:
-                    return
+                    return None
                 return super().create_entry(dash_type, key, inv_entry)
 
         p = MyInterSphinxParser(source=sphinx_built)

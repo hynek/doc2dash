@@ -3,6 +3,9 @@ name: Pin dependencies for oxidization.
 
 on:
   workflow_dispatch:
+  schedule:
+    # Run every 1st of Month at 3:25 UTC
+    - cron: "25 3 1 * *"
 
 
 jobs:
@@ -21,9 +24,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          # Keep in-sync with ./pyoxidizer.yml
           python-version: "3.10"
 
-      - run: pip install nox
+      - run: python -Im pip install nox
       - run: nox -e pin_for_pyoxidizer
 
       - name: Detect changes
@@ -31,7 +35,8 @@ jobs:
         shell: bash
         run:
           # This output boolean tells us if the dependencies have actually changed
-          echo "::set-output name=count::$(git status --porcelain=v1 2>/dev/null | wc -l)"
+          echo "count=$(git status --porcelain=v1 2>/dev/null | wc -l)" >>$GITHUB_OUTPUT
+
       - name: Commit & push changes
         # Only push if changes exist
         if: steps.changes.outputs.count > 0
@@ -41,6 +46,7 @@ jobs:
           git add .
           git commit -m "Automated dependency upgrades for ${{ matrix.runs-on}}"
           git push -f origin ${{ github.ref_name }}:${{ env.BRANCH_NAME }}
+
       - name: Open pull request if needed
         if: steps.changes.outputs.count > 0
         shell: bash

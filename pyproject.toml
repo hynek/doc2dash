@@ -9,28 +9,19 @@ name = "doc2dash"
 description = "Convert docs to the docset format."
 authors = [{ name = "Hynek Schlawack", email = "hs@ox.cx" }]
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
-    "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX",
-    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python",
-    "Topic :: Documentation",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Documentation",
-    "Topic :: Software Development",
-    "Topic :: Text Processing",
 ]
-dependencies = ["attrs>=21.3", "beautifulsoup4", "click", "rich"]
+dependencies = ["attrs>=21.3", "beautifulsoup4", "click>8", "rich"]
 
 [project.optional-dependencies]
 tests = ["coverage[toml]", "pytest"]
@@ -48,16 +39,17 @@ dev = ["doc2dash[tests,typing]"]
 doc2dash = "doc2dash.__main__:main"
 
 [project.urls]
-Documentation = "https://doc2dash.readthedocs.io/"
+Documentation = "https://doc2dash.hynek.me/"
 Changelog = "https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md"
-"Source Code" = "https://github.com/hynek/doc2dash"
+GitHub = "https://github.com/hynek/doc2dash"
 Funding = "https://github.com/sponsors/hynek"
-Ko-fi = "https://ko-fi.com/the_hynek"
+Mastodon = "https://mastodon.social/@hynek"
+Twitter = "https://twitter.com/hynek"
 
 
 [tool.hatch.version]
 source = "vcs"
-raw-options = { version_scheme = "no-guess-dev" }
+raw-options = { local_scheme = "no-local-version" }
 
 
 [tool.pytest.ini_options]
@@ -90,6 +82,12 @@ exclude_lines = [
 ]
 
 
+[tool.interrogate]
+verbose = 2
+fail-under = 100
+whitelist-regex = ["test_.*"]
+
+
 [tool.mypy]
 strict = true
 
@@ -111,10 +109,6 @@ disallow_untyped_decorators = false
 line-length = 79
 
 
-[tool.isort]
-profile = "attrs"
-
-
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
 
@@ -129,25 +123,52 @@ start-after = "<!-- begin-short -->\n"
 text = """
 
 
-## Release Information for """
+## Release Information
 
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-path = "CHANGELOG.md"
-start-after = "<!-- changelog follows -->"
-pattern = "## ([^\n]+?\n\n)###"
+"""
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "CHANGELOG.md"
 start-after = "<!-- changelog follows -->"
 pattern = "\n(###.+?\n)## "
 
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-text = "\n## Credits\n"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-path = "AUTHORS.md"
-start-after = "# Authors\n"
-
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
-pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.png)\)'
+pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.(png|gif))\)'
 replacement = '[\1](https://raw.githubusercontent.com/hynek/doc2dash/main/\g<2>)'
+
+
+[tool.ruff]
+src = ["src", "tests", "noxfile.py"]
+ignore = [
+  "A001",    # shadowing is fine
+  "ANN",     # Mypy is better at this
+  "ARG",     # unused arguments are normal when implementing interfaces
+  "COM",     # Black takes care of our commas
+  "D",       # We prefer our own docstring style.
+  "E501",    # leave line-length enforcement to Black
+  "FBT",     # we have one function that takes one bool; c'mon!
+  "FIX",     # Yes, we want XXX as a marker.
+  "INP001",  # sometimes we want Python files outside of packages
+  "PLR0913", # yes, many arguments, but most have defaults
+  "PLR2004", # numbers are sometimes fine
+  "PYI034",  # We're not adding typing_extensions just for Self.
+  "RUF001",  # leave my smart characters alone
+  "SLF001",  # private members are accessed by friendly functions
+  "TCH",     # TYPE_CHECKING blocks break autodocs
+  "TD",      # we don't follow other people's todo style
+]
+
+[tool.ruff.per-file-ignores]
+"**/test_*" = [
+  "ARG005", # we need stub lambdas
+  "S101",   # assert
+  "SIM300", # Yoda rocks in asserts
+  "PT005",  # we always add underscores and explicit names
+  "PT011",  # broad is fine
+  "TRY002", # stock exceptions are fine in tests
+  "EM101",  # no need for exception msg hygiene in tests
+]
+
+[tool.ruff.isort]
+lines-between-types = 1
+lines-after-imports = 2

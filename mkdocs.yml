@@ -18,6 +18,7 @@ nav:
 
 theme:
   name: material
+  font: false
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -36,6 +37,9 @@ theme:
         icon: material/weather-sunny
         name: Switch to dark mode
 
+extra_css:
+  - stylesheets/extra.css
+
 repo_url: https://github.com/hynek/doc2dash
 repo_name: hynek/doc2dash
 edit_uri: blob/main/docs
@@ -44,6 +48,8 @@ extra:
   social:
     - icon: fontawesome/solid/person-circle-question
       link: https://hynek.me/
+    - icon: fontawesome/brands/mastodon
+      link: https://mastodon.social/@hynek
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/hynek
     - icon: fontawesome/brands/github-alt

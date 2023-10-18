@@ -157,7 +157,7 @@ def _find_entry_and_add_ref(
     soup: BeautifulSoup, name: str, type: EntryType, anchor: str, ref: str
 ) -> bool:
     """
-    Modify *soup* so Dash.app can generate TOCs on the fly.
+    Modify *soup* so Dash can generate TOCs on the fly.
     """
     pos = None
     if type == EntryType.WORD:

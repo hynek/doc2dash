@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import sys
 
@@ -9,21 +10,28 @@ from pathlib import Path
 import nox
 
 
-DEFAULT_PYTHON = "3.10"
+DEFAULT_PYTHON = Path(".python-version-default").read_text().strip()
 
 nox.options.sessions = ["pre_commit", "tests", "docs", "mypy"]
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
+
+MATCH_PYTHON = re.compile(r"\s+python\: \"(\d\.\d\d)\"").match
+# Avoid dependency on a YAML lib using a questionable hack.
+for line in Path(".readthedocs.yaml").read_text().splitlines():
+    if m := MATCH_PYTHON(line):
+        DOCS_PYTHON = m.group(1)
+        break
 
 
 @nox.session
 def pre_commit(session: nox.Session) -> None:
     session.install("pre-commit")
 
-    session.run("pre-commit", "run", "--all-files", "--show-diff-on-failure")
+    session.run("pre-commit", "run", "--all-files")
 
 
-@nox.session(python=["pypy3.8", "3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["pypy3.10", "3.8", "3.9", "3.10", "3.11", "3.12"])
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
 
@@ -73,7 +81,7 @@ def rebuild_sample_docs(session: nox.Session) -> None:
     os.remove(html / "searchindex.js")
 
 
-@nox.session(python="3.9")
+@nox.session(python=DOCS_PYTHON)
 def docs(session: nox.Session) -> None:
     # Needs to be separate when using hashes.
     session.install("-r", "requirements/docs.txt")
@@ -85,22 +93,20 @@ def docs(session: nox.Session) -> None:
         session.run("mkdocs", "build", "--clean", "--strict")
 
 
-@nox.session
+@nox.session(python=DOCS_PYTHON)
 def pin_docs(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
     session.run(
+        # fmt: off
         "pip-compile",
-        "--extra",
-        "docs",
-        "--index-url",
-        "https://pypi.org/simple",
+        "--upgrade",
+        "--extra", "docs",
+        "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
-        "--resolver",
-        "backtracking",
-        "--output-file",
-        "requirements/docs.txt",
+        "--output-file", "requirements/docs.txt",
         "pyproject.toml",
+        # fmt: on
     )
 
 
@@ -120,8 +126,8 @@ def oxidize(session: nox.Session) -> None:
     env["PIP_REQUIRE_VIRTUALENV"] = "0"
 
     # standalone_static doesn't work on macOS and gives us musl builds on
-    # Linux. Since -- unlike on Windows -- you get one binary on both, dynamic
-    # standalone ~should be fine~.
+    # Linux. Since you get one binary on both, dynamic standalone ~should be
+    # fine~.
     if sys.platform == "win32":
         flavor = "standalone_static"
     else:
@@ -131,15 +137,13 @@ def oxidize(session: nox.Session) -> None:
 
     session.run("pyoxidizer", "-V")
     session.run(
+        # fmt: off
         "pyoxidizer",
         "build",
         "--release",
-        "--var",
-        "flavor",
-        flavor,
-        "--var",
-        "platform",
-        sys.platform,
+        "--var", "flavor", flavor,
+        "--var", "platform", sys.platform,
+        # fmt: on
         env=env,
     )
 
@@ -152,15 +156,15 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
     session.run(
+        # fmt: off
         "pip-compile",
-        "--index-url",
-        "https://pypi.org/simple",
+        "--upgrade",
+        "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
-        "--resolver",
-        "backtracking",
-        "--output-file",
-        f"requirements/pyoxidizer-{sys.platform}.txt",
+        "--resolver", "backtracking",
+        "--output-file", f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
+        # fmt: on
     )
 
 
@@ -178,17 +182,13 @@ def download_and_package_binaries(session: nox.Session) -> None:
     print("Downloading for git tag", tag)
 
     run_id = session.run(
-        "gh",
-        "run",
-        "list",
-        "-w",
-        "Build binaries using pyOxidizer",
-        "--branch",
-        tag,
-        "--json",
-        "databaseId",
-        "--jq",
-        ".[0].databaseId",
+        # fmt: off
+        "gh", "run", "list",
+        "--workflow", "Build binaries using pyOxidizer",
+        "--branch", tag,
+        "--json", "databaseId",
+        "--jq", ".[0].databaseId",
+        # fmt: on
         external=True,
         silent=True,
     ).strip()

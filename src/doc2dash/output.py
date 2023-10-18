@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from typing import Any
+from typing import ClassVar
 
 from rich.console import Console
 
@@ -17,10 +17,13 @@ class RichEchoHandler(logging.Handler):
     if output is redirected.  Also is generally more predictable.
     """
 
-    _level_to_fg = {logging.ERROR: "red", logging.WARN: "yellow"}
+    _level_to_fg: ClassVar[dict[int, str]] = {
+        logging.ERROR: "red",
+        logging.WARN: "yellow",
+    }
 
     def emit(self, record: logging.LogRecord) -> None:
-        if record.levelno > logging.WARN:
+        if record.levelno > logging.WARN:  # noqa: SIM108
             print = error_console.print
         else:
             print = console.print
@@ -31,7 +34,7 @@ class RichEchoHandler(logging.Handler):
         )
 
 
-def create_log_config(verbose: bool, quiet: bool) -> dict[str, Any]:
+def create_log_config(verbose: bool, quiet: bool) -> dict[str, object]:
     """
     We use logging's levels as an easy-to-use verbosity controller.
     """

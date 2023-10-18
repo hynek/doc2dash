@@ -77,7 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Work around a display bug in older*Dash.app*releases by setting the plist key `DashDocSetDeclaredInStyle` to `originalName`.
+- Work around a display bug in older Dash releases by setting the plist key `DashDocSetDeclaredInStyle` to `originalName`.
 
 
 ## [2.3.0](https://github.com/hynek/doc2dash/compare/2.2.0...2.3.0) - 2018-11-24
@@ -174,7 +174,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Fixed
 
-- Use better*Dash.app*types for modules and attributes.
+- Use better Dash types for modules and attributes.
 
 
 ## [1.0.0](https://github.com/hynek/doc2dash/compare/0.3.1...1.0.0) - 2012-10-14
@@ -199,7 +199,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add table of contents links to docs to get a nice TOC in *Dash.app* when inside of a module.
+- Add table of contents links to docs to get a nice TOC in Dash when inside of a module.
 - Support `DashDocSetFamily` field.
 - Add `--verbose` and `--quiet` options.
 - Add `--destination` option.

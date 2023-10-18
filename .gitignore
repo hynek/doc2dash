@@ -15,3 +15,4 @@ build
 dist
 site
 test_data
+Justfile
