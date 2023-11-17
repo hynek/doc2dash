@@ -9,8 +9,8 @@ You can recognize *intersphinx*-based docs by the `objects.inv` file at the root
 
 The most common documentation formats that support *intersphinx* are:
 
-- [*Sphinx*](https://www.sphinx-doc.org/), a very common documentation framework in the Python world and beyond.
-- [*MkDocs*](https://www.mkdocs.org/), **if** used with the [*mkdocstrings*](https://mkdocstrings.github.io) plugin.
+- [Sphinx](https://www.sphinx-doc.org/), a very common documentation framework in the Python world and beyond.
+- [MkDocs](https://www.mkdocs.org/), **if** used with the [*mkdocstrings*](https://mkdocstrings.github.io) plugin.
 - [*pydoctor*](https://github.com/twisted/pydoctor) since version 21.2.0[^pydoctor].
 
 If you find a documentation format that supports *intersphinx* but yields poor results from *doc2dash*, please [let us know](https://github.com/hynek/doc2dash/issues).
