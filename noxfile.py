@@ -101,6 +101,7 @@ def pin_docs(session: nox.Session) -> None:
         # fmt: off
         "pip-compile",
         "--upgrade",
+        "--allow-unsafe",   # otherwise install fails due to setuptools
         "--extra", "docs",
         "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
