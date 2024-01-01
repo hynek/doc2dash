@@ -69,7 +69,7 @@ jobs:
 
       - run: python -Im pip install --upgrade coverage[toml]
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: coverage-data
 
