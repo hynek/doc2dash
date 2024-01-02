@@ -10,6 +10,8 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
   PIP_NO_PYTHON_VERSION_WARNING: "1"
 
+permissions: {}
+
 jobs:
   build:
     name: Build binary for ${{ matrix.runs-on }}
@@ -46,7 +48,7 @@ jobs:
           ./doc2dash.exe --version
         if: runner.os == 'Windows'
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: binaries
           path: build/*
