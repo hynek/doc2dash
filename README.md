@@ -56,7 +56,6 @@ A full how-to is [available too](https://doc2dash.hynek.me/en/latest/how-to/).
 - [**PyPI**](https://pypi.org/project/doc2dash/)
 - [**Changelog**](https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md)
 - [**Documentation**](https://doc2dash.hynek.me/)
-- [**GitHub**](https://github.com/hynek/doc2dash)
 - [**Funding**](https://hynek.me/say-thanks/)
 
 
