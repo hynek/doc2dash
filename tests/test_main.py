@@ -192,7 +192,14 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
     """
 
     def fake_prepare(
-        source, dest, name, index_page, enable_js, online_redirect_url, icon
+        source,
+        dest,
+        name,
+        index_page,
+        enable_js,
+        online_redirect_url,
+        icon,
+        icon_2x,
     ):
         os.mkdir(dest)
         db_conn = sqlite3.connect(":memory:")

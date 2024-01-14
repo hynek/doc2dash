@@ -9,9 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/hynek/doc2dash/compare/3.0.0...HEAD)
 
+### Added
+
+- Support for 2x icons using the `--icon-2x` option.
+  [#200](https://github.com/hynek/doc2dash/pull/200)
+
+
 ### Fixed
 
-- The table of contents-generation for *pydoctor*-based documentation has been restored. [#133](https://github.com/hynek/doc2dash/pull/133)
+- The table of contents-generation for *pydoctor*-based documentation has been restored.
+  [#133](https://github.com/hynek/doc2dash/pull/133)
 
 
 ## [3.0.0](https://github.com/hynek/doc2dash/compare/2.4.1...3.0.0) - 2022-09-13

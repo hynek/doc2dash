@@ -29,6 +29,7 @@ class TestPrepareDocset:
             enable_js=False,
             online_redirect_url=None,
             icon=None,
+            icon_2x=None,
         )
 
         m_ct.assert_called_once_with(
@@ -72,6 +73,7 @@ class TestPrepareDocset:
             enable_js=False,
             online_redirect_url=None,
             icon=None,
+            icon_2x=None,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -104,6 +106,7 @@ class TestPrepareDocset:
             enable_js=True,
             online_redirect_url=None,
             icon=None,
+            icon_2x=None,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -136,6 +139,7 @@ class TestPrepareDocset:
             enable_js=False,
             online_redirect_url="https://domain.com",
             icon=None,
+            icon_2x=None,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -167,6 +171,27 @@ class TestPrepareDocset:
             enable_js=False,
             online_redirect_url=None,
             icon=icon,
+            icon_2x=None,
         )
 
         assert (Path(dest) / "icon.png").exists()
+
+    def test_with_icon_2x(self, tmp_path, sphinx_built):
+        """
+        If an icon is passed, it's copied to the root of the docset.
+        """
+        icon = Path("tests") / "logo.png"
+        dest = tmp_path / "bar"
+
+        docsets.prepare_docset(
+            sphinx_built,
+            dest,
+            name="foo",
+            index_page=None,
+            enable_js=False,
+            online_redirect_url=None,
+            icon=None,
+            icon_2x=icon,
+        )
+
+        assert (Path(dest) / "icon@2x.png").exists()
