@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2012 Hynek Schlawack <hs@ox.cx>
+#
+# SPDX-License-Identifier: MIT
+
 """
 Parse Sphinx inventory files so we don't have to rely on Sphinx at runtim
 anymore.

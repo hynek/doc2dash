@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2012 Hynek Schlawack <hs@ox.cx>
+#
+# SPDX-License-Identifier: MIT
+
 from __future__ import annotations
 
 import errno

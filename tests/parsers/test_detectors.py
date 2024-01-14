@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2012 Hynek Schlawack <hs@ox.cx>
+#
+# SPDX-License-Identifier: MIT
+
 from pathlib import Path
 from unittest.mock import Mock
 
