@@ -118,6 +118,11 @@ text = "# doc2dash\n"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "README.md"
 start-after = "<!-- begin-short -->\n"
+end-before = "## Project Links"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+start-at = "## Credits"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 text = """
