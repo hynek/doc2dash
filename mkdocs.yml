@@ -13,6 +13,7 @@ nav:
   - Installation: installation.md
   - Supported Formats: formats.md
   - Usage: usage.md
+  - Submitting Docsets: submit.md
   - Extending: extending.md
   - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md
 
