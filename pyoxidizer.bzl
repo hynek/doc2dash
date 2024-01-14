@@ -4,7 +4,10 @@
 # configuration file format.
 
 def make_exe():
-    dist = default_python_distribution(flavor = VARS["flavor"])
+    dist = default_python_distribution(
+        flavor = VARS["flavor"],
+        build_target = VARS["target"],
+    )
 
     policy = dist.make_python_packaging_policy()
     # policy.extension_module_filter = "minimal"

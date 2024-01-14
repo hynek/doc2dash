@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import os
+import platform
 import re
 import shutil
 import sys
@@ -144,6 +145,16 @@ def oxidize(session: nox.Session) -> None:
             "x86_64-unknown-linux-musl",
             external=True,
         )
+    if platform.machine() == "arm64":
+        cpu = "aarch64"
+    else:
+        cpu = "x86_64"
+
+    target = {
+        "darwin": f"{cpu}-apple-darwin",
+        "win32": "x86_64-pc-windows-msvc",
+        "linux": "x86_64-unknown-linux-musl",
+    }[sys.platform]
 
     session.install("pyoxidizer")
 
@@ -155,6 +166,7 @@ def oxidize(session: nox.Session) -> None:
         "--release",
         "--var", "flavor", flavor,
         "--var", "platform", sys.platform,
+        "--var", "target", target,
         # fmt: on
         env=env,
     )
