@@ -285,7 +285,7 @@ $ git commit -m "Add structlog docset"
  create mode 100644 docsets/structlog/icon.png
  create mode 100644 docsets/structlog/icon@2x.png
  create mode 100644 docsets/structlog/structlog.tgz
- $ git push -u
+$ git push -u
 ```
 
 Looking good -- time for a [pull request](https://github.com/Kapeli/Dash-User-Contributions/pull/3891)!
