@@ -122,7 +122,7 @@ def update_rtd_versions(session: nox.Session) -> None:
     session.run("python", "docs/update-rtd-versions.py", "doc2dash")
 
 
-@nox.session
+@nox.session(python="3.10")
 def oxidize(session: nox.Session) -> None:
     """
     Build a doc2dash binary with PyOxidizer.
@@ -130,13 +130,11 @@ def oxidize(session: nox.Session) -> None:
     env = os.environ.copy()
     env["PIP_REQUIRE_VIRTUALENV"] = "0"
 
-    # standalone_static doesn't work on macOS and gives us musl builds on
-    # Linux. Since you get one binary on both, dynamic standalone ~should be
-    # fine~.
-    if sys.platform == "win32":
-        flavor = "standalone_static"
+    # standalone_static doesn't work on macOS.
+    if sys.platform == "darwin":
+        flavor = "standalone_dynamic"
     else:
-        flavor = "standalone"
+        flavor = "standalone_static"
 
     session.install("pyoxidizer")
 
