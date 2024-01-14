@@ -12,3 +12,8 @@ Basic usage is as simple as:
     :prog_name: doc2dash
     :style: table
     :depth: 1
+
+
+## Environment Variables
+
+*doc2dash* respects [`NO_COLOR`](https://no-color.org).
