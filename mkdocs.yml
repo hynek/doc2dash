@@ -6,14 +6,15 @@ copyright: Copyright &copy; 2012 Hynek Schlawack
 watch:
   - README.md
   - CHANGELOG.md
+  - src/doc2dash/__main__.py
   - src/doc2dash/parsers/types.py
 
 nav:
   - About: index.md
   - Installation: installation.md
   - Supported Formats: formats.md
-  - Usage: usage.md
-  - Building & Submitting Docsets: submit.md
+  - CLI Usage: usage.md
+  - Building & Submitting Docsets: how-to.md
   - Extending: extending.md
   - License & Credits: credits.md
   - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md

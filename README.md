@@ -46,7 +46,7 @@ That’s it – you can add it to Dash or Zeal!
 ---
 
 *doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.hynek.me/en/stable/usage/) for more details.
-A full how-to is [available too](https://doc2dash.hynek.me/en/latest/submit/).
+A full how-to is [available too](https://doc2dash.hynek.me/en/latest/how-to/).
 
 
 ## Project Links
