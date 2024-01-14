@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from enum import Enum
+
 import os
 import plistlib
 import shutil
@@ -30,6 +32,12 @@ class DocSet:
         return self.path / "Contents" / "Resources" / "Documents"
 
 
+class FullTextSearch(Enum):
+    ON = "on"
+    OFF = "off"
+    FORBIDDEN = "forbidden"
+
+
 def prepare_docset(
     source: Path,
     dest: Path,
@@ -40,6 +48,7 @@ def prepare_docset(
     playground_url: str | None,
     icon: Path | None,
     icon_2x: Path | None,
+    full_text_search: FullTextSearch,
 ) -> DocSet:
     """
     Create boilerplate files & directories and copy vanilla docs inside.
@@ -74,6 +83,10 @@ def prepare_docset(
         plist_cfg["DashDocSetFallbackURL"] = online_redirect_url
     if playground_url is not None:
         plist_cfg["DashDocSetPlayURL"] = playground_url
+    if full_text_search is FullTextSearch.FORBIDDEN:
+        plist_cfg["DashDocSetFTSNotSupported"] = True
+    if full_text_search is FullTextSearch.ON:
+        plist_cfg["DashDocSetDefaultFTSEnabled"] = True
 
     write_plist(plist_cfg, plist_path)
 
