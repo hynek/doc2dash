@@ -19,7 +19,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [ubuntu-20.04, windows-latest, macos-latest]
+        runs-on:
+          # Even Go binaries built on 22.04 don't work on 20.04.
+          - ubuntu-20.04
+          - windows-latest
+          - macos-latest
 
     steps:
       - uses: actions/checkout@v4
