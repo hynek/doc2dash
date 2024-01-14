@@ -136,6 +136,9 @@ def oxidize(session: nox.Session) -> None:
     else:
         flavor = "standalone_static"
 
+    if sys.platform == "linux":
+        session.run("rustup", "target", "add", "x86_64-unknown-linux-musl")
+
     session.install("pyoxidizer")
 
     session.run("pyoxidizer", "-V")
