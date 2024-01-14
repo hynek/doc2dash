@@ -11,26 +11,27 @@ authors = [{ name = "Hynek Schlawack", email = "hs@ox.cx" }]
 requires-python = ">=3.8"
 license = "MIT"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Console",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Documentation",
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Documentation",
 ]
 dependencies = ["attrs>=21.3", "beautifulsoup4", "click>8", "rich"]
 
 [project.optional-dependencies]
 tests = ["coverage[toml]", "pytest"]
 docs = [
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-include-markdown-plugin",
-    "mkdocs-click",
-    "mkdocstrings[python]",
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocs-include-markdown-plugin",
+  "mkdocs-click",
+  "mkdocs-callouts",
+  "mkdocstrings[python]",
 ]
 typing = ["mypy", "types-urllib3"]
 dev = ["doc2dash[tests,typing]"]
@@ -71,14 +72,14 @@ source = ["src", ".nox/tests-*/**/site-packages"]
 show_missing = true
 skip_covered = true
 exclude_lines = [
-    "pragma: no cover",
-    "if TYPE_CHECKING:",
-    "raise NotImplementedError",
-    # typing-related code
-    "^if (False|TYPE_CHECKING):",
-    ": \\.\\.\\.$",
-    "^ +\\.\\.\\.$",
-    "-> ['\"]?NoReturn['\"]?:",
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+  # typing-related code
+  "^if (False|TYPE_CHECKING):",
+  ": \\.\\.\\.$",
+  "^ +\\.\\.\\.$",
+  "-> ['\"]?NoReturn['\"]?:",
 ]
 
 

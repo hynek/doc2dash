@@ -1,7 +1,7 @@
 # Building and Submitting Docsets to Dash.app
 
-!!! Note
-    This how-to is extracted from [*How I'm a Productive Programmer With a Memory of a Fruit Fly*](https://hynek.me/articles/productive-fruit-fly-programmer/).
+> [!NOTE]
+> This how-to is extracted from [*How I'm a Productive Programmer With a Memory of a Fruit Fly*](https://hynek.me/articles/productive-fruit-fly-programmer/).
 
 The goal of this how-to is to teach you how to convert *intersphinx*-compatible documentation to a docset and how to submit it to Dash's [*user-generated docset registry*](https://github.com/Kapeli/Dash-User-Contributions), such that others don't have to duplicate your work.
 
@@ -29,11 +29,11 @@ Once you've managed to install all dependencies, it's usually just a matter of `
 
 After figuring this out, you should have a directory called `_build/html` for Sphinx or `site` for MkDocs.
 
-!!! Note
-    Please note with MkDocs that if the project doesn't use the [*mkdocstrings*](https://mkdocstrings.github.io) extension -- which, alas, is virtually all of the popular ones at the moment -- there won't be an `objects.inv` file and therefore no API data to be consumed.
-
-    I hope that more MkDocs-based projects add support for *mkdocstrings* in the future!
-    As with Sphinx, it's language-agnostic.
+> [!NOTE]
+> Please note with MkDocs that if the project doesn't use the [*mkdocstrings*](https://mkdocstrings.github.io) extension -- which, alas, is virtually all of the popular ones at the moment -- there won't be an `objects.inv` file and therefore no API data to be consumed.
+>
+> I hope that more MkDocs-based projects add support for *mkdocstrings* in the future!
+> As with Sphinx, it's language-agnostic.
 
 
 ## Converting
@@ -143,11 +143,11 @@ Since I want to create a new version of the docsets for every new release, the c
 
 For local testing, I'll take advantage of *doc2dash* being a Python project and use a [*tox*](https://tox.wiki/) environment that reuses the dependencies that I use when testing documentation itself.
 
-!!! Note
-    *tox* is a combination of Make and a virtual environment manager based on the `ini` file format.
-    Its original purpose was testing Python software over multiple Python versions but has grown a lot more powerful.
-
-    The big upsides over a `Makefile` are that it's more portable and has support for Python packaging built-in (which is necessary for building the documentation anyways).
+> [!NOTE]
+> *tox* is a combination of Make and a virtual environment manager based on the `ini` file format.
+> Its original purpose was testing Python software over multiple Python versions but has grown a lot more powerful.
+>
+> The big upsides over a `Makefile` are that it's more portable and has support for Python packaging built-in (which is necessary for building the documentation anyways).
 
 The environment installs `structlog[docs]` -- meaning: the package with optional `docs` dependencies, plus *doc2dash*.
 Then it runs `commands` in order:

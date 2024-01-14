@@ -31,7 +31,7 @@ The fastest way to get started is installing *doc2dash* from our [Homebrew tap](
 $ brew install hynek/tap/doc2dash
 ```
 
-> **Note**
+> [!NOTE]
 > If you can’t – or won’t – use [Homebrew](https://brew.sh), check out our [installation instructions](https://doc2dash.hynek.me/en/latest/installation/) for alternatives.
 
 Then point *doc2dash* at a directory containing **built** [*intersphinx*-compatible](https://doc2dash.hynek.me/en/stable/formats/) documentation:

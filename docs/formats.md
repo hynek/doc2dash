@@ -15,10 +15,9 @@ The most common documentation formats that support *intersphinx* are:
 
 If you find a documentation format that supports *intersphinx* but yields poor results from *doc2dash*, please [let us know](https://github.com/hynek/doc2dash/issues).
 
-!!! Warning
-
-    Do **not** attempt to run *doc2dash* over pre-built HTML documentation downloaded from [*Read The Docs*](https://readthedocs.org).
-    Those downloads aren't direct equivalents of the actual, pristine builds and indexing will not work.
+> [!WARNING]
+> Do **not** attempt to run *doc2dash* over pre-built HTML documentation downloaded from [*Read The Docs*](https://readthedocs.org).
+> Those downloads aren't direct equivalents of the actual, pristine builds and indexing will not work.
 
 [^pydoctor]:
     Dedicated support for *pydoctor* has been removed after it became *intersphinx*-compatible.

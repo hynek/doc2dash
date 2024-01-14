@@ -15,12 +15,12 @@ We try to provide as many pre-built bottles as possible.
 
 As of version 3.0, the [releases](https://github.com/hynek/doc2dash/releases) come with **pre-compiled binaries** for Linux, macOS, and Windows on Intel x64 that you can simply download and run *without* any other dependencies.
 
-!!! Warning
-    On macOS, you may get a warning about an unsigned binary.
-    To get rid of that you have two options:
-
-    1. Run `xattr -d com.apple.quarantine ~/Downloads/doc2dash/doc2dash` after unpacking the downloaded archive inside your Downloads folder.
-    1. Open the binary in Finder once using right-click.
+> [!WARNING]
+> On macOS, you may get a warning about an unsigned binary.
+> To get rid of that you have two options:
+>
+> 1. Run `xattr -d com.apple.quarantine ~/Downloads/doc2dash/doc2dash` after unpacking the downloaded archive inside your Downloads folder.
+> 1. Open the binary in Finder once using right-click.
 
 
 ## PyPI
