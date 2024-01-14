@@ -30,6 +30,11 @@ jobs:
           # Double-check latest version supported by PyOxidizer:
           # https://github.com/indygreg/PyOxidizer/releases/
           python-version: "3.10"
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: musl-dev musl-tools
+          version: 1.0
+        if: runner.os == 'Linux'
 
       - run: python -Im pip install nox
       - run: nox -e oxidize
