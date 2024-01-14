@@ -198,6 +198,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         index_page,
         enable_js,
         online_redirect_url,
+        playground_url,
         icon,
         icon_2x,
     ):

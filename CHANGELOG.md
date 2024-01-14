@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for 2x icons using the `--icon-2x` option.
   [#200](https://github.com/hynek/doc2dash/pull/200)
 
+- Support for linking to [docset playgrounds](https://kapeli.com/docsets#docsetPlaygrounds) using the `--playground-url` option.
+  [#201](https://github.com/hynek/doc2dash/pull/201)
+
 
 ### Fixed
 

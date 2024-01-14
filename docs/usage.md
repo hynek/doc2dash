@@ -18,3 +18,5 @@ Basic usage is as simple as:
     :prog_name: doc2dash
     :style: table
     :depth: 1
+
+Refer to our [how-to](how-to.md) and the official [*Docset Generation Guide*](https://kapeli.com/docsets) to learn what those options are good for.

@@ -136,6 +136,7 @@ IMPORTABLE = ImportableType()
     "-u",
     help="The base URL of the online documentation.",
 )
+@click.option("--playground-url", help="The URL to a docset playground.")
 @click.option(
     "--parser",
     "parser_type",
@@ -160,6 +161,7 @@ def main(
     enable_js: bool,
     online_redirect_url: str | None,
     parser_type: type[Parser] | None,
+    playground_url: str | None,
 ) -> None:
     """
     Convert docs from SOURCE to Dash's docset format.
@@ -222,6 +224,7 @@ def main(
         index_page,
         enable_js,
         online_redirect_url,
+        playground_url,
         icon,
         icon_2x,
     )

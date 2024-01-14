@@ -28,6 +28,7 @@ class TestPrepareDocset:
             index_page=None,
             enable_js=False,
             online_redirect_url=None,
+            playground_url=None,
             icon=None,
             icon_2x=None,
         )
@@ -72,6 +73,7 @@ class TestPrepareDocset:
             index_page="foo.html",
             enable_js=False,
             online_redirect_url=None,
+            playground_url=None,
             icon=None,
             icon_2x=None,
         )
@@ -105,6 +107,7 @@ class TestPrepareDocset:
             index_page="foo.html",
             enable_js=True,
             online_redirect_url=None,
+            playground_url=None,
             icon=None,
             icon_2x=None,
         )
@@ -138,6 +141,7 @@ class TestPrepareDocset:
             index_page="foo.html",
             enable_js=False,
             online_redirect_url="https://domain.com",
+            playground_url=None,
             icon=None,
             icon_2x=None,
         )
@@ -156,6 +160,41 @@ class TestPrepareDocset:
             "DashDocSetFallbackURL": "https://domain.com",
         }
 
+    def test_with_playground_url(self, monkeypatch, tmp_path):
+        """
+        If a playground URL is passed, it is added to the plist.
+        """
+        monkeypatch.chdir(tmp_path)
+        m_ct = Mock()
+        monkeypatch.setattr(shutil, "copytree", m_ct)
+        (tmp_path / "bar").mkdir()
+
+        docset = docsets.prepare_docset(
+            Path("some/path/foo"),
+            Path("bar"),
+            name="foo",
+            index_page="foo.html",
+            enable_js=False,
+            online_redirect_url=None,
+            playground_url="https://repl.it/F9J7/1",
+            icon=None,
+            icon_2x=None,
+        )
+
+        p = docsets.read_plist(docset.plist)
+
+        assert p == {
+            "CFBundleIdentifier": "foo",
+            "CFBundleName": "foo",
+            "DocSetPlatformFamily": "foo",
+            "DashDocSetFamily": "python",
+            "DashDocSetDeclaredInStyle": "originalName",
+            "isDashDocset": True,
+            "dashIndexFilePath": "foo.html",
+            "isJavaScriptEnabled": False,
+            "DashDocSetPlayURL": "https://repl.it/F9J7/1",
+        }
+
     def test_with_icon(self, tmp_path, sphinx_built):
         """
         If an icon is passed, it's copied to the root of the docset.
@@ -170,6 +209,7 @@ class TestPrepareDocset:
             index_page=None,
             enable_js=False,
             online_redirect_url=None,
+            playground_url=None,
             icon=icon,
             icon_2x=None,
         )
@@ -190,6 +230,7 @@ class TestPrepareDocset:
             index_page=None,
             enable_js=False,
             online_redirect_url=None,
+            playground_url=None,
             icon=None,
             icon_2x=icon,
         )
