@@ -15,7 +15,9 @@ nav:
   - Usage: usage.md
   - Building & Submitting Docsets: submit.md
   - Extending: extending.md
+  - License & Credits: credits.md
   - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md
+  - Funding: https://hynek.me/say-thanks/
 
 theme:
   name: material

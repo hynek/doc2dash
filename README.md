@@ -43,7 +43,10 @@ $ doc2dash directory/to/documentation
 You should see an output like in the video above and find an appropriately named *docset* in the current directory.
 That’s it – you can add it to Dash or Zeal!
 
+---
+
 *doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.hynek.me/en/stable/usage/) for more details.
+A full how-to is [available too](https://doc2dash.hynek.me/en/latest/submit/).
 
 
 ## Project Links
@@ -59,6 +62,6 @@ That’s it – you can add it to Dash or Zeal!
 
 ## Credits
 
-*doc2dash* is written and maintained by Hynek Schlawack.
+*doc2dash* is maintained by Hynek Schlawack and released under the [MIT](https://github.com/hynek/doc2dash/blob/main/LICENSE) license.
 
 The development is kindly supported by my employer [Variomedia AG](https://www.variomedia.de/) and all my amazing [GitHub Sponsors](https://github.com/sponsors/hynek).
