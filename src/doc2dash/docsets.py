@@ -15,7 +15,7 @@ from pathlib import Path
 import attrs
 
 
-@attrs.frozen(slots=False)
+@attrs.frozen
 class DocSet:
     """
     Summary of docset path and parameters.
