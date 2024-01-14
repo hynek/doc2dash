@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#200](https://github.com/hynek/doc2dash/pull/200)
 
 - Support for linking to [docset playgrounds](https://kapeli.com/docsets#docsetPlaygrounds) using the `--playground-url` option.
+  [#201](https://github.com/hynek/doc2dash/pull/201)
 
 
 ### Fixed
