@@ -13,7 +13,7 @@ nav:
   - Installation: installation.md
   - Supported Formats: formats.md
   - Usage: usage.md
-  - Submitting Docsets: submit.md
+  - Building & Submitting Docsets: submit.md
   - Extending: extending.md
   - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md
 
@@ -65,6 +65,11 @@ markdown_extensions:
   - mkdocs-click
   - pymdownx.smartsymbols
   - footnotes
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg

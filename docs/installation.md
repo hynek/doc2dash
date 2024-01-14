@@ -4,7 +4,7 @@
 
 For [*Homebrew*](https://brew.sh) users *doc2dash* is available from a [*Homebrew* tap](https://github.com/hynek/homebrew-tap):
 
-```shell
+```console
 $ brew install hynek/tap/doc2dash
 ```
 
@@ -30,7 +30,7 @@ If your platform is not supported yet (or doesn't work), the latest stable versi
 A good way to run it without ruining your Python installation is [*pipx*](https://pipxproject.github.io/pipx/).
 Either by installing it first, or by running it directly:
 
-```shell
+```console
 $ pipx run doc2dash --help
 ```
 
@@ -49,4 +49,4 @@ Other alternatives have been developed in cooperation with Dash's developer [Kap
 - [*helm-dash*](https://github.com/areina/helm-dash) for Emacs,
 - and [Zeal](https://zealdocs.org/) for Linux and Windows.
 
-*doc2dash* is only tested against the original Dash though.
+*doc2dash* is only tested against the original Dash, though.

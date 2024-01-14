@@ -1,4 +1,4 @@
-# Submitting Docsets to Dash.app
+# Building and Submitting Docsets to Dash.app
 
 !!! Note
     This how-to is extracted from [*How I'm a Productive Programmer With a Memory of a Fruit Fly*](https://hynek.me/articles/productive-fruit-fly-programmer/).
@@ -286,7 +286,7 @@ $ git commit -m "Add structlog docset"
  create mode 100644 docsets/structlog/icon@2x.png
  create mode 100644 docsets/structlog/structlog.tgz
  $ git push -u
- ```
+```
 
 Looking good -- time for a [pull request](https://github.com/Kapeli/Dash-User-Contributions/pull/3891)!
 

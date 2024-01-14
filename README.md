@@ -27,7 +27,7 @@ It’s also extendable: [**you** can write your own parser](https://doc2dash.hyn
 
 The fastest way to get started is installing *doc2dash* from our [Homebrew tap](https://github.com/hynek/homebrew-tap):
 
-```shell
+```console
 $ brew install hynek/tap/doc2dash
 ```
 
@@ -36,7 +36,7 @@ $ brew install hynek/tap/doc2dash
 
 Then point *doc2dash* at a directory containing **built** [*intersphinx*-compatible](https://doc2dash.hynek.me/en/stable/formats/) documentation:
 
-```shell
+```console
 $ doc2dash directory/to/documentation
 ```
 
