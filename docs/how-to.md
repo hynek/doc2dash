@@ -85,7 +85,7 @@ Therefore, we'll add `--index-page index.html` to the command line.
 ### Add Icons
 
 Documentation sets can have icons that are shown throughout Dash next to the docsets's names and symbols.
-That's pretty but also helpful to recognize docsets faster and if you're searching across multiple docsets, where a symbol is coming from.
+That's pretty, but also helpful to recognize where a symbol is coming from when searching across multiple docsets
 
 *structlog* has a cool beaver logo, so let's use [ImageMagick](https://imagemagick.org/) to resize the logo to 16x16 and 32x32 pixels:
 
