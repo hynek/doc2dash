@@ -110,39 +110,6 @@ disallow_untyped_decorators = false
 line-length = 79
 
 
-[tool.hatch.metadata.hooks.fancy-pypi-readme]
-content-type = "text/markdown"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-text = "# doc2dash\n"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-path = "README.md"
-start-after = "<!-- begin-short -->\n"
-end-before = "## Project Links"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-path = "README.md"
-start-at = "## Credits"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-text = """
-
-
-## Release Information
-
-"""
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-path = "CHANGELOG.md"
-start-after = "<!-- changelog follows -->"
-pattern = "\n(###.+?\n)## "
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
-pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.(png|gif))\)'
-replacement = '[\1](https://raw.githubusercontent.com/hynek/doc2dash/main/\g<2>)'
-
-
 [tool.ruff]
 src = ["src", "tests", "noxfile.py"]
 ignore = [
@@ -178,3 +145,36 @@ ignore = [
 [tool.ruff.isort]
 lines-between-types = 1
 lines-after-imports = 2
+
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = "# doc2dash\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+start-after = "<!-- begin-short -->\n"
+end-before = "## Project Links"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+start-at = "## Credits"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = """
+
+
+## Release Information
+
+"""
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "CHANGELOG.md"
+start-after = "<!-- changelog follows -->"
+pattern = "\n(###.+?\n)## "
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.(png|gif))\)'
+replacement = '[\1](https://raw.githubusercontent.com/hynek/doc2dash/main/\g<2>)'
