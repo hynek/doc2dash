@@ -34,7 +34,7 @@ docs = [
   "mkdocstrings[python]",
 ]
 typing = ["mypy", "types-urllib3"]
-dev = ["doc2dash[tests,typing]"]
+dev = ["doc2dash[tests,typing]", "nox"]
 
 [project.scripts]
 doc2dash = "doc2dash.__main__:main"
