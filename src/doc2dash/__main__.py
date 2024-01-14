@@ -18,10 +18,8 @@ from typing import Any
 
 import click
 
-from doc2dash import docsets
-from doc2dash.convert import convert_docs
-
-from . import parsers
+from . import docsets, parsers
+from .convert import convert_docs
 from .output import create_log_config, error_console
 from .parsers.types import Parser
 
@@ -145,6 +143,13 @@ IMPORTABLE = ImportableType()
     "doc2dash.parsers.intersphinx.InterSphinxParser). Default behavior "
     "is to auto-detect documentation type.",
 )
+@click.option(
+    "--full-text-search",
+    type=docsets.FullTextSearch,
+    default=docsets.FullTextSearch.OFF,
+    help="Whether full-text search should be 'on' or 'off by default. "
+    "Or whether it's 'forbidden' to switch it on by the user at all.",
+)
 @click.version_option(version=metadata.version("doc2dash"))
 def main(
     source: Path,
@@ -160,8 +165,9 @@ def main(
     index_page: Path | None,
     enable_js: bool,
     online_redirect_url: str | None,
-    parser_type: type[Parser] | None,
     playground_url: str | None,
+    parser_type: type[Parser] | None,
+    full_text_search: docsets.FullTextSearch,
 ) -> None:
     """
     Convert docs from SOURCE to Dash's docset format.
@@ -227,6 +233,7 @@ def main(
         playground_url,
         icon,
         icon_2x,
+        full_text_search,
     )
 
     parser = parser_type(docset.docs)

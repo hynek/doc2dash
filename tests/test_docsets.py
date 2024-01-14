@@ -31,6 +31,7 @@ class TestPrepareDocset:
             playground_url=None,
             icon=None,
             icon_2x=None,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         m_ct.assert_called_once_with(
@@ -76,6 +77,7 @@ class TestPrepareDocset:
             playground_url=None,
             icon=None,
             icon_2x=None,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -110,6 +112,7 @@ class TestPrepareDocset:
             playground_url=None,
             icon=None,
             icon_2x=None,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -144,6 +147,7 @@ class TestPrepareDocset:
             playground_url=None,
             icon=None,
             icon_2x=None,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -179,6 +183,7 @@ class TestPrepareDocset:
             playground_url="https://repl.it/F9J7/1",
             icon=None,
             icon_2x=None,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         p = docsets.read_plist(docset.plist)
@@ -194,6 +199,56 @@ class TestPrepareDocset:
             "isJavaScriptEnabled": False,
             "DashDocSetPlayURL": "https://repl.it/F9J7/1",
         }
+
+    def test_full_text_search_on(self, tmp_path, sphinx_built):
+        """
+        If full text search is enabled, it's added to the plist.
+        """
+        icon = Path("tests") / "logo.png"
+        dest = tmp_path / "bar"
+
+        docset = docsets.prepare_docset(
+            sphinx_built,
+            dest,
+            name="foo",
+            index_page=None,
+            enable_js=False,
+            online_redirect_url=None,
+            playground_url=None,
+            icon=None,
+            icon_2x=icon,
+            full_text_search=docsets.FullTextSearch.ON,
+        )
+
+        p = docsets.read_plist(docset.plist)
+
+        assert p["DashDocSetDefaultFTSEnabled"] is True
+        assert "DashDocSetFTSNotSupported" not in p
+
+    def test_full_text_search_forbidden(self, tmp_path, sphinx_built):
+        """
+        If full text search is forbidden, it's added to the plist.
+        """
+        icon = Path("tests") / "logo.png"
+        dest = tmp_path / "bar"
+
+        docset = docsets.prepare_docset(
+            sphinx_built,
+            dest,
+            name="foo",
+            index_page=None,
+            enable_js=False,
+            online_redirect_url=None,
+            playground_url=None,
+            icon=None,
+            icon_2x=icon,
+            full_text_search=docsets.FullTextSearch.FORBIDDEN,
+        )
+
+        p = docsets.read_plist(docset.plist)
+
+        assert p["DashDocSetFTSNotSupported"] is True
+        assert "DashDocSetDefaultFTSEnabled" not in p
 
     def test_with_icon(self, tmp_path, sphinx_built):
         """
@@ -212,6 +267,7 @@ class TestPrepareDocset:
             playground_url=None,
             icon=icon,
             icon_2x=None,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         assert (Path(dest) / "icon.png").exists()
@@ -233,6 +289,7 @@ class TestPrepareDocset:
             playground_url=None,
             icon=None,
             icon_2x=icon,
+            full_text_search=docsets.FullTextSearch.OFF,
         )
 
         assert (Path(dest) / "icon@2x.png").exists()

@@ -201,6 +201,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         playground_url,
         icon,
         icon_2x,
+        full_text_search,
     ):
         os.mkdir(dest)
         db_conn = sqlite3.connect(":memory:")

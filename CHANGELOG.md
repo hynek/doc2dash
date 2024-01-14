@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for linking to [docset playgrounds](https://kapeli.com/docsets#docsetPlaygrounds) using the `--playground-url` option.
   [#201](https://github.com/hynek/doc2dash/pull/201)
 
+- Control over [full-text search](https://kapeli.com/docsets#fts) using the `--full-text-search=(on|off|forbidden)` option.
+  [#202](https://github.com/hynek/doc2dash/pull/202)
+
 
 ### Fixed
 
