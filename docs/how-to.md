@@ -82,21 +82,25 @@ Confusingly, the file name of the index is `genindex.html` and the file name of 
 Therefore, we'll add `--index-page index.html` to the command line.
 
 
-### Add an Icon
+### Add Icons
 
 Documentation sets can have icons that are shown throughout Dash next to the docsets's names and symbols.
 That's pretty but also helpful to recognize docsets faster and if you're searching across multiple docsets, where a symbol is coming from.
 
-*structlog* has a cool beaver logo, so let's use [ImageMagick](https://imagemagick.org/) to resize the logo to 16x16 pixels:
+*structlog* has a cool beaver logo, so let's use [ImageMagick](https://imagemagick.org/) to resize the logo to 16x16 and 32x32 pixels:
 
 ```console
 $ magick \
     docs/_static/structlog_logo_transparent.png \
     -resize 16x16 \
     docs/_static/docset-icon.png
+$ magick \
+    docs/_static/structlog_logo_transparent.png \
+    -resize 32x32 \
+    docs/_static/docset-icon@2x.png
 ```
 
-Now we can add it to the docset using the `--icon docset-icon.png` option.
+Now we can add it to the docset using the `--icon` and `--icon-2x` options.
 
 
 ### Support Online Redirection
@@ -125,6 +129,7 @@ Let's run the whole command line and see how it looks in Dash:
 $ doc2dash \
     --index-page index.html \
     --icon docs/_static/docset-icon.png \
+    --icon-2x docs/_static/docset-icon@2x.png \
     --online-redirect-url https://www.structlog.org/en/latest/ \
     docs/_build/html
 Converting intersphinx docs from '/Users/hynek/FOSS/structlog/docs/_build/html' to 'structlog.docset'.
@@ -163,13 +168,11 @@ allowlist_externals =
 commands =
     rm -rf structlog.docset docs/_build
     sphinx-build -n -T -W -b html -d {envtmpdir}/doctrees docs docs/_build/html
-    doc2dash --index-page index.html --icon docs/_static/docset-icon.png --online-redirect-url https://www.structlog.org/en/latest/ docs/_build/html
-    cp docs/_static/docset-icon@2x.png structlog.docset/icon@2x.png
+    doc2dash --index-page index.html --icon docs/_static/docset-icon.png --icon-2x docs/_static/docset-icon@2x.png --online-redirect-url https://www.structlog.org/en/latest/ docs/_build/html
     tar --exclude='.DS_Store' -cvzf structlog.tgz structlog.docset
 ```
 
 Now I can build a docset just by calling `tox run -e docset`.
-[Until *doc2dash* supports hi-res icons](https://github.com/hynek/doc2dash/issues/130), it also copies a 32x32 pixels big version of the logo directly into the docset.
 
 Doing that in CI is trivial, but entails tons of boilerplate, so I'll just [link to the workflow](https://github.com/hynek/structlog/blob/main/.github/workflows/build-docset.yml).
 Note the `upload-artifact` action at the end that allows me to download the built docsets from the run summaries.

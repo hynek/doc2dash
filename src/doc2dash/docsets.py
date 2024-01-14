@@ -38,6 +38,7 @@ def prepare_docset(
     enable_js: bool,
     online_redirect_url: str | None,
     icon: Path | None,
+    icon_2x: Path | None,
 ) -> DocSet:
     """
     Create boilerplate files & directories and copy vanilla docs inside.
@@ -77,6 +78,9 @@ def prepare_docset(
 
     if icon:
         shutil.copy2(icon, dest / "icon.png")
+
+    if icon_2x:
+        shutil.copy2(icon_2x, dest / "icon@2x.png")
 
     return DocSet(path=dest, plist=plist_path, db_conn=db_conn)
 

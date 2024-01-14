@@ -96,6 +96,11 @@ IMPORTABLE = ImportableType()
     help="Add PNG icon to docset.",
 )
 @click.option(
+    "--icon-2x",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    help="Add a 2x-sized PNG icon for hires displays to docset.",
+)
+@click.option(
     "--index-page",
     "-I",
     metavar="FILENAME",
@@ -150,6 +155,7 @@ def main(
     add_to_dash: bool,
     add_to_global: bool,
     icon: Path | None,
+    icon_2x: Path | None,
     index_page: Path | None,
     enable_js: bool,
     online_redirect_url: str | None,
@@ -210,7 +216,14 @@ def main(
         force=force,
     )
     docset = docsets.prepare_docset(
-        source, dest, name, index_page, enable_js, online_redirect_url, icon
+        source,
+        dest,
+        name,
+        index_page,
+        enable_js,
+        online_redirect_url,
+        icon,
+        icon_2x,
     )
 
     parser = parser_type(docset.docs)
