@@ -164,9 +164,10 @@ def oxidize(session: nox.Session) -> None:
         "pyoxidizer",
         "build",
         "--release",
+        "--target-triple", target,
+        "--var", "target", target,
         "--var", "flavor", flavor,
         "--var", "platform", sys.platform,
-        "--var", "target", target,
         # fmt: on
         env=env,
     )

@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#202](https://github.com/hynek/doc2dash/pull/202)
 
 
+### Changed
+
+- The Linux binaries are now statically linked against *musl* libc for a wider compatibility.
+  [#203](https://github.com/hynek/doc2dash/pull/203)
+
+
 ### Fixed
 
 - The table of contents-generation for *pydoctor*-based documentation has been restored.
