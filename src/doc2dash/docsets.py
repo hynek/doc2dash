@@ -37,6 +37,7 @@ def prepare_docset(
     index_page: Path | None,
     enable_js: bool,
     online_redirect_url: str | None,
+    playground_url: str | None,
     icon: Path | None,
     icon_2x: Path | None,
 ) -> DocSet:
@@ -71,6 +72,8 @@ def prepare_docset(
         plist_cfg["dashIndexFilePath"] = str(index_page)
     if online_redirect_url is not None:
         plist_cfg["DashDocSetFallbackURL"] = online_redirect_url
+    if playground_url is not None:
+        plist_cfg["DashDocSetPlayURL"] = playground_url
 
     write_plist(plist_cfg, plist_path)
 
