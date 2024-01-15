@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog follows -->
 
+
+## [Unreleased](https://github.com/hynek/doc2dash/compare/3.1.0...HEAD)
+
 ## [3.1.0](https://github.com/hynek/doc2dash/compare/3.0.0...3.1.0) - 2024-01-15
 
 ### Added
