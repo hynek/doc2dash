@@ -13,15 +13,20 @@ nav:
   - About: index.md
   - Installation: installation.md
   - Supported Formats: formats.md
-  - CLI Usage: usage.md
-  - Building & Submitting Docsets: how-to.md
-  - Extending: extending.md
-  - License & Credits: credits.md
-  - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md
-  - Funding: https://hynek.me/say-thanks/
+  - Usage:
+    - CLI Reference: cli.md
+    - Building & Submitting Docsets: how-to.md
+    - Extending: extending.md
+  - Meta:
+    - License & Credits: credits.md
+    - Changelog: https://github.com/hynek/doc2dash/blob/main/CHANGELOG.md
+    - Funding: https://hynek.me/say-thanks/
 
 theme:
   name: material
+  features:
+    - navigation.expand
+    - navigation.sections
   font: false
   icon:
     repo: fontawesome/brands/github

@@ -229,7 +229,7 @@ Next, it would like us to fill in metadata in the `docset.html` file which is st
 ```json
 {
     "name": "structlog",
-    "version": "22.1.0",
+    "version": "24.1.0",
     "archive": "structlog.tgz",
     "author": {
         "name": "Hynek Schlawack",
