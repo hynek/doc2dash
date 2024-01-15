@@ -3,5 +3,5 @@
 {%
    include-markdown "../README.md"
    start="<!-- begin-short -->"
-   end="## Project Links"
+   end="## Quickstart"
 %}

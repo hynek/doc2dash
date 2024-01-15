@@ -11,6 +11,7 @@ watch:
 
 nav:
   - About: index.md
+  - Quickstart: quickstart.md
   - Installation: installation.md
   - Supported Formats: formats.md
   - Usage:
