@@ -59,7 +59,7 @@ def coverage_report(session: nox.Session) -> None:
 
 @nox.session(python=DEFAULT_PYTHON)
 def mypy(session: nox.Session) -> None:
-    session.install(".[typing]")
+    session.install(".[typing]", "nox")
 
     session.run("mypy", "src", "docs/update-rtd-versions.py", "noxfile.py")
 
@@ -178,11 +178,13 @@ def download_and_package_binaries(session: nox.Session) -> None:
     """
     Download latest binaries and package them up for release upload.
     """
-    shutil.rmtree("binaries", ignore_errors=True)
+    bins = Path("binaries")
+    shutil.rmtree(bins, ignore_errors=True)
+    bins.mkdir()
 
     tag = session.run(
         "git", "describe", "--abbrev=0", "--tags", external=True, silent=True
-    ).strip()
+    ).strip()  # type: ignore[union-attr]
 
     print("Downloading for git tag", tag)
 
@@ -196,19 +198,20 @@ def download_and_package_binaries(session: nox.Session) -> None:
         # fmt: on
         external=True,
         silent=True,
-    ).strip()
+    ).strip()  # type: ignore[union-attr]
 
-    session.run("gh", "run", "download", run_id, external=True)
+    with session.chdir(bins):
+        session.run("gh", "run", "download", run_id, external=True)
 
     for arch_path in Path("binaries").glob("*"):
-        arch = arch_path.name
-        with session.chdir(arch_path / "release/install"):
+        (triple_path,) = tuple(arch_path.glob("*"))
+        with session.chdir(triple_path / "release/install"):
             d = Path("doc2dash")
             if d.exists():  # i.e. not Windows
                 d.chmod(0o755)
             session.run(
                 "zip",
-                f"../../../doc2dash.{arch}.zip",
+                f"../../../../doc2dash.{triple_path.name}.zip",
                 "COPYING.txt",
                 "doc2dash",
                 "doc2dash.exe",
