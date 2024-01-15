@@ -178,3 +178,9 @@ pattern = "\n(###.+?\n)## "
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = '\[(.+?)\]\(((?!https?://)\S+?.\.(png|gif))\)'
 replacement = '[\1](https://raw.githubusercontent.com/hynek/doc2dash/main/\g<2>)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+# Transform GitHub callouts into bolded text.
+# https://github.com/orgs/community/discussions/16925
+pattern = '\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]'
+replacement = '**\1**:'
