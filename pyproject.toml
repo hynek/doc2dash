@@ -112,6 +112,8 @@ line-length = 79
 
 [tool.ruff]
 src = ["src", "tests", "noxfile.py"]
+
+[tool.ruff.lint]
 ignore = [
   "A001",    # shadowing is fine
   "ANN",     # Mypy is better at this
@@ -131,7 +133,7 @@ ignore = [
   "TD",      # we don't follow other people's todo style
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "**/test_*" = [
   "ARG005", # we need stub lambdas
   "S101",   # assert
@@ -142,7 +144,7 @@ ignore = [
   "EM101",  # no need for exception msg hygiene in tests
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 lines-between-types = 1
 lines-after-imports = 2
 
