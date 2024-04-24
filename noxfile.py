@@ -20,6 +20,10 @@ nox.options.sessions = ["pre_commit", "tests", "docs", "mypy"]
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
 
+nox.needs_version = ">=2024.3.2"
+nox.options.default_venv_backend = "uv|virtualenv"
+
+
 MATCH_PYTHON = re.compile(r"\s+python\: \"(\d\.\d\d)\"").match
 # Avoid dependency on a YAML lib using a questionable hack.
 for line in Path(".readthedocs.yaml").read_text().splitlines():

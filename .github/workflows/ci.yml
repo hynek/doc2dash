@@ -40,7 +40,7 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: python -Im pip install --upgrade wheel nox
+        run: python -Im pip install --upgrade nox uv
 
       - run: nox --python ${{ matrix.python-version }}
         if: runner.os == 'Linux'
