@@ -2,7 +2,7 @@
 
 ## Homebrew 🍻
 
-For [*Homebrew*](https://brew.sh) users *doc2dash* is available from a [*Homebrew* tap](https://github.com/hynek/homebrew-tap):
+For [Homebrew](https://brew.sh) users *doc2dash* is available from a [Homebrew tap](https://github.com/hynek/homebrew-tap):
 
 ```console
 $ brew install hynek/tap/doc2dash
