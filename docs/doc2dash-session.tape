@@ -1,3 +1,5 @@
+# Session recording file for <https://github.com/charmbracelet/vhs>.
+
 Output doc2dash-session.gif
 Set FontFamily "Berkeley Mono"
 Set Shell fish
