@@ -106,7 +106,6 @@ def pin_docs(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
     session.run(
-        # fmt: off
         "pip-compile",
         "--upgrade",
         "--allow-unsafe",   # otherwise install fails due to setuptools
@@ -115,8 +114,7 @@ def pin_docs(session: nox.Session) -> None:
         "--generate-hashes",
         "--output-file", "requirements/docs.txt",
         "pyproject.toml",
-        # fmt: on
-    )
+    )  # fmt: skip
 
 
 @nox.session
@@ -146,15 +144,13 @@ def oxidize(session: nox.Session) -> None:
 
     session.run("pyoxidizer", "-V")
     session.run(
-        # fmt: off
         "pyoxidizer",
         "build",
         "--release",
         "--var", "flavor", flavor,
         "--var", "platform", sys.platform,
-        # fmt: on
         env=env,
-    )
+    )  # fmt: skip
 
 
 @nox.session
@@ -165,7 +161,6 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
     session.install("pip-tools>=6.8.0")
 
     session.run(
-        # fmt: off
         "pip-compile",
         "--upgrade",
         "--index-url", "https://pypi.org/simple",
@@ -173,8 +168,7 @@ def pin_for_pyoxidizer(session: nox.Session) -> None:
         "--resolver", "backtracking",
         "--output-file", f"requirements/pyoxidizer-{sys.platform}.txt",
         "pyproject.toml",
-        # fmt: on
-    )
+    )  # fmt: skip
 
 
 @nox.session
@@ -193,16 +187,14 @@ def download_and_package_binaries(session: nox.Session) -> None:
     print("Downloading for git tag", tag)
 
     run_id = session.run(
-        # fmt: off
         "gh", "run", "list",
         "--workflow", "Build binaries using pyOxidizer",
         "--branch", tag,
         "--json", "databaseId",
         "--jq", ".[0].databaseId",
-        # fmt: on
         external=True,
         silent=True,
-    ).strip()  # type: ignore[union-attr]
+    ).strip()  # type: ignore[union-attr] # fmt: skip
 
     with session.chdir(bins):
         session.run("gh", "run", "download", run_id, external=True)
