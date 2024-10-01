@@ -32,9 +32,9 @@ pygments==2.18.0 \
     --hash=sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199 \
     --hash=sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a
     # via rich
-rich==13.8.0 \
-    --hash=sha256:2e85306a063b9492dffc86278197a60cbece75bcb766022f3436f567cae11bdc \
-    --hash=sha256:a5ac1f1cd448ade0d59cc3356f7db7a7ccda2c8cbae9c7a90c28ff463d3e91f4
+rich==13.8.1 \
+    --hash=sha256:1760a3c0848469b97b558fc61c85233e3dafb69c7a071b4d60c38099d3cd4c06 \
+    --hash=sha256:8260cda28e3db6bf04d2d1ef4dbc03ba80a824c88b0e7668a0f23126a424844a
     # via doc2dash (pyproject.toml)
 soupsieve==2.6 \
     --hash=sha256:e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb \
