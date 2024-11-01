@@ -33,6 +33,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -64,6 +66,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version-default
@@ -104,6 +108,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version-default

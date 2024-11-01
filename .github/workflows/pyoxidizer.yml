@@ -29,6 +29,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # get correct version
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           # Double-check latest version supported by PyOxidizer:
