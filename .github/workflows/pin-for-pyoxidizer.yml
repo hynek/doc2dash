@@ -1,5 +1,5 @@
 ---
-name: Pin dependencies for oxidization.
+name: Pin dependencies for oxidization
 
 on:
   workflow_dispatch:
@@ -7,6 +7,9 @@ on:
     # Run every 1st of Month at 3:25 UTC
     - cron: "25 3 1 * *"
 
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   pin:
@@ -25,7 +28,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-           persist-credentials: false
+          # We need to persist credentials to possibly push the branch later.
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           # Keep in-sync with ./pyoxidizer.yml
@@ -44,8 +48,6 @@ jobs:
       - name: Commit & push changes
         # Only push if changes exist
         if: steps.changes.outputs.count > 0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
