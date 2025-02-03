@@ -112,7 +112,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version-default
-          cache: pip
 
       - run: python -Im pip install -e .[dev]
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
