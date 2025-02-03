@@ -39,14 +39,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+      - uses: hynek/setup-cached-uv@v2
 
-      - name: Install dependencies
-        run: python -Im pip install --upgrade nox uv
-
-      - run: nox --python ${{ matrix.python-version }}
+      - run: uvx nox --python ${{ matrix.python-version }}
         if: runner.os == 'Linux'
 
-      - run: nox --python ${{ matrix.python-version }} -e tests
+      - run: uvx nox --python ${{ matrix.python-version }} -e tests
         if: runner.os == 'Windows'
 
       - name: Upload coverage data
@@ -65,12 +63,9 @@ jobs:
     needs: tests
 
     steps:
-      - name: Download pre-built packages
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
         with:
-          name: Packages
-          path: dist
-      - run: tar xf dist/*.tar.gz --strip-components=1
+           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version-default
