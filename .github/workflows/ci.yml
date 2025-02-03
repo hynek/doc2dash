@@ -24,11 +24,11 @@ jobs:
       matrix:
         python-version:
           - "pypy3.10"
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         runs-on: [ubuntu-latest, windows-latest]
 
     steps:
@@ -39,7 +39,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
-          cache: pip
 
       - name: Install dependencies
         run: python -Im pip install --upgrade nox uv
@@ -113,7 +112,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version-default
-          cache: pip
 
       - run: python -Im pip install -e .[dev]
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'

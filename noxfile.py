@@ -14,6 +14,12 @@ from pathlib import Path
 import nox
 
 
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
+
+
 DEFAULT_PYTHON = Path(".python-version-default").read_text().strip()
 
 nox.options.sessions = ["pre_commit", "tests", "docs", "mypy"]
@@ -31,6 +37,13 @@ for line in Path(".readthedocs.yaml").read_text().splitlines():
         DOCS_PYTHON = m.group(1)
         break
 
+pyp = tomllib.loads(Path("pyproject.toml").read_text())
+ALL_SUPPORTED = [
+    pv.rsplit(" ")[-1]
+    for pv in pyp["project"]["classifiers"]
+    if pv.startswith("Programming Language :: Python :: ")
+]
+
 
 @nox.session
 def pre_commit(session: nox.Session) -> None:
@@ -39,7 +52,7 @@ def pre_commit(session: nox.Session) -> None:
     session.run("pre-commit", "run", "--all-files")
 
 
-@nox.session(python=["pypy3.10", "3.8", "3.9", "3.10", "3.11", "3.12"])
+@nox.session(python=["pypy3.10", *ALL_SUPPORTED])
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
 
