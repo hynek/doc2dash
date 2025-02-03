@@ -245,4 +245,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Strip annotations from unused remembered names the are re-used in synonyms.
+- Strip annotations from unused remembered names the are reused in synonyms.

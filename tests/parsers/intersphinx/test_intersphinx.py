@@ -154,8 +154,7 @@ class TestInterSphinxParser:
                         "--destination": (
                             "doc2dash",
                             "2.0",
-                            "index.html#document-usage#cmdoption--"
-                            "destination",
+                            "index.html#document-usage#cmdoption--destination",
                             "-",
                         )
                     },
