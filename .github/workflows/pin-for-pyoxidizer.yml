@@ -8,6 +8,9 @@ on:
     - cron: "25 3 1 * *"
 
 
+permissions: {}
+
+
 jobs:
   pin:
     name: Pinning for ${{ matrix.runs-on }}
