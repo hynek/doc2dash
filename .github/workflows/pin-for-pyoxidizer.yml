@@ -48,7 +48,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "Automated dependency upgrades for $RUNS_ON
+          git commit -m "Automated dependency upgrades for $RUNS_ON"
           git push -f origin $REF_NAME:$BRANCH_NAME
 
       - name: Open pull request if needed
