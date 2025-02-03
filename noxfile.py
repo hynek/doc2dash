@@ -52,7 +52,7 @@ def pre_commit(session: nox.Session) -> None:
     session.run("pre-commit", "run", "--all-files")
 
 
-@nox.session(python=["pypy3", *ALL_SUPPORTED])
+@nox.session(python=["pypy3.10", *ALL_SUPPORTED])
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
 
