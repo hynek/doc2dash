@@ -1,5 +1,5 @@
 ---
-name: Pin dependencies for oxidization.
+name: Pin dependencies for oxidization
 
 on:
   workflow_dispatch:
