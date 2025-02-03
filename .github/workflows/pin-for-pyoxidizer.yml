@@ -48,6 +48,7 @@ jobs:
       - name: Commit & push changes
         # Only push if changes exist
         if: steps.changes.outputs.count > 0
+        shell: bash
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
