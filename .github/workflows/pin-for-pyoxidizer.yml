@@ -25,7 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-           persist-credentials: true
+          # We need to persist credentials to possibly push the branch later.
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           # Keep in-sync with ./pyoxidizer.yml
