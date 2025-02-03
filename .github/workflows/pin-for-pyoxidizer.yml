@@ -24,6 +24,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+           persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           # Keep in-sync with ./pyoxidizer.yml
