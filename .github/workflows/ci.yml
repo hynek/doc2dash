@@ -39,14 +39,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+      - uses: hynek/setup-cached-uv@v2
 
-      - name: Install dependencies
-        run: python -Im pip install --upgrade nox uv
-
-      - run: nox --python ${{ matrix.python-version }}
+      - run: uvx nox --python ${{ matrix.python-version }}
         if: runner.os == 'Linux'
 
-      - run: nox --python ${{ matrix.python-version }} -e tests
+      - run: uvx nox --python ${{ matrix.python-version }} -e tests
         if: runner.os == 'Windows'
 
       - name: Upload coverage data
@@ -57,6 +55,7 @@ jobs:
           include-hidden-files: true
           if-no-files-found: ignore
         if: runner.os == 'Linux'
+
 
   coverage:
     name: Combine & check coverage
@@ -70,25 +69,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version-default
-          cache: pip
+      - uses: hynek/setup-cached-uv@v2
 
-      - uses: actions/download-artifact@v4
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
         with:
           pattern: coverage-data-*
           merge-multiple: true
 
       - name: Combine coverage & fail if it's <100%.
         run: |
-          python -Im pip install --upgrade coverage[toml]
+          uv tool install coverage
 
-          python -Im coverage combine
-          python -Im coverage html --skip-covered --skip-empty
+          coverage combine
+          coverage html --skip-covered --skip-empty
 
           # Report and write to summary.
-          python -Im coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+          coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
 
           # Report again and fail if under 100%.
-          python -Im coverage report --fail-under=100
+          coverage report --fail-under=100
 
       - name: Upload HTML report if check failed.
         uses: actions/upload-artifact@v4
@@ -116,6 +116,7 @@ jobs:
       - run: python -Im pip install -e .[dev]
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
       - run: python -Im doc2dash --version
+
 
   required-checks-pass:
     name: Ensure everything required is passing for branch protection
