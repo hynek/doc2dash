@@ -50,7 +50,7 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "Automated dependency upgrades for $RUNS_ON"
-          git push -f origin ${{ github.ref_name }}:${{ env.BRANCH_NAME }}
+          git push -f origin ${REF_NAME}:${BRANCH_NAME}
 
       - name: Open pull request if needed
         if: steps.changes.outputs.count > 0
