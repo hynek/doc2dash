@@ -39,7 +39,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
-          cache: pip
 
       - name: Install dependencies
         run: python -Im pip install --upgrade nox uv
