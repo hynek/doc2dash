@@ -7,9 +7,8 @@ on:
     # Run every 1st of Month at 3:25 UTC
     - cron: "25 3 1 * *"
 
-
-permissions: {}
-
+permissions:
+  contents: write
 
 jobs:
   pin:
