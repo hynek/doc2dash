@@ -54,7 +54,7 @@ def pre_commit(session: nox.Session) -> None:
 
 @nox.session(python=["pypy3.10", *ALL_SUPPORTED])
 def tests(session: nox.Session) -> None:
-    session.install(".[tests]")
+    session.install(".", "--group", "tests")
 
     # Ensure that rich doesn't add format sequences.
     env = {"TERM": "dumb"}
@@ -76,7 +76,7 @@ def coverage_report(session: nox.Session) -> None:
 
 @nox.session(python=DEFAULT_PYTHON)
 def mypy(session: nox.Session) -> None:
-    session.install(".[typing]", "nox")
+    session.install(".", "--group", "typing", "nox")
 
     session.run("mypy", "src", "docs/update-rtd-versions.py", "noxfile.py")
 

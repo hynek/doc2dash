@@ -113,7 +113,7 @@ jobs:
         with:
           python-version-file: .python-version-default
 
-      - run: python -Im pip install -e .[dev]
+      - run: python -Im pip install -e . --group dev
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
       - run: python -Im doc2dash --version
 
