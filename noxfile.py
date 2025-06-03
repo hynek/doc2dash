@@ -116,13 +116,12 @@ def docs(session: nox.Session) -> None:
 
 @nox.session(python=DOCS_PYTHON)
 def pin_docs(session: nox.Session) -> None:
-    session.install("pip-tools>=6.8.0")
+    session.install("uv")
 
     session.run(
-        "pip-compile",
+        "uv", "pip", "compile",
         "--upgrade",
-        "--allow-unsafe",   # otherwise install fails due to setuptools
-        "--extra", "docs",
+        "--group", "docs",
         "--index-url", "https://pypi.org/simple",
         "--generate-hashes",
         "--output-file", "requirements/docs.txt",
