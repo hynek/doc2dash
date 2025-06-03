@@ -113,7 +113,7 @@ jobs:
         with:
           python-version-file: .python-version-default
 
-      - run: python -Im pip install -e .[dev]
+      - run: python -Im pip install -e . --group dev
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
       - run: python -Im doc2dash --version
 
@@ -131,6 +131,6 @@ jobs:
 
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@release/v1
+        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe  # v1.2.2
         with:
           jobs: ${{ toJSON(needs) }}
