@@ -9,7 +9,7 @@ Here are a few guidelines to get you started:
 - Try to limit each pull request to one change only.
 
 - To run the test suite, all you need is a recent [Nox](https://nox.thea.codes/).
-  If you use `pip install -e .[dev]`, it will be installed automatically.
+  If you use `pip install -e . --group dev`, it will be installed automatically.
 
 - To run the test suite against all supported Python version, run `nox`.
   Our [CI](https://github.com/hynek/doc2dash/actions) runs it the same way.
@@ -31,7 +31,7 @@ Here are a few guidelines to get you started:
 
 - Obey [PEP 8](https://peps.python.org/pep-0008/) and [PEP 257](https://peps.python.org/pep-0257/).
 
-- To install a development version of *doc2dash* use `pip install -Ue .[dev]`.
+- To install a development version of *doc2dash* use `pip install -Ue . --group dev`.
   We recommend using the Python version from `.python-version-default`.
 
 - We also recommend to install [_pre-commit_](https://pre-commit.com) and running `pre-commit install` to prevent unnecessary CI breakage.

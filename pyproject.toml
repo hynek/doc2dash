@@ -23,7 +23,7 @@ classifiers = [
 ]
 dependencies = ["attrs>=23.2", "beautifulsoup4", "click>8", "rich"]
 
-[project.optional-dependencies]
+[dependency-groups]
 tests = ["coverage[toml]", "pytest"]
 docs = [
   "mkdocs",
@@ -34,7 +34,8 @@ docs = [
   "mkdocstrings[python]",
 ]
 typing = ["mypy", "types-urllib3"]
-dev = ["doc2dash[tests,typing]", "nox"]
+dev = [{ include-group = "tests" }, { include-group = "typing" }, "nox"]
+
 
 [project.scripts]
 doc2dash = "doc2dash.__main__:main"
