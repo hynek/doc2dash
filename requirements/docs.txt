@@ -273,9 +273,9 @@ mkdocs-get-deps==0.2.0 \
     --hash=sha256:162b3d129c7fad9b19abfdcb9c1458a651628e4b1dea628ac68790fb3061c60c \
     --hash=sha256:2bf11d0b133e77a0dd036abeeb06dec8775e46efa526dc70667d8863eefc6134
     # via mkdocs
-mkdocs-include-markdown-plugin==7.1.5 \
-    --hash=sha256:a986967594da6789226798e3c41c70bc17130fadb92b4313f42bd3defdac0adc \
-    --hash=sha256:d0b96edee45e7fda5eb189e63331cfaf1bf1fbdbebbd08371f1daa77045d3ae9
+mkdocs-include-markdown-plugin==7.1.8 \
+    --hash=sha256:9cc79f60c452e4db885c32b4cd63feea1f96012b6720be49a2ce6a1fbad77458 \
+    --hash=sha256:eed91cdb22c9035c8d8421523c97bee3796e2df626afefae11e97dd0c6854573
     # via doc2dash (pyproject.toml:docs)
 mkdocs-material==9.6.14 \
     --hash=sha256:39d795e90dce6b531387c255bd07e866e027828b7346d3eba5ac3de265053754 \
