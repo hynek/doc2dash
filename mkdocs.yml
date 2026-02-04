@@ -90,5 +90,5 @@ plugins:
       handlers:
         python:
           paths: [src]
-          import:
+          inventories:
             - https://docs.python.org/3/objects.inv
