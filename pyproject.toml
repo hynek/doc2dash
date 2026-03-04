@@ -26,7 +26,7 @@ dependencies = ["attrs>=23.2", "beautifulsoup4", "click>8", "rich"]
 [dependency-groups]
 tests = ["coverage[toml]", "pytest"]
 docs = [
-  "mkdocs",
+  "mkdocs<2",
   "mkdocs-material",
   "mkdocs-include-markdown-plugin",
   "mkdocs-click",
