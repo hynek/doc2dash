@@ -32,7 +32,7 @@ DEFAULT_DOCSET_PATH = Path(
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 
 
-class ImportableType(click.ParamType):
+class ImportableType(click.ParamType[Parser]):
     name = "importable"
 
     def convert(self, value: str, param: Any, ctx: Any) -> Parser:
