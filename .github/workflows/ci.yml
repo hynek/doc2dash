@@ -32,6 +32,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
         runs-on: [ubuntu-latest, windows-latest]
     env:
       PYTHON: ${{ matrix.python-version }}
