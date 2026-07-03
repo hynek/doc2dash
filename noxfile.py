@@ -78,7 +78,7 @@ def coverage_report(session: nox.Session) -> None:
 def mypy(session: nox.Session) -> None:
     session.install(".", "--group", "typing", "nox")
 
-    session.run("mypy", "src", "docs/update-rtd-versions.py", "noxfile.py")
+    session.run("mypy", "src", "noxfile.py")
 
 
 @nox.session
@@ -109,9 +109,9 @@ def docs(session: nox.Session) -> None:
     session.install("-e", ".")
 
     if session.posargs:
-        session.run("mkdocs", *session.posargs)
+        session.run("zensical", *session.posargs)
     else:
-        session.run("mkdocs", "build", "--clean", "--strict")
+        session.run("zensical", "build", "--clean", "--strict")
 
 
 @nox.session(python=DOCS_PYTHON)
@@ -127,10 +127,3 @@ def pin_docs(session: nox.Session) -> None:
         "--output-file", "requirements/docs.txt",
         "pyproject.toml",
     )  # fmt: skip
-
-
-@nox.session
-def update_rtd_versions(session: nox.Session) -> None:
-    session.install("urllib3")
-
-    session.run("python", "docs/update-rtd-versions.py", "doc2dash")

@@ -26,12 +26,10 @@ dependencies = ["attrs>=23.2", "beautifulsoup4", "click>8", "rich"]
 [dependency-groups]
 tests = ["coverage[toml]", "pytest"]
 docs = [
-  "mkdocs<2",
-  "mkdocs-material",
-  "mkdocs-include-markdown-plugin",
+  "zensical",
+  "mkdocstrings-python",
   "mkdocs-click",
-  "mkdocs-callouts",
-  "mkdocstrings[python]",
+  "markdown-callouts",
 ]
 typing = ["mypy", "types-urllib3"]
 dev = [{ include-group = "tests" }, { include-group = "typing" }, "nox"]
@@ -161,7 +159,7 @@ text = "# doc2dash\n"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "README.md"
-start-after = "<!-- begin-short -->\n"
+start-after = "<!-- --8<-- [start:short] -->\n"
 end-before = "## Project Links"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]

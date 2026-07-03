@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-           persist-credentials: false
+          persist-credentials: false
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -62,7 +62,6 @@ jobs:
           if-no-files-found: ignore
         if: runner.os == 'Linux'
 
-
   coverage:
     name: Combine & check coverage
     runs-on: ubuntu-latest
@@ -71,7 +70,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-           persist-credentials: false
+          persist-credentials: false
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version-file: .python-version-default
@@ -103,7 +102,6 @@ jobs:
           path: htmlcov
         if: ${{ failure() }}
 
-
   install-dev:
     name: Verify dev env
     runs-on: ${{ matrix.os }}
@@ -114,7 +112,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-           persist-credentials: false
+          persist-credentials: false
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version-file: .python-version-default
@@ -122,7 +120,6 @@ jobs:
       - run: python -Im pip install -e . --group dev
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
       - run: python -Im doc2dash --version
-
 
   required-checks-pass:
     name: Ensure everything required is passing for branch protection
@@ -137,6 +134,6 @@ jobs:
 
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe  # v1.2.2
+        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
         with:
           jobs: ${{ toJSON(needs) }}

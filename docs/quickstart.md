@@ -1,7 +1,3 @@
 # Quickstart
 
-{%
-   include-markdown "../README.md"
-   start="## Quickstart"
-   end="## Project Links"
-%}
+--8<-- "README.md:quickstart"

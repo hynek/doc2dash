@@ -1,6 +1,3 @@
 # License and Credits
 
-{%
-   include-markdown "../README.md"
-   start="## Credits"
-%}
+--8<-- "README.md:credits"

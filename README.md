@@ -5,7 +5,7 @@
 [![Homebrew Tap](https://img.shields.io/badge/Homebrew-tap-brown)](https://github.com/hynek/homebrew-tap)
 [![Current PyPI release](https://img.shields.io/pypi/v/doc2dash)](https://pypi.org/project/doc2dash/)
 
-<!-- begin-short -->
+<!-- --8<-- [start:short] -->
 
 *doc2dash* is an extensible [Documentation Set](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/Documentation_Sets/010-Overview_of_Documentation_Sets/docset_overview.html#//apple_ref/doc/uid/TP40005266-CH13-SW6) (*docset*) generator that helps you to have documentation for all your favorite APIs in [Dash-compatible](https://kapeli.com/dash/) API browsers.
 
@@ -19,11 +19,13 @@ Currently it supports all known *intersphinx*-based documentation systems like [
 While *doc2dash* is a Python project, the support is **not** limited to Python-related formats.
 
 It’s also extendable: [**you** can write your own parser](https://doc2dash.hynek.me/en/latest/extending/)!
+<!-- --8<-- [end:short] -->
 
 ![doc2dash Session](docs/doc2dash-session.gif)
 
 
 ## Quickstart
+<!-- --8<-- [start:quickstart] -->
 
 The fastest way to get started is installing *doc2dash* from our [Homebrew tap](https://github.com/hynek/homebrew-tap):
 
@@ -47,6 +49,7 @@ That’s it – you can add it to Dash or Zeal!
 
 *doc2dash* has many more features and options – make sure to check out the [usage](https://doc2dash.hynek.me/en/stable/usage/) for more details.
 A full how-to is [available too](https://doc2dash.hynek.me/en/latest/how-to/).
+<!-- --8<-- [end:quickstart] -->
 
 
 ## Project Links
@@ -60,7 +63,9 @@ A full how-to is [available too](https://doc2dash.hynek.me/en/latest/how-to/).
 
 
 ## Credits
+<!-- --8<-- [start:credits] -->
 
 *doc2dash* is maintained by Hynek Schlawack and released under the [MIT](https://github.com/hynek/doc2dash/blob/main/LICENSE) license.
 
 The development is kindly supported by my employer [Variomedia AG](https://www.variomedia.de/) and all my amazing [GitHub Sponsors](https://github.com/sponsors/hynek).
+<!-- --8<-- [end:credits] -->
