@@ -107,6 +107,11 @@ module = "noxfile"
 disallow_untyped_decorators = false
 
 
+[[tool.ty.overrides]]
+include = ["tests", "noxfile.py"]
+rules.all = "ignore"
+
+
 [tool.ruff]
 src = ["src", "tests", "noxfile.py"]
 line-length = 79
