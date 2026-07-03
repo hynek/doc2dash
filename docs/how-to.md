@@ -13,7 +13,7 @@ For *optionally* submitting the docset at the end, you'll also need a basic unde
 I suggest **you** pick an *intersphinx*-compatible project that isn't supported by Dash yet and whose documentation's tab you visit most often.
 
 
-## Building Documentation
+## Building documentation
 
 We start with the biggest problem and source of frequent feature requests for *doc2dash*:
 you need the documentation in a complete, built form.
@@ -59,7 +59,7 @@ If you pass `--add-to-global` or `-A`, it moves the finished docset to a global 
 I rarely run *doc2dash* without `-A` when creating docsets for myself.
 
 
-## Improving Your Documentation Set
+## Improving your Documentation Set
 
 Dash's documentation has a [bunch of recommendations](https://kapeli.com/docsets#contributetodash) on how you can improve the docset that we built in the previous step.
 It's important to note that the next five steps are strictly optional and more often than not, I skip them because I'm lazy.
@@ -67,7 +67,7 @@ It's important to note that the next five steps are strictly optional and more o
 But in this case, I want to submit the docset to Dash's user-contributed registry, so let's go the full distance!
 
 
-### Set the Main Page
+### Set the main page
 
 With Dash, you can always search *all* installed docsets, but sometimes you want to limit the scope of search.
 For example, when I type `p:` (the colon is significant), Dash switches to only searching the latest Python docset.
@@ -82,7 +82,7 @@ Confusingly, the file name of the index is `genindex.html` and the file name of 
 Therefore, we'll add `--index-page index.html` to the command line.
 
 
-### Add Icons
+### Add icons
 
 Documentation sets can have icons that are shown throughout Dash next to the docsets's names and symbols.
 That's pretty, but also helpful to recognize where a symbol is coming from when searching across multiple docsets
@@ -103,7 +103,7 @@ $ magick \
 Now we can add it to the docset using the `--icon` and `--icon-2x` options.
 
 
-### Support Online Redirection
+### Support online redirection
 
 Offline docs are awesome, but sometimes it can be useful to jump to the online version of the documentation page you're reading right now.
 A common reason is to peruse a newer or older version.
@@ -120,7 +120,7 @@ I think `latest` makes more sense, if you leave the comfort of offline documenta
 ```
 
 
-### Putting It All Together
+### Putting it all together
 
 We're done!
 Let's run the whole command line and see how it looks in Dash:

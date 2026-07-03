@@ -1,7 +1,5 @@
 # Welcome to doc2dash
 
-{%
-   include-markdown "../README.md"
-   start="<!-- begin-short -->"
-   end="## Quickstart"
-%}
+--8<-- "README.md:short"
+
+![doc2dash Session](doc2dash-session.gif)
