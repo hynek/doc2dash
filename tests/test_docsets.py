@@ -5,6 +5,7 @@
 import shutil
 import sqlite3
 
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -51,12 +52,16 @@ class TestPrepareDocset:
             "isJavaScriptEnabled": False,
         }
 
-        with sqlite3.connect("bar/Contents/Resources/docSet.dsidx") as db_conn:
+        with closing(
+            sqlite3.connect("bar/Contents/Resources/docSet.dsidx")
+        ) as db_conn:
             cur = db_conn.cursor()
             # ensure table exists and is empty
             cur.execute("select count(1) from searchIndex")
 
             assert cur.fetchone()[0] == 0
+
+        docset.close()
 
     def test_with_index_page(self, monkeypatch, tmp_path):
         """
@@ -67,7 +72,7 @@ class TestPrepareDocset:
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
-        docset = docsets.prepare_docset(
+        with docsets.prepare_docset(
             Path("some/path/foo"),
             Path("bar"),
             name="foo",
@@ -78,9 +83,8 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=None,
             full_text_search=docsets.FullTextSearch.OFF,
-        )
-
-        p = docsets.read_plist(docset.plist)
+        ) as docset:
+            p = docsets.read_plist(docset.plist)
 
         assert p == {
             "CFBundleIdentifier": "foo",
@@ -102,7 +106,7 @@ class TestPrepareDocset:
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
-        docset = docsets.prepare_docset(
+        with docsets.prepare_docset(
             Path("some/path/foo"),
             Path("bar"),
             name="foo",
@@ -113,11 +117,10 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=None,
             full_text_search=docsets.FullTextSearch.OFF,
-        )
+        ) as docset:
+            p = docsets.read_plist(docset.plist)
 
-        p = docsets.read_plist(docset.plist)
-
-        assert p == {
+        assert {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",
             "DocSetPlatformFamily": "foo",
@@ -126,7 +129,7 @@ class TestPrepareDocset:
             "isDashDocset": True,
             "dashIndexFilePath": "foo.html",
             "isJavaScriptEnabled": True,
-        }
+        } == p
 
     def test_with_online_redirect_url(self, monkeypatch, tmp_path):
         """
@@ -137,7 +140,7 @@ class TestPrepareDocset:
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
-        docset = docsets.prepare_docset(
+        with docsets.prepare_docset(
             Path("some/path/foo"),
             Path("bar"),
             name="foo",
@@ -148,11 +151,10 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=None,
             full_text_search=docsets.FullTextSearch.OFF,
-        )
+        ) as docset:
+            p = docsets.read_plist(docset.plist)
 
-        p = docsets.read_plist(docset.plist)
-
-        assert p == {
+        assert {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",
             "DocSetPlatformFamily": "foo",
@@ -162,7 +164,7 @@ class TestPrepareDocset:
             "dashIndexFilePath": "foo.html",
             "isJavaScriptEnabled": False,
             "DashDocSetFallbackURL": "https://domain.com",
-        }
+        } == p
 
     def test_with_playground_url(self, monkeypatch, tmp_path):
         """
@@ -173,7 +175,7 @@ class TestPrepareDocset:
         monkeypatch.setattr(shutil, "copytree", m_ct)
         (tmp_path / "bar").mkdir()
 
-        docset = docsets.prepare_docset(
+        with docsets.prepare_docset(
             Path("some/path/foo"),
             Path("bar"),
             name="foo",
@@ -184,11 +186,10 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=None,
             full_text_search=docsets.FullTextSearch.OFF,
-        )
+        ) as docset:
+            p = docsets.read_plist(docset.plist)
 
-        p = docsets.read_plist(docset.plist)
-
-        assert p == {
+        assert {
             "CFBundleIdentifier": "foo",
             "CFBundleName": "foo",
             "DocSetPlatformFamily": "foo",
@@ -198,7 +199,7 @@ class TestPrepareDocset:
             "dashIndexFilePath": "foo.html",
             "isJavaScriptEnabled": False,
             "DashDocSetPlayURL": "https://repl.it/F9J7/1",
-        }
+        } == p
 
     def test_full_text_search_on(self, tmp_path, sphinx_built):
         """
@@ -207,7 +208,7 @@ class TestPrepareDocset:
         icon = Path("tests") / "logo.png"
         dest = tmp_path / "bar"
 
-        docset = docsets.prepare_docset(
+        with docsets.prepare_docset(
             sphinx_built,
             dest,
             name="foo",
@@ -218,9 +219,8 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=icon,
             full_text_search=docsets.FullTextSearch.ON,
-        )
-
-        p = docsets.read_plist(docset.plist)
+        ) as docset:
+            p = docsets.read_plist(docset.plist)
 
         assert p["DashDocSetDefaultFTSEnabled"] is True
         assert "DashDocSetFTSNotSupported" not in p
@@ -232,7 +232,7 @@ class TestPrepareDocset:
         icon = Path("tests") / "logo.png"
         dest = tmp_path / "bar"
 
-        docset = docsets.prepare_docset(
+        with docsets.prepare_docset(
             sphinx_built,
             dest,
             name="foo",
@@ -243,9 +243,8 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=icon,
             full_text_search=docsets.FullTextSearch.FORBIDDEN,
-        )
-
-        p = docsets.read_plist(docset.plist)
+        ) as docset:
+            p = docsets.read_plist(docset.plist)
 
         assert p["DashDocSetFTSNotSupported"] is True
         assert "DashDocSetDefaultFTSEnabled" not in p
@@ -257,7 +256,7 @@ class TestPrepareDocset:
         icon = Path("tests") / "logo.png"
         dest = tmp_path / "bar"
 
-        docsets.prepare_docset(
+        with docsets.prepare_docset(
             sphinx_built,
             dest,
             name="foo",
@@ -268,9 +267,8 @@ class TestPrepareDocset:
             icon=icon,
             icon_2x=None,
             full_text_search=docsets.FullTextSearch.OFF,
-        )
-
-        assert (Path(dest) / "icon.png").exists()
+        ):
+            assert (Path(dest) / "icon.png").exists()
 
     def test_with_icon_2x(self, tmp_path, sphinx_built):
         """
@@ -279,7 +277,7 @@ class TestPrepareDocset:
         icon = Path("tests") / "logo.png"
         dest = tmp_path / "bar"
 
-        docsets.prepare_docset(
+        with docsets.prepare_docset(
             sphinx_built,
             dest,
             name="foo",
@@ -290,6 +288,5 @@ class TestPrepareDocset:
             icon=None,
             icon_2x=icon,
             full_text_search=docsets.FullTextSearch.OFF,
-        )
-
-        assert (Path(dest) / "icon@2x.png").exists()
+        ):
+            assert (Path(dest) / "icon@2x.png").exists()

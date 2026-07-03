@@ -223,7 +223,7 @@ def main(
         add_to_global=add_to_global,
         force=force,
     )
-    docset = docsets.prepare_docset(
+    with docsets.prepare_docset(
         source,
         dest,
         name,
@@ -234,18 +234,17 @@ def main(
         icon,
         icon_2x,
         full_text_search,
-    )
+    ) as docset:
+        parser = parser_type(docset.docs)
 
-    parser = parser_type(docset.docs)
+        log.info(
+            "Converting [b]%s[/b] docs from '%s' to '%s'.",
+            parser.name,
+            source,
+            dest,
+        )
 
-    log.info(
-        "Converting [b]%s[/b] docs from '%s' to '%s'.",
-        parser.name,
-        source,
-        dest,
-    )
-
-    convert_docs(parser=parser, docset=docset, quiet=quiet)
+        convert_docs(parser=parser, docset=docset, quiet=quiet)
 
     if add_to_dash or add_to_global:
         log.info("Adding to Dash...")

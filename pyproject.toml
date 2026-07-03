@@ -54,15 +54,10 @@ source = "vcs"
 raw-options = { local_scheme = "no-local-version" }
 
 
-[tool.pytest.ini_options]
-addopts = [
-  "-ra",
-  "--strict-markers",
-  "--strict-config",
-  "--import-mode=importlib",
-]
-xfail_strict = true
-testpaths = "tests"
+[tool.pytest]
+strict = true
+testpaths = ["tests"]
+addopts = ["-ra", "--import-mode=importlib"]
 filterwarnings = ["once::Warning"]
 
 

@@ -31,6 +31,18 @@ class DocSet:
     def docs(self) -> Path:
         return self.path / "Contents" / "Resources" / "Documents"
 
+    def __enter__(self) -> DocSet:
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        self.close()
+
+    def close(self) -> None:
+        """
+        Clean up resources held by the docset.
+        """
+        self.db_conn.close()
+
 
 class FullTextSearch(Enum):
     ON = "on"
