@@ -4,13 +4,12 @@
 
 from __future__ import annotations
 
-from enum import Enum
-
 import os
 import plistlib
 import shutil
 import sqlite3
 
+from enum import Enum
 from functools import cached_property
 from pathlib import Path
 

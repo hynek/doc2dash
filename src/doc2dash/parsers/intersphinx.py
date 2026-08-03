@@ -6,9 +6,10 @@ from __future__ import annotations
 
 import logging
 
+from collections.abc import Generator, Iterator, Mapping
 from contextlib import contextmanager
 from pathlib import Path
-from typing import ClassVar, Generator, Iterator, Mapping
+from typing import ClassVar
 
 import attrs
 

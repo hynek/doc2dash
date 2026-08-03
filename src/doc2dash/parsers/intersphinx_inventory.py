@@ -35,8 +35,8 @@ import re
 import zlib
 
 from collections import defaultdict
+from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import Callable, Mapping, Tuple
 
 import attrs
 
@@ -44,7 +44,7 @@ import attrs
 log = logging.getLogger(__name__)
 
 
-InventoryEntry = Tuple[str, str]  # (uri, display name)
+InventoryEntry = tuple[str, str]  # (uri, display name)
 
 
 def load_inventory(source: Path) -> Mapping[str, Mapping[str, InventoryEntry]]:
