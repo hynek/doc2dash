@@ -35,8 +35,8 @@ import re
 import zlib
 
 from collections import defaultdict
+from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import Callable, Mapping, Tuple
 
 import attrs
 
@@ -44,7 +44,7 @@ import attrs
 log = logging.getLogger(__name__)
 
 
-InventoryEntry = Tuple[str, str]  # (uri, display name)
+InventoryEntry = tuple[str, str]  # (uri, display name)
 
 
 def load_inventory(source: Path) -> Mapping[str, Mapping[str, InventoryEntry]]:
@@ -56,7 +56,7 @@ def load_inventory(source: Path) -> Mapping[str, Mapping[str, InventoryEntry]]:
     with (source / "objects.inv").open("rb") as fp:
         assert b"# Sphinx inventory version 2\n" == fp.readline()
 
-        key, value = fp.readline().split(b": ", 1)
+        key, _value = fp.readline().split(b": ", 1)
         assert b"# Project" == key
 
         key = fp.readline().split(b": ")[0]

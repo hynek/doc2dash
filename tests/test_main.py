@@ -238,7 +238,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         def make_patcher_for_file(self, path):
             pass
 
-    class fake_module:  # noqa: N801
+    class fake_module:
         Parser = FakeParser
 
     expected = f"""\

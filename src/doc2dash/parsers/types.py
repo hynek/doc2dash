@@ -4,10 +4,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Generator, Iterator
 from contextlib import contextmanager
 from enum import Enum
 from pathlib import Path
-from typing import ClassVar, Generator, Iterator, Protocol
+from typing import ClassVar, Protocol
 
 import attrs
 

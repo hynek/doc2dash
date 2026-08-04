@@ -27,8 +27,7 @@ def get_doctype(
         name = dt.detect(path)
         if name:
             return dt, name
-    else:
-        return None, None
+    return None, None
 
 
 __all__ = ["get_doctype", "types"]

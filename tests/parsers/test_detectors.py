@@ -52,8 +52,7 @@ class TestDetectors:
         """
         Non-existent paths are treated like they don't belong to the parser.
         """
-        for dt in DOCTYPES:
-            assert not dt.detect(Path("foo"))
+        assert not dt.detect(Path("foo"))
 
 
 def raiser(exc):

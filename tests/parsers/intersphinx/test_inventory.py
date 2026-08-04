@@ -57,8 +57,10 @@ def test_parse_example(sphinx_built):
         "std:doc": {
             "index": (
                 "index.html",
-                "Let’s define some symbols and see if doc2dash can handle "
-                "them!",
+                (
+                    "Let’s define some symbols and see if doc2dash can handle "
+                    "them!"
+                ),
             ),
             "glossary": ("glossary.html", "A Glossary"),
         },
@@ -153,6 +155,8 @@ class TestCachedFileExists:
         m.assert_not_called()
 
         assert [
-            "intersphinx: path 'missing' is in objects.inv, but does not "
-            "exist. Skipping."
+            (
+                "intersphinx: path 'missing' is in objects.inv, but does not "
+                "exist. Skipping."
+            )
         ] == caplog.messages

@@ -8,8 +8,8 @@ import logging
 import urllib
 
 from collections import defaultdict
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 from rich.progress import Progress
 

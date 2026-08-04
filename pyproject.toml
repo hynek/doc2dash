@@ -120,13 +120,16 @@ ignore = [
   "ANN",     # Mypy is better at this
   "ARG",     # unused arguments are normal when implementing interfaces
   "COM",     # Formatter takes care of our commas
+  "CPY",     # they expect a very specific shape of a copyright notice
   "D",       # We prefer our own docstring style.
   "E501",    # leave line-length enforcement to formatter
   "FBT",     # we have one function that takes one bool; c'mon!
   "FIX",     # Yes, we want XXX as a marker.
   "INP001",  # sometimes we want Python files outside of packages
   "ISC001",  # conflicts with formatter
-  "PLR0913", # yes, many arguments, but most have defaults
+  "PLR0913", # leave complexity to me
+  "PLR0915", # leave complexity to me
+  "PLR0917", # leave complexity to me
   "PLR2004", # numbers are sometimes fine
   "PYI034",  # We're not adding typing_extensions just for Self.
   "RUF001",  # leave my smart characters alone

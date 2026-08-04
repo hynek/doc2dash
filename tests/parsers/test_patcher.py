@@ -140,8 +140,10 @@ class TestPatchTOCAnchors:
 
         assert [
             "Can't find anchor 'anchor-1' (EntryType.METHOD) in 'bar.html'.",
-            "Can't find anchor 'anchor-2' (EntryType.METHOD) in 'foo bar.html'"
-            ".",  # lol
+            (
+                "Can't find anchor 'anchor-2' (EntryType.METHOD) in 'foo bar.html'"
+                "."
+            ),  # lol
             "Failed to add anchors for 2 TOC entries.",
         ] == caplog.messages
 
