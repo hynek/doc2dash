@@ -13,7 +13,7 @@ from typing import ClassVar
 import attrs
 import pytest
 
-from doc2dash.parsers.patcher import patch_anchors
+from doc2dash.parsers.patcher import log, patch_anchors
 from doc2dash.parsers.types import EntryType, ParserEntry
 
 
@@ -122,7 +122,6 @@ class TestPatchTOCAnchors:
         """
         If patching fails, a debug message is logged.
         """
-        from doc2dash.parsers.patcher import log
 
         old_level = log.getEffectiveLevel()
         log.setLevel(logging.DEBUG)

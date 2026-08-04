@@ -11,7 +11,7 @@ from doc2dash.output import create_log_config
 
 class TestSetupLogging:
     @pytest.mark.parametrize(
-        "verbose, quiet, expected",
+        ("verbose", "quiet", "expected"),
         [
             (False, False, logging.INFO),
             (True, False, logging.DEBUG),

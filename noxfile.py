@@ -98,8 +98,8 @@ def rebuild_sample_docs(session: nox.Session) -> None:
     shutil.rmtree(built / "doctrees")
     shutil.rmtree(html / "_sources")
     shutil.rmtree(html / "_static")
-    os.remove(html / ".buildinfo")
-    os.remove(html / "searchindex.js")
+    (html / ".buildinfo").unlink()
+    (html / "searchindex.js").unlink()
 
 
 @nox.session(python=DOCS_PYTHON)

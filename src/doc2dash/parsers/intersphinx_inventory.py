@@ -54,13 +54,13 @@ def load_inventory(source: Path) -> Mapping[str, Mapping[str, InventoryEntry]]:
     {"role": {"name": ("path#anchor", "display-name"}}
     """
     with (source / "objects.inv").open("rb") as fp:
-        assert b"# Sphinx inventory version 2\n" == fp.readline()
+        assert fp.readline() == b"# Sphinx inventory version 2\n"
 
         key, _value = fp.readline().split(b": ", 1)
-        assert b"# Project" == key
+        assert key == b"# Project"
 
         key = fp.readline().split(b": ")[0]
-        assert b"# Version" == key
+        assert key == b"# Version"
 
         line = fp.readline()
         assert re.fullmatch(

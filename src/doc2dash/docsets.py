@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import os
 import plistlib
 import shutil
 import sqlite3
@@ -68,7 +67,7 @@ def prepare_docset(
     """
     resources = dest / "Contents" / "Resources"
     docs = resources / "Documents"
-    os.makedirs(resources)
+    resources.mkdir(parents=True)
 
     db_conn = sqlite3.connect(resources / "docSet.dsidx")
     db_conn.row_factory = sqlite3.Row

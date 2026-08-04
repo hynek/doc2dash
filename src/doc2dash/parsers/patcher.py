@@ -13,7 +13,8 @@ from pathlib import Path
 
 from rich.progress import Progress
 
-from ..output import console
+from doc2dash.output import console
+
 from .types import EntryType, Parser, ParserEntry
 
 

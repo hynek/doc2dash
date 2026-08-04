@@ -99,7 +99,7 @@ def test_bad_format(caplog):
 
 
 @pytest.mark.parametrize(
-    "path,expected",
+    ("path", "expected"),
     [
         ("docs.html", ("docs.html", "docs.html")),
         ("docs/", ("docs/index.html", "docs/index.html")),

@@ -203,7 +203,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         icon_2x,
         full_text_search,
     ):
-        os.mkdir(dest)
+        dest.mkdir()
         db_conn = sqlite3.connect(":memory:")
         db_conn.row_factory = sqlite3.Row
         db_conn.execute(
@@ -238,7 +238,7 @@ def test_normal_flow(monkeypatch, tmp_path, runner):
         def make_patcher_for_file(self, path):
             pass
 
-    class fake_module:
+    class fake_module:  # noqa: N801
         Parser = FakeParser
 
     expected = f"""\
@@ -272,9 +272,9 @@ Added 1 index entries.
         == result.output.split("Patching for TOCs...")[0]
     ), result.output.split("Patching for TOCs...")[0]
     assert 0 == result.exit_code
-    assert (("open", "-a", "dash", Path("bah.docset")),) == run_mock.call_args[
-        0
-    ]
+    assert (
+        ("/usr/bin/open", "-a", "dash", Path("bah.docset")),
+    ) == run_mock.call_args[0]
 
     # alternative 2: patch doc2dash.parsers
     monkeypatch.setattr(
@@ -293,9 +293,9 @@ Added 1 index entries.
         == result.output.split("Patching for TOCs...")[0]
     )
     assert 0 == result.exit_code
-    assert (("open", "-a", "dash", Path("bar.docset")),) == run_mock.call_args[
-        0
-    ]
+    assert (
+        ("/usr/bin/open", "-a", "dash", Path("bar.docset")),
+    ) == run_mock.call_args[0]
 
     # Again, just without adding and icon.
     run_mock.reset_mock()
@@ -389,7 +389,7 @@ class TestSetupPaths:
 
         with pytest.raises(SystemExit) as e:
             main.setup_destination(
-                destination=Path("."),
+                destination=Path(),
                 name="foo",
                 force=False,
                 add_to_global=False,
@@ -397,7 +397,7 @@ class TestSetupPaths:
         assert e.value.code == errno.EEXIST
 
         main.setup_destination(
-            destination=Path("."),
+            destination=Path(),
             name="foo",
             force=True,
             add_to_global=False,

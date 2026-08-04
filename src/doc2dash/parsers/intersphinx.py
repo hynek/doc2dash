@@ -136,7 +136,7 @@ class InterSphinxParser:
         Returns a Dash type string, or None to not construct entries.
         """
         try:
-            return INV_TO_TYPE[inv_type.split(":")[-1]]
+            return INV_TO_TYPE[inv_type.rsplit(":", maxsplit=1)[-1]]
         except KeyError:  # pragma: no cover
             log.debug("convert_type: unknown type: %r", inv_type)
 

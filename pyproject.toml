@@ -115,8 +115,10 @@ src = ["src", "tests", "noxfile.py"]
 line-length = 79
 
 [tool.ruff.lint]
+select = ["ALL"]
 ignore = [
   "A001",    # shadowing is fine
+  "A002",    # shadowing is fine
   "ANN",     # Mypy is better at this
   "ARG",     # unused arguments are normal when implementing interfaces
   "COM",     # Formatter takes care of our commas
@@ -125,6 +127,7 @@ ignore = [
   "E501",    # leave line-length enforcement to formatter
   "FBT",     # we have one function that takes one bool; c'mon!
   "FIX",     # Yes, we want XXX as a marker.
+  "G004",    # our "logging" is different
   "INP001",  # sometimes we want Python files outside of packages
   "ISC001",  # conflicts with formatter
   "PLR0913", # leave complexity to me
@@ -133,6 +136,7 @@ ignore = [
   "PLR2004", # numbers are sometimes fine
   "PYI034",  # We're not adding typing_extensions just for Self.
   "RUF001",  # leave my smart characters alone
+  "S101",    # asserts are useful
   "SLF001",  # private members are accessed by friendly functions
   "TCH",     # TYPE_CHECKING blocks break autodocs
   "TD",      # we don't follow other people's todo style
@@ -152,6 +156,9 @@ ignore = [
 [tool.ruff.lint.isort]
 lines-between-types = 1
 lines-after-imports = 2
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
 
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
