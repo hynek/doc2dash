@@ -134,6 +134,10 @@ class InterSphinxParser:
         Map an intersphinx type to a Dash type.
 
         Returns a Dash type string, or None to not construct entries.
+
+        Args:
+            inv_type: The intersphinx inventory type string; any domain
+                prefix (such as ``py:``) is stripped before lookup.
         """
         try:
             return INV_TO_TYPE[inv_type.rsplit(":", maxsplit=1)[-1]]
@@ -151,6 +155,14 @@ class InterSphinxParser:
         Parameters are the dash type, intersphinx inventory key and data tuple.
 
         This is a method to allow customization by inheritance.
+
+        Args:
+            dash_type: The Dash entry type for the new entry.
+            key: The intersphinx inventory key (lookup name).
+            inv_entry: The inventory data tuple ``(uri, display name)``.
+
+        Returns:
+            The constructed entry, or None to skip this inventory entry.
         """
         path_str = inv_entry[0]
         name = inv_entry[1] if inv_entry[1] != "-" else key

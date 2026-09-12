@@ -41,6 +41,14 @@ class RichEchoHandler(logging.Handler):
 def create_log_config(verbose: bool, quiet: bool) -> dict[str, object]:
     """
     We use logging's levels as an easy-to-use verbosity controller.
+
+    Args:
+        verbose: If True, use the ``DEBUG`` level.
+        quiet: If True, use the ``ERROR`` level. Mutually exclusive with
+            *verbose*.
+
+    Returns:
+        A logging configuration dictionary suitable for ``dictConfig``.
     """
     assert not (verbose and quiet)
     if verbose:

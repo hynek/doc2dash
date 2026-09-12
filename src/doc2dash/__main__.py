@@ -259,6 +259,19 @@ def setup_destination(
 ) -> Path:
     """
     Determine source and destination using the options.
+
+    Args:
+        destination: The base destination directory.
+        name: The docset name; used as the file name and bundle identifier.
+        add_to_global: If True, use the global docset directory instead of
+            *destination*.
+        force: If True, remove an existing docset at the destination.
+
+    Returns:
+        The final docset path.
+
+    Raises:
+        SystemExit: If the destination already exists and *force* is False.
     """
     if add_to_global:
         destination = DEFAULT_DOCSET_PATH
