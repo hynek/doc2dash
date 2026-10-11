@@ -27,6 +27,15 @@ def patch_anchors(
     """
     Consume ``ParseEntry``s then patch docs for TOCs by calling
     *parser*'s ``find_entry_and_add_ref``.
+
+    Args:
+        parser: The parser instance whose ``find_entry_and_add_ref`` is
+            used to patch the docs.
+        docs: The root directory of the extracted documentation.
+        show_progressbar: If True, display a progress bar while patching.
+
+    Yields:
+        ``None``; ``ParserEntry`` objects are sent in via ``send()``.
     """
     files = defaultdict(list)
     num = 0
