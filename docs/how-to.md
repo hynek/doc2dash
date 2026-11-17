@@ -254,7 +254,7 @@ Maintained by [Hynek Schlawack](https://github.com/hynek/).
 
 ### Requirements
 
-- Python 3.12
+- Python that is supported by *doc2dash*
 - [*tox*](https://tox.wiki/)
 
 

@@ -7,17 +7,11 @@ from __future__ import annotations
 import os
 import re
 import shutil
-import sys
+import tomllib
 
 from pathlib import Path
 
 import nox
-
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 
 DEFAULT_PYTHON = Path(".python-version-default").read_text().strip()
@@ -52,7 +46,7 @@ def pre_commit(session: nox.Session) -> None:
     session.run("prek", "run", "--all-files")
 
 
-@nox.session(python=["pypy3.10", *ALL_SUPPORTED])
+@nox.session(python=["pypy3.11", *ALL_SUPPORTED])
 def tests(session: nox.Session) -> None:
     session.install(".", "--group", "tests")
 

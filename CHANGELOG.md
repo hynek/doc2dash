@@ -10,7 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/hynek/doc2dash/compare/3.1.0...HEAD)
 
+### Added
+
+- Python 3.15 support.
+
+
 ### Removed
+
+- Python 3.10 support.
 
 - Since pyOxidizer [is not maintained anymore](https://gregoryszorc.com/blog/2024/03/17/my-shifting-open-source-priorities/), *doc2dash* will not ship binaries anymore.
   We will keep maintaining our [Homebrew tap](https://github.com/hynek/homebrew-tap) and recommend [*uv*](https://docs.astral.sh/uv/) for ad-hoc runs -- Python packaging is good now!

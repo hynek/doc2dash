@@ -27,12 +27,12 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "pypy3.10"
-          - "3.10"
+          - "pypy3.11"
           - "3.11"
           - "3.12"
           - "3.13"
           - "3.14"
+          - "3.15"
         runs-on: [ubuntu-latest, windows-latest]
     env:
       PYTHON: ${{ matrix.python-version }}
@@ -74,6 +74,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version-file: .python-version-default
+          allow-prereleases: true
       - uses: hynek/setup-cached-uv@34e35d30f1ebc7421a5cc733bca38dcc62603960 # v2.6.0
 
       - name: Download coverage data
@@ -116,6 +117,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version-file: .python-version-default
+          allow-prereleases: true
 
       - run: python -Im pip install -e . --group dev
       - run: python -c 'import doc2dash; print(doc2dash.__title__)'
