@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import os
 import re
 import shutil
 import tomllib
@@ -20,7 +19,8 @@ nox.options.sessions = ["pre_commit", "tests", "docs", "mypy"]
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
 
-nox.needs_version = ">=2024.3.2"
+# First version with parallel support.
+nox.needs_version = ">=2026.08.10"
 nox.options.default_venv_backend = "uv|virtualenv"
 
 
@@ -39,14 +39,14 @@ ALL_SUPPORTED = [
 ]
 
 
-@nox.session
+@nox.session(allow_parallel=True)
 def pre_commit(session: nox.Session) -> None:
     session.install("prek")
 
     session.run("prek", "run", "--all-files")
 
 
-@nox.session(python=["pypy3.11", *ALL_SUPPORTED])
+@nox.session(python=["pypy3.11", *ALL_SUPPORTED], allow_parallel=True)
 def tests(session: nox.Session) -> None:
     session.install(".", "--group", "tests")
 
@@ -56,11 +56,8 @@ def tests(session: nox.Session) -> None:
     session.run("coverage", "run", "-m", "pytest", *session.posargs, env=env)
     session.run("coverage", "run", "-m", "doc2dash", "--version")
 
-    if os.environ.get("CI") != "true":
-        session.notify("coverage_report")
 
-
-@nox.session
+@nox.session(requires=["tests"])
 def coverage_report(session: nox.Session) -> None:
     session.install("coverage[toml]")
 
@@ -68,7 +65,7 @@ def coverage_report(session: nox.Session) -> None:
     session.run("coverage", "report")
 
 
-@nox.session(python=DEFAULT_PYTHON)
+@nox.session(python=DEFAULT_PYTHON, allow_parallel=True)
 def mypy(session: nox.Session) -> None:
     session.install(".", "--group", "typing", "nox")
 
@@ -96,7 +93,7 @@ def rebuild_sample_docs(session: nox.Session) -> None:
     (html / "searchindex.js").unlink()
 
 
-@nox.session(python=DOCS_PYTHON)
+@nox.session(python=DOCS_PYTHON, allow_parallel=True)
 def docs(session: nox.Session) -> None:
     # Needs to be separate when using hashes.
     session.install("-r", "requirements/docs.txt")
